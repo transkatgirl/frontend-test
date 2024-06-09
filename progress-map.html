@@ -13,9 +13,25 @@
 			border-radius: 0.15em;
 		}
 
-		.progress-map tfoot td {
+		.progress-map tfoot {
 			text-align: center;
 			color: #555;
+		}
+
+		.progress-map tfoot th {
+			font-weight: normal;
+		}
+
+		.progress-map .map-current {
+			opacity: 0.5;
+		}
+
+		.progress-map .map-hidden {
+			visibility: hidden;
+		}
+
+		.pathway-map td {
+			padding-left: 1em;
 		}
 
 		tbody,
@@ -25,6 +41,29 @@
 
 		table meter {
 			width: 10em;
+		}
+
+		.pathway-map .breadcrumb {
+			display: flex;
+			flex-wrap: wrap;
+			list-style: none;
+			margin: 0;
+			padding: 0;
+		}
+
+		.pathway-map .breadcrumb li:first-of-type {
+			font-weight: bold;
+		}
+
+		.pathway-map .breadcrumb li:not(:first-of-type) {
+			opacity: 0.5;
+		}
+
+		.pathway-map .breadcrumb li:not(:last-child)::after {
+			display: inline-block;
+			margin: 0 .25rem;
+			content: "→";
+			opacity: 0.5;
 		}
 
 	</style>
@@ -70,44 +109,63 @@
 		</tbody>
 	</table>
 
+	<h2>Overviews</h2>
 
-	<h2>Time-Based Analytics</h2>
-
-	<h3>Average Time Spent By Subject, Past 7 days</h3>
-	<table>
+	<table class="pathway-map">
+		<caption>Active Pathways</caption>
 		<tbody>
 			<tr>
-				<th>Subject 1</th>
+				<th>Pathway 1</th>
+				<td>Level 2</td>
 				<td>
-					<meter min="0" max="120" low="30" high="90" optimum="120" value="90"></meter>
+					<ul class="breadcrumb">
+						<li>Subject 1</li>
+						<li>Subject 5</li>
+					</ul>
 				</td>
 			</tr>
 			<tr>
-				<th>Subject 2</th>
+				<th>Pathway 2</th>
+				<td>Level 2</td>
 				<td>
-					<meter min="0" max="120" low="30" high="90" optimum="120" value="100"></meter>
+					<ul class="breadcrumb">
+						<li>Subject 2</li>
+						<li>Subject 6</li>
+					</ul>
 				</td>
 			</tr>
 			<tr>
-				<th>Subject 3</th>
+				<th>Pathway 3</th>
+				<td>Level 4</td>
 				<td>
-					<meter min="0" max="120" low="30" high="90" optimum="120" value="60"></meter>
+					<ul class="breadcrumb">
+						<li>Subject 3</li>
+					</ul>
 				</td>
 			</tr>
 			<tr>
-				<th>Subject 4</th>
+				<th>Pathway 4</th>
+				<td>Level 1</td>
 				<td>
-					<meter min="0" max="120" low="30" high="90" optimum="120" value="40"></meter>
+					<ul class="breadcrumb">
+						<li>Subject 4</li>
+						<li>Subject 8</li>
+					</ul>
 				</td>
 			</tr>
 		</tbody>
 	</table>
 
-	<h3>28-day Overview, By subject</h3>
+	</br>
+
 	<table class="progress-map">
+		<caption>Per-Pathway Progress</caption>
+		<colgroup span="1"></colgroup>
+		<colgroup span="27"></colgroup>
+		<colgroup span="1"></colgroup>
 		<tbody>
 			<tr>
-				<th>Subject 1</th>
+				<th>Pathway 1</th>
 				<td class="progress-square"> </td>
 				<td class="progress-square"> </td>
 				<td class="progress-square"> </td>
@@ -135,10 +193,10 @@
 				<td class="progress-square"> </td>
 				<td class="progress-square"> </td>
 				<td class="progress-square"> </td>
-				<td class="progress-square"> </td>
+				<td class="progress-square map-current"> </td>
 			</tr>
 			<tr>
-				<th>Subject 2</th>
+				<th>Pathway 2</th>
 				<td class="progress-square"> </td>
 				<td class="progress-square"> </td>
 				<td class="progress-square"> </td>
@@ -166,10 +224,10 @@
 				<td class="progress-square"> </td>
 				<td class="progress-square"> </td>
 				<td class="progress-square"> </td>
-				<td class="progress-square"> </td>
+				<td class="progress-square map-current"> </td>
 			</tr>
 			<tr>
-				<th>Subject 3</th>
+				<th>Pathway 3</th>
 				<td class="progress-square"> </td>
 				<td class="progress-square"> </td>
 				<td class="progress-square"> </td>
@@ -197,10 +255,10 @@
 				<td class="progress-square"> </td>
 				<td class="progress-square"> </td>
 				<td class="progress-square"> </td>
-				<td class="progress-square"> </td>
+				<td class="progress-square map-current"> </td>
 			</tr>
 			<tr>
-				<th>Subject 4</th>
+				<th>Pathway 4</th>
 				<td class="progress-square"> </td>
 				<td class="progress-square"> </td>
 				<td class="progress-square"> </td>
@@ -228,12 +286,12 @@
 				<td class="progress-square"> </td>
 				<td class="progress-square"> </td>
 				<td class="progress-square"> </td>
-				<td class="progress-square"> </td>
+				<td class="progress-square map-current"> </td>
 			</tr>
 		</tbody>
 		<tfoot>
 			<tr>
-				<td></td>
+				<th>Day</th>
 				<td>28</td>
 				<td></td>
 				<td></td>
@@ -267,8 +325,10 @@
 
 	</table>
 
-	<h3>24-weeks Overview, By day</h3>
+	</br>
+
 	<table class="progress-map">
+		<caption>Overall Progress</caption>
 		<tbody>
 			<tr>
 				<th></th>
@@ -462,7 +522,7 @@
 		</tbody>
 		<tfoot>
 			<tr>
-				<td></td>
+				<th>Week</th>
 				<td>24</td>
 				<td></td>
 				<td></td>
