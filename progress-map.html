@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+
+<head>
+	<style>
+		body {
+			font-family: sans-serif;
+		}
+
+		.progress-square {
+			background-color: black;
+			width: 1.25em;
+			height: 1.25em;
+			border-radius: 0.15em;
+		}
+
+		.progress-map tfoot td {
+			text-align: center;
+			color: #555;
+		}
+
+		tbody,
+		tfoot th {
+			text-align: right;
+		}
+
+		table meter {
+			width: 10em;
+		}
+
+	</style>
+</head>
+
+<body>
+	<h1>Progress Map</h1>
+
+	<h2>Today</h2>
+
+	<h3>Course Progress</h3>
+
+	<h3>TODO List</h3>
+
+	<h3>Time Spent By Subject</h3>
+
+	<table>
+		<tbody>
+			<tr>
+				<th>Subject 1</th>
+				<td>
+					<meter min="0" max="120" low="30" high="90" optimum="120" value="90"></meter>
+				</td>
+			</tr>
+			<tr>
+				<th>Subject 2</th>
+				<td>
+					<meter min="0" max="120" low="30" high="90" optimum="120" value="120"></meter>
+				</td>
+			</tr>
+			<tr>
+				<th>Subject 3</th>
+				<td>
+					<meter min="0" max="120" low="30" high="90" optimum="120" value="60"></meter>
+				</td>
+			</tr>
+			<tr>
+				<th>Subject 4</th>
+				<td>
+					<meter min="0" max="120" low="30" high="90" optimum="120" value="29"></meter>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+
+
+	<h2>Time-Based Analytics</h2>
+
+	<h3>Average Time Spent By Subject, Past 7 days</h3>
+	<table>
+		<tbody>
+			<tr>
+				<th>Subject 1</th>
+				<td>
+					<meter min="0" max="120" low="30" high="90" optimum="120" value="90"></meter>
+				</td>
+			</tr>
+			<tr>
+				<th>Subject 2</th>
+				<td>
+					<meter min="0" max="120" low="30" high="90" optimum="120" value="100"></meter>
+				</td>
+			</tr>
+			<tr>
+				<th>Subject 3</th>
+				<td>
+					<meter min="0" max="120" low="30" high="90" optimum="120" value="60"></meter>
+				</td>
+			</tr>
+			<tr>
+				<th>Subject 4</th>
+				<td>
+					<meter min="0" max="120" low="30" high="90" optimum="120" value="40"></meter>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+
+	<h3>28-day Overview, By subject</h3>
+	<table class="progress-map">
+		<tbody>
+			<tr>
+				<th>Subject 1</th>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+			</tr>
+			<tr>
+				<th>Subject 2</th>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+			</tr>
+			<tr>
+				<th>Subject 3</th>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+			</tr>
+			<tr>
+				<th>Subject 4</th>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+			</tr>
+		</tbody>
+		<tfoot>
+			<tr>
+				<td></td>
+				<td>28</td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>21</td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>14</td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>7</td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+			</tr>
+		</tfoot>
+
+	</table>
+
+	<h3>24-weeks Overview, By day</h3>
+	<table class="progress-map">
+		<tbody>
+			<tr>
+				<th></th>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+			</tr>
+			<tr>
+				<th>Mon</th>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+			</tr>
+			<tr>
+				<th></th>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+			</tr>
+			<tr>
+				<th>Wed</th>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+			</tr>
+			<tr>
+				<th></th>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+			</tr>
+			<tr>
+				<th>Fri</th>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+			</tr>
+			<tr>
+				<th></th>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+				<td class="progress-square"> </td>
+			</tr>
+		</tbody>
+		<tfoot>
+			<tr>
+				<td></td>
+				<td>24</td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>20</td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>16</td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>12</td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>8</td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>4</td>
+				<td></td>
+				<td></td>
+				<td></td>
+			</tr>
+		</tfoot>
+	</table>
+</body>
