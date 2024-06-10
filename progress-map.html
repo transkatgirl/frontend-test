@@ -3,7 +3,8 @@
 <head>
 	<style>
 		body {
-			font-family: sans-serif;
+			font: 1em/1.2 sans-serif;
+			margin-left: 1em;
 		}
 
 		.progress-square {
@@ -43,7 +44,34 @@
 			width: 10em;
 		}
 
-		.pathway-map .breadcrumb {
+
+
+
+
+		.pathway {
+			background-color: beige;
+			display: flex;
+			flex-wrap: wrap;
+			width: 25em;
+			align-content: space-between;
+			justify-content: space-between;
+			align-items: baseline;
+			gap: 0.2em;
+			padding: 1.25em;
+		}
+
+		.pathway h3 {
+			margin-top: 0;
+			font-size: 1.2em;
+		}
+
+		.pathway .pathway-inner {
+			width: 100%;
+			background-color: bisque;
+			padding-left: 1em;
+		}
+
+		.pathway-breadcrumb {
 			display: flex;
 			flex-wrap: wrap;
 			list-style: none;
@@ -51,22 +79,36 @@
 			padding: 0;
 		}
 
-		.pathway-map .breadcrumb li:first-of-type {
-			font-weight: bold;
+		.pathway .pathway-breadcrumb {
+			padding-top: 1.2em;
 		}
 
-		.pathway-map .breadcrumb li:not(:first-of-type) {
+		.pathway-chapters li:not(.list-active-chapter) {
 			opacity: 0.5;
 		}
 
-		.pathway-map .breadcrumb li:not(:last-child)::after {
+		.pathway-breadcrumb li:not(:last-child)::after {
 			display: inline-block;
 			margin: 0 .25rem;
 			content: "→";
+		}
+
+		.pathway-breadcrumb li.breadcrumb-active-course:not(:last-child)::after {
+			opacity: 0.5;
+		}
+
+		.pathway-breadcrumb .breadcrumb-active-course {
+			font-weight: bold;
+		}
+
+		.pathway-breadcrumb li:not(.breadcrumb-active-course) {
 			opacity: 0.5;
 		}
 
 	</style>
+	<script>
+
+	</script>
 </head>
 
 <body>
@@ -76,7 +118,48 @@
 
 	<h3>Course Progress</h3>
 
-	<h3>TODO List</h3>
+	<div class="pathway">
+		<h3>Pathway Name</h3>
+		<span>Level 2</span>
+		<div class="pathway-inner">
+			<h4>Course 4</h4>
+			<ol class="pathway-chapters" start="2">
+				<li>Chapter Name</li>
+				<li>Chapter Name</li>
+				<li class="list-active-chapter">Chapter Name
+					<ol>
+						<li>Subchapter Name</li>
+						<li>Subchapter Name</li>
+						<li>Subchapter Name</li>
+						<li class="list-active-chapter">Assignment 1</li>
+						<li>Assignment 2</li>
+					</ol>
+				</li>
+				<li>Chapter Name</li>
+				<li>Chapter Name</li>
+			</ol>
+			<p>Chapter 4/30 - 13% complete</p>
+		</div>
+		<td>
+			<ul class="pathway-breadcrumb">
+				<li>Course 0</li>
+				<li class="breadcrumb-active-course">Course 4</li>
+				<li>Course 8</li>
+			</ul>
+		</td>
+	</div>
+
+
+
+	<!-- <h3>TODO List</h3>
+
+	<ul>
+		<li>Item</li>
+		<li>Item</li>
+		<li>Item</li>
+		<li>Item</li>
+		<li>Item</li>
+	</ul> -->
 
 	<h3>Time Spent By Subject</h3>
 
@@ -109,52 +192,15 @@
 		</tbody>
 	</table>
 
+
+
 	<h2>Overviews</h2>
 
-	<table class="pathway-map">
-		<caption>Active Pathways</caption>
-		<tbody>
-			<tr>
-				<th>Pathway 1</th>
-				<td>Level 2</td>
-				<td>
-					<ul class="breadcrumb">
-						<li>Subject 1</li>
-						<li>Subject 5</li>
-					</ul>
-				</td>
-			</tr>
-			<tr>
-				<th>Pathway 2</th>
-				<td>Level 2</td>
-				<td>
-					<ul class="breadcrumb">
-						<li>Subject 2</li>
-						<li>Subject 6</li>
-					</ul>
-				</td>
-			</tr>
-			<tr>
-				<th>Pathway 3</th>
-				<td>Level 4</td>
-				<td>
-					<ul class="breadcrumb">
-						<li>Subject 3</li>
-					</ul>
-				</td>
-			</tr>
-			<tr>
-				<th>Pathway 4</th>
-				<td>Level 1</td>
-				<td>
-					<ul class="breadcrumb">
-						<li>Subject 4</li>
-						<li>Subject 8</li>
-					</ul>
-				</td>
-			</tr>
-		</tbody>
-	</table>
+	<!-- Overview coloring: 5 levels
+
+		Overall progress: Each level corresponding to 90min/day (customizable)
+		Per-pathway progress: Each level corresponding to overall progress increment divided by number of active pathways
+	-->
 
 	</br>
 
