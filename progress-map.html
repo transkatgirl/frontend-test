@@ -50,12 +50,7 @@
 
 		.pathway {
 			background-color: beige;
-			display: flex;
-			flex-wrap: wrap;
 			width: 25em;
-			align-content: space-between;
-			justify-content: space-between;
-			align-items: baseline;
 			gap: 0.2em;
 			padding: 1.25em;
 		}
@@ -66,9 +61,17 @@
 		}
 
 		.pathway .pathway-inner {
-			width: 100%;
 			background-color: bisque;
-			padding-left: 1em;
+			padding: 1.1em;
+		}
+
+		.pathway .pathway-inner h4 {
+			margin: 0;
+			font-size: 1.05em;
+		}
+
+		.pathway .pathway-inner ol {
+			margin-bottom: 0;
 		}
 
 		.pathway-breadcrumb {
@@ -119,10 +122,16 @@
 	<h3>Course Progress</h3>
 
 	<div class="pathway">
-		<h3>Pathway Name</h3>
-		<span>Level 2</span>
+		<div style="display: flex;">
+			<h3 style="flex-grow: 1;">Pathway Name</h3>
+			<span>Level 2</span>
+		</div>
 		<div class="pathway-inner">
-			<h4>Course 4</h4>
+			<div style="display: flex;">
+				<h4 style="flex-grow: 1;">Course 4</h4>
+				<span>Chapter 4 / 30</span>
+			</div>
+
 			<ol class="pathway-chapters" start="2">
 				<li>Chapter Name</li>
 				<li>Chapter Name</li>
@@ -138,7 +147,6 @@
 				<li>Chapter Name</li>
 				<li>Chapter Name</li>
 			</ol>
-			<p>Chapter 4/30 - 13% complete</p>
 		</div>
 		<td>
 			<ul class="pathway-breadcrumb">
