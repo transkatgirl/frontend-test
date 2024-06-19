@@ -4,35 +4,35 @@
 	<style>
 		body {
 			font: 1em/1.2 sans-serif;
-			margin-left: 1em;
+			margin: 1em;
 		}
 
 		.progress-square {
 			background-color: black;
-			width: 1.25em;
-			height: 1.25em;
+			width: 1.2em;
+			height: 1.2em;
 			border-radius: 0.15em;
 		}
 
-		.progress-map tfoot {
-			text-align: center;
-			color: #555;
+		.daily-progress-square {
+			background-color: green;
+			width: 1em;
+			height: 1em;
+			border-radius: 0.15em;
 		}
 
-		.progress-map tfoot th {
+		.progress-map th,
+		.progress-map tfoot td {
 			font-weight: normal;
+			opacity: 0.5;
 		}
 
 		.progress-map .map-current {
 			opacity: 0.5;
 		}
 
-		.progress-map .map-hidden {
+		.hidden-progress-square {
 			visibility: hidden;
-		}
-
-		.pathway-map td {
-			padding-left: 1em;
 		}
 
 		tbody,
@@ -40,72 +40,38 @@
 			text-align: right;
 		}
 
-		table meter {
-			width: 10em;
+		.progress-map tfoot {
+			text-align: center;
 		}
 
-
-
-
-
-		.pathway {
+		.course {
 			background-color: beige;
 			width: 25em;
 			gap: 0.2em;
 			padding: 1.25em;
 		}
 
-		.pathway h3 {
+		.course h2 {
+			margin-top: 0;
+		}
+
+		.course h3 {
 			margin-top: 0;
 			font-size: 1.2em;
 		}
 
-		.pathway .pathway-inner {
+		.course-chapters {
 			background-color: bisque;
-			padding: 1.1em;
-		}
-
-		.pathway .pathway-inner h4 {
 			margin: 0;
-			font-size: 1.05em;
+			padding: 1.5em 3em;
 		}
 
-		.pathway .pathway-inner ol {
-			margin-bottom: 0;
-		}
-
-		.pathway-breadcrumb {
-			display: flex;
-			flex-wrap: wrap;
-			list-style: none;
-			margin: 0;
-			padding: 0;
-		}
-
-		.pathway .pathway-breadcrumb {
-			padding-top: 1.2em;
-		}
-
-		.pathway-chapters li:not(.list-active-chapter) {
+		.course-chapters li:not(.list-active-chapter) {
 			opacity: 0.5;
 		}
 
-		.pathway-breadcrumb li:not(:last-child)::after {
-			display: inline-block;
-			margin: 0 .25rem;
-			content: "→";
-		}
-
-		.pathway-breadcrumb li.breadcrumb-active-course:not(:last-child)::after {
-			opacity: 0.5;
-		}
-
-		.pathway-breadcrumb .breadcrumb-active-course {
-			font-weight: bold;
-		}
-
-		.pathway-breadcrumb li:not(.breadcrumb-active-course) {
-			opacity: 0.5;
+		.course .progress-map {
+			padding-top: 1em;
 		}
 
 	</style>
@@ -115,44 +81,43 @@
 </head>
 
 <body>
-	<h1>Progress Map</h1>
+	<h1>Homepage</h1>
 
-	<h2>Your Pathways</h2>
+	<h2>Your Active Courses</h2>
 
-	<div class="pathway">
+	<div class="course">
 		<div style="display: flex;">
-			<h3 style="flex-grow: 1;">Pathway Name</h3>
-			<span>Level 2</span>
+			<h3 style="flex-grow: 1;">Course Name</h3>
+			<span>Chapter 4 / 30</span>
 		</div>
-		<div class="pathway-inner">
-			<div style="display: flex;">
-				<h4 style="flex-grow: 1;">Course 4</h4>
-				<span>Chapter 4 / 30</span>
-			</div>
-
-			<ol class="pathway-chapters" start="2">
-				<li>Chapter Name</li>
-				<li>Chapter Name</li>
-				<li class="list-active-chapter">Chapter Name
-					<ol>
-						<li>Subchapter Name</li>
-						<li>Subchapter Name</li>
-						<li>Subchapter Name</li>
-						<li class="list-active-chapter">Assignment 1</li>
-						<li>Assignment 2</li>
-					</ol>
-				</li>
-				<li>Chapter Name</li>
-				<li>Chapter Name</li>
-			</ol>
-		</div>
-		<td>
-			<ul class="pathway-breadcrumb">
-				<li>Course 0</li>
-				<li class="breadcrumb-active-course">Course 4</li>
-				<li>Course 8</li>
-			</ul>
-		</td>
+		<ol class="course-chapters" start="2">
+			<li>Chapter Name</li>
+			<li>Chapter Name</li>
+			<li class="list-active-chapter">Chapter Name
+				<ol>
+					<li>Subchapter Name</li>
+					<li>Subchapter Name</li>
+					<li>Subchapter Name</li>
+					<li class="list-active-chapter">Assignment 1</li>
+					<li>Assignment 2</li>
+				</ol>
+			</li>
+			<li>Chapter Name</li>
+			<li>Chapter Name</li>
+		</ol>
+		<table class="progress-map">
+			<tbody>
+				<tr>
+					<th>⏳</th>
+					<td class="daily-progress-square"> </td>
+					<td class="daily-progress-square"> </td>
+					<td class="daily-progress-square"> </td>
+					<td class="daily-progress-square map-current"> </td>
+				</tr>
+			</tbody>
+		</table>
+		<!--<meter min="0" max="120" low="30" high="90" optimum="120" value="90"></meter>
+		<span>90 / 120 minutes</span>-->
 	</div>
 
 
@@ -175,215 +140,44 @@
 		Per-pathway progress: Each level corresponding to overall progress increment divided by number of active pathways
 	-->
 
-	<table>
+	<!-- <table>
 		<caption>
 			Today's Goal Completion
 		</caption>
 		<tbody>
 			<tr>
-				<th>Pathway 1</th>
+				<th>Course 1</th>
 				<td>
 					<meter min="0" max="120" low="30" high="90" optimum="120" value="90"></meter>
 				</td>
 				<td>90 / 120 minutes</td>
 			</tr>
 			<tr>
-				<th>Pathway 2</th>
+				<th>Course 2</th>
 				<td>
 					<meter min="0" max="120" low="30" high="90" optimum="120" value="120"></meter>
 				</td>
 				<td>120 / 120 minutes</td>
 			</tr>
 			<tr>
-				<th>Pathway 3</th>
+				<th>Course 3</th>
 				<td>
 					<meter min="0" max="120" low="30" high="90" optimum="120" value="60"></meter>
 				</td>
 				<td>60 / 120 minutes</td>
 			</tr>
 			<tr>
-				<th>Pathway 4</th>
+				<th>Course 4</th>
 				<td>
 					<meter min="0" max="120" low="30" high="90" optimum="120" value="29"></meter>
 				</td>
 				<td>29 / 120 minutes</td>
 			</tr>
 		</tbody>
-	</table>
-
-	</br>
+	</table> -->
 
 	<table class="progress-map">
-		<caption>Per-Pathway Progress</caption>
-		<colgroup span="1"></colgroup>
-		<colgroup span="27"></colgroup>
-		<colgroup span="1"></colgroup>
-		<tbody>
-			<tr>
-				<th>Pathway 1</th>
-				<td class="progress-square"> </td>
-				<td class="progress-square"> </td>
-				<td class="progress-square"> </td>
-				<td class="progress-square"> </td>
-				<td class="progress-square"> </td>
-				<td class="progress-square"> </td>
-				<td class="progress-square"> </td>
-				<td class="progress-square"> </td>
-				<td class="progress-square"> </td>
-				<td class="progress-square"> </td>
-				<td class="progress-square"> </td>
-				<td class="progress-square"> </td>
-				<td class="progress-square"> </td>
-				<td class="progress-square"> </td>
-				<td class="progress-square"> </td>
-				<td class="progress-square"> </td>
-				<td class="progress-square"> </td>
-				<td class="progress-square"> </td>
-				<td class="progress-square"> </td>
-				<td class="progress-square"> </td>
-				<td class="progress-square"> </td>
-				<td class="progress-square"> </td>
-				<td class="progress-square"> </td>
-				<td class="progress-square"> </td>
-				<td class="progress-square"> </td>
-				<td class="progress-square"> </td>
-				<td class="progress-square"> </td>
-				<td class="progress-square map-current"> </td>
-			</tr>
-			<tr>
-				<th>Pathway 2</th>
-				<td class="progress-square"> </td>
-				<td class="progress-square"> </td>
-				<td class="progress-square"> </td>
-				<td class="progress-square"> </td>
-				<td class="progress-square"> </td>
-				<td class="progress-square"> </td>
-				<td class="progress-square"> </td>
-				<td class="progress-square"> </td>
-				<td class="progress-square"> </td>
-				<td class="progress-square"> </td>
-				<td class="progress-square"> </td>
-				<td class="progress-square"> </td>
-				<td class="progress-square"> </td>
-				<td class="progress-square"> </td>
-				<td class="progress-square"> </td>
-				<td class="progress-square"> </td>
-				<td class="progress-square"> </td>
-				<td class="progress-square"> </td>
-				<td class="progress-square"> </td>
-				<td class="progress-square"> </td>
-				<td class="progress-square"> </td>
-				<td class="progress-square"> </td>
-				<td class="progress-square"> </td>
-				<td class="progress-square"> </td>
-				<td class="progress-square"> </td>
-				<td class="progress-square"> </td>
-				<td class="progress-square"> </td>
-				<td class="progress-square map-current"> </td>
-			</tr>
-			<tr>
-				<th>Pathway 3</th>
-				<td class="progress-square"> </td>
-				<td class="progress-square"> </td>
-				<td class="progress-square"> </td>
-				<td class="progress-square"> </td>
-				<td class="progress-square"> </td>
-				<td class="progress-square"> </td>
-				<td class="progress-square"> </td>
-				<td class="progress-square"> </td>
-				<td class="progress-square"> </td>
-				<td class="progress-square"> </td>
-				<td class="progress-square"> </td>
-				<td class="progress-square"> </td>
-				<td class="progress-square"> </td>
-				<td class="progress-square"> </td>
-				<td class="progress-square"> </td>
-				<td class="progress-square"> </td>
-				<td class="progress-square"> </td>
-				<td class="progress-square"> </td>
-				<td class="progress-square"> </td>
-				<td class="progress-square"> </td>
-				<td class="progress-square"> </td>
-				<td class="progress-square"> </td>
-				<td class="progress-square"> </td>
-				<td class="progress-square"> </td>
-				<td class="progress-square"> </td>
-				<td class="progress-square"> </td>
-				<td class="progress-square"> </td>
-				<td class="progress-square map-current"> </td>
-			</tr>
-			<tr>
-				<th>Pathway 4</th>
-				<td class="progress-square"> </td>
-				<td class="progress-square"> </td>
-				<td class="progress-square"> </td>
-				<td class="progress-square"> </td>
-				<td class="progress-square"> </td>
-				<td class="progress-square"> </td>
-				<td class="progress-square"> </td>
-				<td class="progress-square"> </td>
-				<td class="progress-square"> </td>
-				<td class="progress-square"> </td>
-				<td class="progress-square"> </td>
-				<td class="progress-square"> </td>
-				<td class="progress-square"> </td>
-				<td class="progress-square"> </td>
-				<td class="progress-square"> </td>
-				<td class="progress-square"> </td>
-				<td class="progress-square"> </td>
-				<td class="progress-square"> </td>
-				<td class="progress-square"> </td>
-				<td class="progress-square"> </td>
-				<td class="progress-square"> </td>
-				<td class="progress-square"> </td>
-				<td class="progress-square"> </td>
-				<td class="progress-square"> </td>
-				<td class="progress-square"> </td>
-				<td class="progress-square"> </td>
-				<td class="progress-square"> </td>
-				<td class="progress-square map-current"> </td>
-			</tr>
-		</tbody>
-		<tfoot>
-			<tr>
-				<th>Day</th>
-				<td>28</td>
-				<td></td>
-				<td></td>
-				<td></td>
-				<td></td>
-				<td></td>
-				<td></td>
-				<td>21</td>
-				<td></td>
-				<td></td>
-				<td></td>
-				<td></td>
-				<td></td>
-				<td></td>
-				<td>14</td>
-				<td></td>
-				<td></td>
-				<td></td>
-				<td></td>
-				<td></td>
-				<td></td>
-				<td>7</td>
-				<td></td>
-				<td></td>
-				<td></td>
-				<td></td>
-				<td></td>
-				<td></td>
-			</tr>
-		</tfoot>
-
-	</table>
-
-	</br>
-
-	<table class="progress-map">
-		<caption>Overall Progress</caption>
+		<!--<caption>24-Week Progress</caption>-->
 		<tbody>
 			<tr>
 				<th></th>
@@ -518,7 +312,7 @@
 				<td class="progress-square"> </td>
 				<td class="progress-square"> </td>
 				<td class="progress-square"> </td>
-				<td class="progress-square"> </td>
+				<td class="progress-square map-current"> </td>
 			</tr>
 			<tr>
 				<th>Fri</th>
@@ -545,7 +339,7 @@
 				<td class="progress-square"> </td>
 				<td class="progress-square"> </td>
 				<td class="progress-square"> </td>
-				<td class="progress-square"> </td>
+				<td class="progress-square hidden-progress-square"> </td>
 			</tr>
 			<tr>
 				<th></th>
@@ -572,10 +366,10 @@
 				<td class="progress-square"> </td>
 				<td class="progress-square"> </td>
 				<td class="progress-square"> </td>
-				<td class="progress-square"> </td>
+				<td class="progress-square hidden-progress-square"> </td>
 			</tr>
 		</tbody>
-		<tfoot>
+		<!--<tfoot>
 			<tr>
 				<th>Week</th>
 				<td>24</td>
@@ -603,6 +397,6 @@
 				<td></td>
 				<td></td>
 			</tr>
-		</tfoot>
+		</tfoot>-->
 	</table>
 </body>
