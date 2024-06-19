@@ -8,17 +8,41 @@
 		}
 
 		.progress-square {
-			background-color: black;
+			background-color: grey;
+			border: 0.1em solid black;
 			width: 1.2em;
 			height: 1.2em;
 			border-radius: 0.15em;
 		}
 
-		.daily-progress-square {
-			background-color: green;
-			width: 1em;
-			height: 1em;
-			border-radius: 0.15em;
+		.chapter-progress-square-finished {
+			background-color: rgb(165, 42, 42);
+			border: 0.1em solid rgb(165, 42, 42);
+		}
+
+		.chapter-progress-square-in-progress {
+			background-color: rgba(165, 42, 42, 0.5);
+			border: 0.1em solid rgb(165, 42, 42);
+		}
+
+		.chapter-progress-square-todo {
+			background-color: unset;
+			border: 0.1em solid rgb(165, 42, 42);
+		}
+
+		.daily-progress-square-finished {
+			background-color: rgb(0, 128, 0);
+			border: 0.1em solid rgb(0, 128, 0);
+		}
+
+		.daily-progress-square-in-progress {
+			background-color: rgba(0, 128, 0, 0.5);
+			border: 0.1em solid rgb(0, 128, 0);
+		}
+
+		.daily-progress-square-todo {
+			background-color: unset;
+			border: 0.1em solid rgb(0, 128, 0);
 		}
 
 		.progress-map th,
@@ -46,8 +70,9 @@
 
 		.course {
 			background-color: beige;
-			width: 25em;
-			gap: 0.2em;
+			border: 0.1em solid lightgray;
+			border-radius: 0.15em;
+			width: 18em;
 			padding: 1.25em;
 		}
 
@@ -62,16 +87,17 @@
 
 		.course-chapters {
 			background-color: bisque;
-			margin: 0;
-			padding: 1.5em 3em;
+			border: 0.1em solid lightgray;
+			border-radius: 0.15em;
+			padding: 0.5em;
 		}
 
 		.course-chapters li:not(.list-active-chapter) {
 			opacity: 0.5;
 		}
 
-		.course .progress-map {
-			padding-top: 1em;
+		.course-chapter-map {
+			margin: 0 auto;
 		}
 
 	</style>
@@ -86,38 +112,108 @@
 	<h2>Your Active Courses</h2>
 
 	<div class="course">
-		<div style="display: flex;">
-			<h3 style="flex-grow: 1;">Course Name</h3>
-			<span>Chapter 4 / 30</span>
+		<h3>Course Name</h3>
+		<div class="course-chapters">
+			<table class="progress-map course-chapter-map">
+				<tbody>
+					<tr>
+						<td class="progress-square chapter-progress-square-finished"> </td>
+						<td class="progress-square chapter-progress-square-finished"> </td>
+						<td class="progress-square chapter-progress-square-finished"> </td>
+						<td class="progress-square chapter-progress-square-in-progress"> </td>
+						<td class="progress-square chapter-progress-square-todo"> </td>
+						<td class="progress-square chapter-progress-square-todo"> </td>
+						<td class="progress-square chapter-progress-square-todo"> </td>
+						<td class="progress-square chapter-progress-square-todo"> </td>
+						<td class="progress-square chapter-progress-square-todo"> </td>
+						<td class="progress-square chapter-progress-square-todo"> </td>
+					</tr>
+					<tr>
+						<td class="progress-square chapter-progress-square-todo"> </td>
+						<td class="progress-square chapter-progress-square-todo"> </td>
+						<td class="progress-square chapter-progress-square-todo"> </td>
+						<td class="progress-square chapter-progress-square-todo"> </td>
+						<td class="progress-square chapter-progress-square-todo"> </td>
+						<td class="progress-square chapter-progress-square-todo"> </td>
+						<td class="progress-square chapter-progress-square-todo"> </td>
+						<td class="progress-square chapter-progress-square-todo"> </td>
+						<td class="progress-square chapter-progress-square-todo"> </td>
+						<td class="progress-square chapter-progress-square-todo"> </td>
+					</tr>
+					<tr>
+						<td class="progress-square chapter-progress-square-todo"> </td>
+						<td class="progress-square chapter-progress-square-todo"> </td>
+						<td class="progress-square chapter-progress-square-todo"> </td>
+						<td class="progress-square chapter-progress-square-todo"> </td>
+						<td class="progress-square chapter-progress-square-todo"> </td>
+						<td class="progress-square chapter-progress-square-todo"> </td>
+						<td class="progress-square chapter-progress-square-todo"> </td>
+						<td class="progress-square chapter-progress-square-todo"> </td>
+						<td class="progress-square chapter-progress-square-todo"> </td>
+						<td class="progress-square chapter-progress-square-todo"> </td>
+					</tr>
+				</tbody>
+			</table>
 		</div>
-		<ol class="course-chapters" start="2">
-			<li>Chapter Name</li>
-			<li>Chapter Name</li>
-			<li class="list-active-chapter">Chapter Name
-				<ol>
-					<li>Subchapter Name</li>
-					<li>Subchapter Name</li>
-					<li>Subchapter Name</li>
-					<li class="list-active-chapter">Assignment 1</li>
-					<li>Assignment 2</li>
-				</ol>
-			</li>
-			<li>Chapter Name</li>
-			<li>Chapter Name</li>
-		</ol>
+
+
+		</br>
 		<table class="progress-map">
 			<tbody>
 				<tr>
-					<th>⏳</th>
-					<td class="daily-progress-square"> </td>
-					<td class="daily-progress-square"> </td>
-					<td class="daily-progress-square"> </td>
-					<td class="daily-progress-square map-current"> </td>
+					<th>⏱️</th>
+					<td class="progress-square daily-progress-square-finished"> </td>
+					<td class="progress-square daily-progress-square-finished"> </td>
+					<td class="progress-square daily-progress-square-finished"> </td>
+					<td class="progress-square daily-progress-square-in-progress"> </td>
+					<td class="progress-square daily-progress-square-todo"> </td>
+					<td class="progress-square daily-progress-square-todo"> </td>
 				</tr>
 			</tbody>
 		</table>
-		<!--<meter min="0" max="120" low="30" high="90" optimum="120" value="90"></meter>
-		<span>90 / 120 minutes</span>-->
+
+		<!--<meter min=" 0" max="120" low="30" high="90" optimum="120" value="90"></meter>
+			<span>90 / 120 minutes</span>-->
+	</div>
+
+	<br>
+
+	<div class="course">
+		<h3>Course Name</h3>
+		<div class="course-chapters">
+			<ol start="2">
+				<li>Chapter Name</li>
+				<li>Chapter Name</li>
+				<li class="list-active-chapter">Chapter Name
+					<ol>
+						<li>Subchapter Name</li>
+						<li>Subchapter Name</li>
+						<li>Subchapter Name</li>
+						<li class="list-active-chapter">Assignment 1</li>
+						<li>Assignment 2</li>
+					</ol>
+				</li>
+				<li>Chapter Name</li>
+				<li>Chapter Name</li>
+			</ol>
+		</div>
+		</br>
+		<table class="progress-map">
+			<tbody>
+				<tr>
+					<th>⏱️</th>
+					<td class="progress-square daily-progress-square-finished"> </td>
+					<td class="progress-square daily-progress-square-finished"> </td>
+					<td class="progress-square daily-progress-square-finished"> </td>
+					<td class="progress-square daily-progress-square-in-progress"> </td>
+					<td class="progress-square daily-progress-square-todo"> </td>
+					<td class="progress-square daily-progress-square-todo"> </td>
+				</tr>
+			</tbody>
+		</table>
+
+		<!--<meter min=" 0" max="120" low="30" high="90" optimum="120" value="90"></meter>
+				<span>90 / 120 minutes</span>-->
 	</div>
 
 
