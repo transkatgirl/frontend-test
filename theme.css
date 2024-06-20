@@ -70,7 +70,8 @@ section h3 {
 }
 
 .progress-map.chapter-progress-map tbody td {
-	border: 0.1em solid rgb(165, 42, 42);
+	border: 0.1em solid transparent;
+	background-color: rgba(16, 4, 4, 0.1);
 }
 
 .progress-map.chapter-progress-map .finished {
@@ -78,11 +79,12 @@ section h3 {
 }
 
 .progress-map.chapter-progress-map .in-progress {
-	background-color: rgba(165, 42, 42, 0.5);
+	background-color: rgba(165, 42, 42, 0.55);
 }
 
 .progress-map.hourly-progress-map tbody td {
-	border: 0.1em solid rgb(0, 128, 0);
+	border: 0.1em solid transparent;
+	background-color: rgba(0, 16, 0, 0.1);
 }
 
 .progress-map.hourly-progress-map .finished {
@@ -90,50 +92,31 @@ section h3 {
 }
 
 .progress-map.hourly-progress-map .in-progress {
-	background-color: rgba(0, 128, 0, 0.5);
+	background-color: rgba(0, 128, 0, 0.55);
 }
 
 .progress-map.daily-progress-map tbody td {
 	border: 0.1em solid transparent;
+	background-color: rgba(0, 16, 0, 0.1);
 }
 
 .progress-map.daily-progress-map .level-1 {
-	background-color: rgba(0, 128, 0, 0.1);
-}
-
-.progress-map.daily-progress-map .level-2 {
-	background-color: rgba(0, 128, 0, 0.2);
-}
-
-.progress-map.daily-progress-map .level-3 {
-	background-color: rgba(0, 128, 0, 0.3);
-}
-
-.progress-map.daily-progress-map .level-4 {
 	background-color: rgba(0, 128, 0, 0.4);
 }
 
-.progress-map.daily-progress-map .level-5 {
-	background-color: rgba(0, 128, 0, 0.5);
+.progress-map.daily-progress-map .level-2 {
+	background-color: rgba(0, 128, 0, 0.55);
 }
 
-.progress-map.daily-progress-map .level-6 {
-	background-color: rgba(0, 128, 0, 0.6);
-}
-
-.progress-map.daily-progress-map .level-7 {
+.progress-map.daily-progress-map .level-3 {
 	background-color: rgba(0, 128, 0, 0.7);
 }
 
-.progress-map.daily-progress-map .level-8 {
-	background-color: rgba(0, 128, 0, 0.8);
+.progress-map.daily-progress-map .level-4 {
+	background-color: rgba(0, 128, 0, 0.85);
 }
 
-.progress-map.daily-progress-map .level-9 {
-	background-color: rgba(0, 128, 0, 0.9);
-}
-
-.progress-map.daily-progress-map .level-10 {
+.progress-map.daily-progress-map .level-5 {
 	background-color: rgba(0, 128, 0, 1);
 }
 
