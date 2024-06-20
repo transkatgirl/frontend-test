@@ -5,6 +5,10 @@ body {
 	margin: 1.2em;
 }
 
+a {
+	color: unset;
+}
+
 section,
 .subsection {
 	border: 0.1em solid lightgray;
@@ -42,6 +46,10 @@ section h3 {
 
 .course-card {
 	width: 18em;
+}
+
+.course-card .subsection a {
+	text-decoration: unset;
 }
 
 .course-card li:not(.active-section) {
@@ -208,8 +216,4 @@ section h3 {
 .course-viewer-inner > iframe {
 	border: none;
 	width: calc(100% - (15em + 0.5em + 0.1em));
-}
-
-.course-viewer-inner > nav a {
-	color: black;
 }
