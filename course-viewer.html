@@ -2,136 +2,113 @@
 
 <head>
 	<link rel="stylesheet" href="theme.css" />
-	<style>
-		ul,
-		ol {
-			margin: 0;
-		}
-
-		.table-of-contents {
-			height: 90%;
-			width: 16em;
-			position: fixed;
-			z-index: 1;
-			left: 0;
-			overflow: auto;
-			background-color: beige;
-			padding: 0.5em;
-		}
-
-		iframe {
-			margin-left: 16em;
-			width: 100%;
-			border: none;
-		}
-
-	</style>
 </head>
 
-<body>
+<body class="course-viewer">
 	<header>
 		<h1>Course Name</h1>
 	</header>
-	<nav class="table-of-contents">
-		<h2>Table of Contents</h2>
-		<ul>
-			<li>Section Name</li>
-			<li>Section Name</li>
-		</ul>
-		<ol>
-			<li><input type="checkbox" /> Chapter Name</li>
-			<li>Chapter Name
-				<ul>
-					<li>Section Name</li>
-					<li><input type="checkbox" /> Section Name</li>
-				</ul>
-				<ol>
-					<li><input type="checkbox" /> Section Name</li>
-					<li><input type="checkbox" /> Section Name</li>
-					<li><input type="checkbox" /> Section Name</li>
-					<li><input type="checkbox" /> Section Name</li>
-					<li><input type="checkbox" /> Section Name</li>
-				</ol>
-				<ul>
-					<li><input type="checkbox" /> Section Name</li>
-					<li><input type="checkbox" /> Section Name</li>
-				</ul>
-			</li>
-			<li>Chapter Name
-				<ul>
-					<li>Section Name</li>
-					<li><input type="checkbox" /> Section Name</li>
-				</ul>
-				<ol>
-					<li><input type="checkbox" /> Section Name</li>
-					<li><input type="checkbox" /> Section Name</li>
-					<li><input type="checkbox" /> Section Name</li>
-					<li><input type="checkbox" /> Section Name</li>
-					<li><input type="checkbox" /> Section Name</li>
-				</ol>
-				<ul>
-					<li><input type="checkbox" /> Section Name</li>
-					<li><input type="checkbox" /> Section Name</li>
-				</ul>
-			</li>
-			<li>Chapter Name
-				<ul>
-					<li>Section Name</li>
-					<li><input type="checkbox" /> Section Name</li>
-				</ul>
-				<ol>
-					<li><input type="checkbox" /> Section Name</li>
-					<li><input type="checkbox" /> Section Name</li>
-					<li><input type="checkbox" /> Section Name</li>
-					<li><input type="checkbox" /> Section Name</li>
-					<li><input type="checkbox" /> Section Name</li>
-				</ol>
-				<ul>
-					<li><input type="checkbox" /> Section Name</li>
-					<li><input type="checkbox" /> Section Name</li>
-				</ul>
-			</li>
-			<li>Chapter Name
-				<ul>
-					<li>Section Name</li>
-					<li><input type="checkbox" /> Section Name</li>
-				</ul>
-				<ol>
-					<li><input type="checkbox" /> Section Name</li>
-					<li><input type="checkbox" /> Section Name</li>
-					<li><input type="checkbox" /> Section Name</li>
-					<li><input type="checkbox" /> Section Name</li>
-					<li><input type="checkbox" /> Section Name</li>
-				</ol>
-				<ul>
-					<li><input type="checkbox" /> Section Name</li>
-					<li><input type="checkbox" /> Section Name</li>
-				</ul>
-			</li>
-			<li>Chapter Name
-				<ul>
-					<li>Section Name</li>
-					<li><input type="checkbox" /> Section Name</li>
-				</ul>
-				<ol>
-					<li><input type="checkbox" /> Section Name</li>
-					<li><input type="checkbox" /> Section Name</li>
-					<li><input type="checkbox" /> Section Name</li>
-					<li><input type="checkbox" /> Section Name</li>
-					<li><input type="checkbox" /> Section Name</li>
-				</ol>
-				<ul>
-					<li><input type="checkbox" /> Section Name</li>
-					<li><input type="checkbox" /> Section Name</li>
-				</ul>
-			</li>
-			<li><input type="checkbox" /> Chapter Name</li>
-			<li><input type="checkbox" /> Chapter Name</li>
-		</ol>
-		<ul>
-			<li>Section Name</li>
-			<li>Section Name</li>
-		</ul>
-	</nav>
-	<iframe src="demo-course.html">
+	<div class="course-viewer-inner">
+		<nav class="table-of-contents">
+			<ul>
+				<li>Section Name</li>
+				<li>Section Name</li>
+			</ul>
+			<ol>
+				<li><input type="checkbox" /> Chapter Name</li>
+				<li>Chapter Name
+					<ul>
+						<li>Section Name</li>
+						<li><input type="checkbox" /> Section Name</li>
+					</ul>
+					<ol>
+						<li><input type="checkbox" /> Section Name</li>
+						<li><input type="checkbox" /> Section Name</li>
+						<li><input type="checkbox" /> Section Name</li>
+						<li><input type="checkbox" /> Section Name</li>
+						<li><input type="checkbox" /> Section Name</li>
+					</ol>
+					<ul>
+						<li><input type="checkbox" /> Section Name</li>
+						<li><input type="checkbox" /> Section Name</li>
+					</ul>
+				</li>
+				<li>Chapter Name
+					<ul>
+						<li>Section Name</li>
+						<li><input type="checkbox" /> Section Name</li>
+					</ul>
+					<ol>
+						<li><input type="checkbox" /> Section Name</li>
+						<li><input type="checkbox" /> Section Name</li>
+						<li><input type="checkbox" /> Section Name</li>
+						<li><input type="checkbox" /> Section Name</li>
+						<li><input type="checkbox" /> Section Name</li>
+					</ol>
+					<ul>
+						<li><input type="checkbox" /> Section Name</li>
+						<li><input type="checkbox" /> Section Name</li>
+					</ul>
+				</li>
+				<li>Chapter Name
+					<ul>
+						<li>Section Name</li>
+						<li><input type="checkbox" /> Section Name</li>
+					</ul>
+					<ol>
+						<li><input type="checkbox" /> Section Name</li>
+						<li><input type="checkbox" /> Section Name</li>
+						<li><input type="checkbox" /> Section Name</li>
+						<li><input type="checkbox" /> Section Name</li>
+						<li><input type="checkbox" /> Section Name</li>
+					</ol>
+					<ul>
+						<li><input type="checkbox" /> Section Name</li>
+						<li><input type="checkbox" /> Section Name</li>
+					</ul>
+				</li>
+				<li>Chapter Name
+					<ul>
+						<li>Section Name</li>
+						<li><input type="checkbox" /> Section Name</li>
+					</ul>
+					<ol>
+						<li><input type="checkbox" /> Section Name</li>
+						<li><input type="checkbox" /> Section Name</li>
+						<li><input type="checkbox" /> Section Name</li>
+						<li><input type="checkbox" /> Section Name</li>
+						<li><input type="checkbox" /> Section Name</li>
+					</ol>
+					<ul>
+						<li><input type="checkbox" /> Section Name</li>
+						<li><input type="checkbox" /> Section Name</li>
+					</ul>
+				</li>
+				<li>Chapter Name
+					<ul>
+						<li>Section Name</li>
+						<li><input type="checkbox" /> Section Name</li>
+					</ul>
+					<ol>
+						<li><input type="checkbox" /> Section Name</li>
+						<li><input type="checkbox" /> Section Name</li>
+						<li><input type="checkbox" /> Section Name</li>
+						<li><input type="checkbox" /> Section Name</li>
+						<li><input type="checkbox" /> Section Name</li>
+					</ol>
+					<ul>
+						<li><input type="checkbox" /> Section Name</li>
+						<li><input type="checkbox" /> Section Name</li>
+					</ul>
+				</li>
+				<li><input type="checkbox" /> Chapter Name</li>
+				<li><input type="checkbox" /> Chapter Name</li>
+			</ol>
+			<ul>
+				<li>Section Name</li>
+				<li>Section Name</li>
+			</ul>
+		</nav>
+		<iframe src="demo-course.html"></iframe>
+	</div>
 </body>

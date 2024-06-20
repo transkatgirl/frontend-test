@@ -171,3 +171,41 @@ section h3 {
 }
 
 /* Course Viewer-specific CSS */
+
+.course-viewer {
+	margin: 0;
+
+}
+
+.course-viewer > header {
+	background-color: burlywood;
+	height: 2em;
+	padding: 1.2em;
+	display: flex;
+	align-items: center;
+	border-bottom: 0.1em solid grey;
+
+}
+
+.course-viewer-inner {
+	display: flex;
+	height: calc(100vh - (2em + (1.2em * 2) + 0.1em));
+}
+
+.course-viewer-inner > nav {
+	background-color: beige;
+	padding: 1.2em;
+	width: 18em;
+	overflow: auto;
+	border-right: 0.1em solid gray;
+}
+
+.course-viewer-inner > nav ul,
+.course-viewer-inner > nav ol {
+	margin: 0;
+}
+
+.course-viewer-inner > iframe {
+	border: none;
+	width: 100%;
+}
