@@ -4,16 +4,15 @@
 
 graph TD
 	subgraph Mathematics
-		Prealgebra ---> Algebra-Fundementals
-		Algebra-Fundementals ---> Algebra-and-Trigonometry
-		Algebra-and-Trigonometry ---> Statistics-Fundementals
-		Algebra-and-Trigonometry ---> Calculus
+		Prealgebra --> Algebra-Fundementals
+		Algebra-Fundementals --> Algebra-and-Trigonometry
+		Algebra-and-Trigonometry --> Statistics-Fundementals
+		Algebra-and-Trigonometry --> Calculus
 	end
 
-	Calculus ---> Physics-Fundementals
+	Calculus --> Physics-Fundementals
 
-	Statistics-Fundementals-->|Corequisite| Chemistry-Fundementals
-	Statistics-Fundementals-->|Corequisite| Physics-Fundementals
+	Statistics-Fundementals -->|Corequisite| Natural-Science
 
 	subgraph Natural-Science
 		subgraph Physical-Science
@@ -25,7 +24,7 @@ graph TD
 			end
 		end
 
-		Chemistry-Fundementals-->|Corequisite| Biology-Fundementals
+		Chemistry-Fundementals -->|Corequisite| Biology-Fundementals
 
 		subgraph Life-Science
 			subgraph Biology
@@ -35,13 +34,16 @@ graph TD
 		end
 	end
 
-	Statistics-Fundementals-->|Corequisite| Political-Science-Fundementals
-	Statistics-Fundementals-->|Corequisite| Introductory-Anthropology
-	Statistics-Fundementals-->|Corequisite| Sociology-Fundementals
-	Statistics-Fundementals-->|Corequisite| Economics-Fundementals
-	Statistics-Fundementals-->|Corequisite| Psychology-Fundementals
+	Statistics-Fundementals -->|Corequisite| Social-Science
 
 	Calculus ---> Economics-Fundementals
+
+	subgraph Humanities
+		World-History
+		Introductory-Philosophy
+	end
+
+    World-History -->|Corequisite| Social-Science
 
 	subgraph Social-Science
 		subgraph Political-Science
@@ -63,14 +65,6 @@ graph TD
 		subgraph Psychology
 			Psychology-Fundementals
 		end
-	end
-
-	World-History -->|Corequisite| Sociology-Fundementals
-	World-History -->|Corequisite| Introductory-Anthropology
-
-	subgraph Humanities
-		World-History
-		Introductory-Philosophy
 	end
 
 ```
