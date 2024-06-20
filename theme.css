@@ -186,17 +186,31 @@ section h3 {
 
 .course-viewer > header {
 	background-color: burlywood;
-	height: 2em;
+	height: 1.2em;
 	padding: 1.2em;
 	display: flex;
 	align-items: center;
+	justify-content: space-between;
 	border-bottom: 0.1em solid gray;
+}
 
+.course-viewer > header > nav {
+	display: flex;
+	align-items: center;
+}
+
+.course-viewer > header > nav a {
+	margin-left: 1em;
+	padding: 0.5em;
+	background-color: beige;
+	text-decoration: none;
+	border: 0.1em solid lightgray;
+	border-radius: 0.2em;
 }
 
 .course-viewer-inner {
 	display: flex;
-	height: calc(100vh - (2em + (1.2em * 2) + 0.1em));
+	height: calc(100vh - (1.2em + (1.2em * 2) + 0.1em));
 }
 
 .course-viewer-inner > nav {
@@ -216,4 +230,8 @@ section h3 {
 .course-viewer-inner > iframe {
 	border: none;
 	width: calc(100% - (15em + 0.5em + 0.1em));
+}
+
+.course-viewer h1 {
+	font-size: 1.2em;
 }
