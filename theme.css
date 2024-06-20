@@ -2,7 +2,7 @@
 
 body {
 	font: 1em/1.2 sans-serif;
-	margin: 1em;
+	margin: 1.2em;
 }
 
 section,
@@ -15,7 +15,7 @@ section {
 	background-color: beige;
 	padding: 1.5em;
 	display: inline-block;
-	margin-bottom: 1.2em;
+	margin: 0 1.2em 1.2em 0;
 }
 
 .subsection {
@@ -33,6 +33,12 @@ section h3 {
 }
 
 /* Homescreen-specific CSS */
+
+.active-courses {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: flex-start;
+}
 
 .course-card {
 	width: 18em;
@@ -69,6 +75,16 @@ section h3 {
 	border-radius: 0.1em;
 }
 
+.progress-map.color-key {
+	font-size: 0.9em;
+	float: right;
+}
+
+.progress-map.color-key tbody td {
+	width: 1.1em;
+	height: 1.1em;
+}
+
 .progress-map.chapter-progress-map tbody td {
 	border: 0.1em solid transparent;
 	background-color: rgba(16, 4, 4, 0.1);
@@ -95,36 +111,62 @@ section h3 {
 	background-color: rgba(0, 128, 0, 0.55);
 }
 
-.progress-map.daily-progress-map tbody td {
+.progress-map.daily-time-progress-map tbody td {
 	border: 0.1em solid transparent;
 	background-color: rgba(0, 16, 0, 0.1);
 }
 
-.progress-map.daily-progress-map .level-1 {
+.progress-map.daily-time-progress-map .level-1 {
 	background-color: rgba(0, 128, 0, 0.4);
 }
 
-.progress-map.daily-progress-map .level-2 {
+.progress-map.daily-time-progress-map .level-2 {
 	background-color: rgba(0, 128, 0, 0.55);
 }
 
-.progress-map.daily-progress-map .level-3 {
+.progress-map.daily-time-progress-map .level-3 {
 	background-color: rgba(0, 128, 0, 0.7);
 }
 
-.progress-map.daily-progress-map .level-4 {
+.progress-map.daily-time-progress-map .level-4 {
 	background-color: rgba(0, 128, 0, 0.85);
 }
 
-.progress-map.daily-progress-map .level-5 {
+.progress-map.daily-time-progress-map .level-5 {
 	background-color: rgba(0, 128, 0, 1);
 }
 
-.progress-map.daily-progress-map .in-progress {
+.progress-map.daily-time-progress-map .in-progress {
 	border: 0.1em solid black;
 }
 
-.progress-map.daily-progress-map .no-data {
+.progress-map.daily-time-progress-map .no-data {
+	background-color: unset;
+}
+
+
+.progress-map.daily-chapter-progress-map tbody td {
+	border: 0.1em solid transparent;
+	background-color: rgba(16, 4, 4, 0.1);
+}
+
+.progress-map.daily-chapter-progress-map .level-1 {
+	background-color: rgba(165, 42, 42, 0.5);
+}
+
+.progress-map.daily-chapter-progress-map .level-2 {
+	background-color: rgba(165, 42, 42, 0.75);
+}
+
+.progress-map.daily-chapter-progress-map .level-3 {
+	background-color: rgba(165, 42, 42, 1);
+}
+
+.progress-map.daily-chapter-progress-map .in-progress {
+	border: 0.1em solid black;
+}
+
+.progress-map.daily-time-progress-map .no-data {
 	background-color: unset;
 }
 

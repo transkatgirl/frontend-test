@@ -8,12 +8,32 @@
 			margin: 0;
 		}
 
+		.table-of-contents {
+			height: 90%;
+			width: 16em;
+			position: fixed;
+			z-index: 1;
+			left: 0;
+			overflow: auto;
+			background-color: beige;
+			padding: 0.5em;
+		}
+
+		iframe {
+			margin-left: 16em;
+			width: 100%;
+			border: none;
+		}
+
 	</style>
 </head>
 
 <body>
-	<h1>Course Name</h1>
-	<div class="table-of-contents">
+	<header>
+		<h1>Course Name</h1>
+	</header>
+	<nav class="table-of-contents">
+		<h2>Table of Contents</h2>
 		<ul>
 			<li>Section Name</li>
 			<li>Section Name</li>
@@ -112,8 +132,6 @@
 			<li>Section Name</li>
 			<li>Section Name</li>
 		</ul>
-	</div>
-	<div>
-
-	</div>
+	</nav>
+	<iframe src="demo-course.html">
 </body>
