@@ -76,8 +76,6 @@ section h3 {
 }
 
 .progress-map tbody td {
-	/*background-color: grey;
-	border: 0.1em solid black; */
 	width: 1.2em;
 	height: 1.2em;
 	border-radius: 0.1em;
@@ -217,11 +215,20 @@ section h3 {
 }
 
 .course-viewer-inner > nav {
-	background-color: beige;
+	background-color: antiquewhite;
 	padding: 1em 0.5em;
-	width: 15em;
+	width: 14em;
 	overflow: auto;
 	border-right: 0.1em solid gray;
+	resize: horizontal;
+}
+
+.course-viewer-inner > nav a {
+	text-decoration: unset;
+}
+
+.course-viewer-inner > nav a:hover {
+	text-decoration: underline;
 }
 
 .course-viewer-inner > nav ul,
@@ -230,9 +237,13 @@ section h3 {
 	padding-left: 2em;
 }
 
+.course-viewer-inner > nav li {
+	margin: 0.15em 0;
+}
+
 .course-viewer-inner > iframe {
 	border: none;
-	width: calc(100% - (15em + 0.5em + 0.1em));
+	flex-grow: 1;
 }
 
 .course-viewer h1 {
