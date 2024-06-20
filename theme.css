@@ -48,6 +48,20 @@ section h3 {
 	align-items: flex-start;
 }
 
+nav.settings {
+	float: right;
+	margin-top: 0.6em;
+}
+
+nav.settings a {
+	margin-left: 0.6em;
+	padding: 0.5em;
+	background-color: beige;
+	text-decoration: none;
+	border: 0.1em solid lightgray;
+	border-radius: 0.2em;
+}
+
 .course-card {
 	width: 18em;
 }
