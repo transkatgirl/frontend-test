@@ -197,6 +197,12 @@ nav.settings a {
 	background-color: unset;
 }
 
+@media (max-width: 49em) {
+	.progress-map .expanded-data {
+		display: none;
+	}
+}
+
 /* Course Viewer-specific CSS */
 
 .course-viewer {
@@ -241,10 +247,23 @@ nav.settings a {
 	resize: horizontal;
 }
 
-/*.course-viewer-inner > nav:not(:hover) ul,
-.course-viewer-inner > nav:not(:hover) ol {
-	display: none;
-}*/
+@media (max-width: 46em) {
+	.course-viewer > header table {
+		display: none;
+	}
+}
+
+@media (max-width: 55em) {
+	.course-viewer-inner > nav {
+		width: unset !important;
+		resize: none;
+	}
+
+	.course-viewer-inner > nav:not(:hover) ul,
+	.course-viewer-inner > nav:not(:hover) ol {
+		display: none;
+	}
+}
 
 .course-viewer-inner > nav a {
 	text-decoration: unset;
