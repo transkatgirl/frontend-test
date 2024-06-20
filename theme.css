@@ -235,11 +235,16 @@ nav.settings a {
 .course-viewer-inner > nav {
 	background-color: antiquewhite;
 	padding: 1em 0.75em 1em 1em;
-	width: 15em;
 	overflow: auto;
 	border-right: 0.1em solid gray;
+	width: 15em;
 	resize: horizontal;
 }
+
+/*.course-viewer-inner > nav:not(:hover) ul,
+.course-viewer-inner > nav:not(:hover) ol {
+	display: none;
+}*/
 
 .course-viewer-inner > nav a {
 	text-decoration: unset;
