@@ -1,0 +1,148 @@
+/* Common CSS, shared with all pages */
+
+body {
+	font: 1em/1.2 sans-serif;
+	margin: 1em;
+}
+
+section,
+.subsection {
+	border: 0.1em solid lightgray;
+	border-radius: 0.1em;
+}
+
+section {
+	background-color: beige;
+	padding: 1.5em;
+	display: inline-block;
+	margin-bottom: 1.2em;
+}
+
+.subsection {
+	background-color: bisque;
+	padding: 0.5em;
+}
+
+section h2,
+section h3 {
+	margin-top: 0;
+}
+
+section h3 {
+	font-size: 1.2em;
+}
+
+/* Homescreen-specific CSS */
+
+.course-card {
+	width: 18em;
+}
+
+.course-card li:not(.active-section) {
+	opacity: 0.5;
+}
+
+.course-card .subsection table {
+	margin: 0 auto;
+}
+
+.progress-map tbody,
+.progress-map tfoot th {
+	text-align: right;
+}
+
+.progress-map tfoot {
+	text-align: center;
+}
+
+.progress-map th,
+.progress-map tfoot td {
+	font-weight: normal;
+	opacity: 0.5;
+}
+
+.progress-map tbody td {
+	/*background-color: grey;
+	border: 0.1em solid black; */
+	width: 1.2em;
+	height: 1.2em;
+	border-radius: 0.1em;
+}
+
+.progress-map.chapter-progress-map tbody td {
+	border: 0.1em solid rgb(165, 42, 42);
+}
+
+.progress-map.chapter-progress-map .finished {
+	background-color: rgb(165, 42, 42);
+}
+
+.progress-map.chapter-progress-map .in-progress {
+	background-color: rgba(165, 42, 42, 0.5);
+}
+
+.progress-map.hourly-progress-map tbody td {
+	border: 0.1em solid rgb(0, 128, 0);
+}
+
+.progress-map.hourly-progress-map .finished {
+	background-color: rgb(0, 128, 0);
+}
+
+.progress-map.hourly-progress-map .in-progress {
+	background-color: rgba(0, 128, 0, 0.5);
+}
+
+.progress-map.daily-progress-map tbody td {
+	border: 0.1em solid transparent;
+}
+
+.progress-map.daily-progress-map .level-1 {
+	background-color: rgba(0, 128, 0, 0.1);
+}
+
+.progress-map.daily-progress-map .level-2 {
+	background-color: rgba(0, 128, 0, 0.2);
+}
+
+.progress-map.daily-progress-map .level-3 {
+	background-color: rgba(0, 128, 0, 0.3);
+}
+
+.progress-map.daily-progress-map .level-4 {
+	background-color: rgba(0, 128, 0, 0.4);
+}
+
+.progress-map.daily-progress-map .level-5 {
+	background-color: rgba(0, 128, 0, 0.5);
+}
+
+.progress-map.daily-progress-map .level-6 {
+	background-color: rgba(0, 128, 0, 0.6);
+}
+
+.progress-map.daily-progress-map .level-7 {
+	background-color: rgba(0, 128, 0, 0.7);
+}
+
+.progress-map.daily-progress-map .level-8 {
+	background-color: rgba(0, 128, 0, 0.8);
+}
+
+.progress-map.daily-progress-map .level-9 {
+	background-color: rgba(0, 128, 0, 0.9);
+}
+
+.progress-map.daily-progress-map .level-10 {
+	background-color: rgba(0, 128, 0, 1);
+}
+
+.progress-map.daily-progress-map .in-progress {
+	border: 0.1em solid black;
+}
+
+.progress-map.daily-progress-map .no-data {
+	background-color: unset;
+}
+
+/* Course Viewer-specific CSS */
