@@ -174,7 +174,6 @@ section h3 {
 
 .course-viewer {
 	margin: 0;
-
 }
 
 .course-viewer > header {
@@ -183,7 +182,7 @@ section h3 {
 	padding: 1.2em;
 	display: flex;
 	align-items: center;
-	border-bottom: 0.1em solid grey;
+	border-bottom: 0.1em solid gray;
 
 }
 
@@ -194,8 +193,8 @@ section h3 {
 
 .course-viewer-inner > nav {
 	background-color: beige;
-	padding: 1.2em;
-	width: 18em;
+	padding: 1em 0.5em;
+	width: 15em;
 	overflow: auto;
 	border-right: 0.1em solid gray;
 }
@@ -203,9 +202,14 @@ section h3 {
 .course-viewer-inner > nav ul,
 .course-viewer-inner > nav ol {
 	margin: 0;
+	padding-left: 2em;
 }
 
 .course-viewer-inner > iframe {
 	border: none;
-	width: 100%;
+	width: calc(100% - (15em + 0.5em + 0.1em));
+}
+
+.course-viewer-inner > nav a {
+	color: black;
 }
