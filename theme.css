@@ -39,7 +39,7 @@ section h3 {
 /* Homescreen-specific CSS */
 
 .homepage {
-	background-color: hsl(150, 50%, 96%);
+	background-color: rgb(250, 255, 255);
 }
 
 .active-courses {
