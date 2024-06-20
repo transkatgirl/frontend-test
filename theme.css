@@ -66,10 +66,6 @@ nav.settings a {
 	text-decoration: unset;
 }
 
-.course-card li:not(.active-section) {
-	opacity: 0.5;
-}
-
 .course-card .subsection table {
 	margin: 0 auto;
 }
