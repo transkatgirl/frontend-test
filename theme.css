@@ -119,6 +119,10 @@ section h3 {
 	background-color: rgba(0, 128, 0, 0.55);
 }
 
+.progress-map.hourly-progress-map th {
+	opacity: 1;
+}
+
 .progress-map.daily-time-progress-map tbody td {
 	border: 0.1em solid transparent;
 	background-color: rgba(0, 16, 0, 0.1);
@@ -152,7 +156,6 @@ section h3 {
 	background-color: unset;
 }
 
-
 .progress-map.daily-chapter-progress-map tbody td {
 	border: 0.1em solid transparent;
 	background-color: rgba(16, 4, 4, 0.1);
@@ -185,7 +188,7 @@ section h3 {
 }
 
 .course-viewer > header {
-	background-color: burlywood;
+	background-color: tan;
 	height: 1.2em;
 	padding: 1.2em;
 	display: flex;
