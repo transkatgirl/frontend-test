@@ -38,6 +38,10 @@ section h3 {
 
 /* Homescreen-specific CSS */
 
+.homepage {
+	background-color: hsl(150, 50%, 96%);
+}
+
 .active-courses {
 	display: flex;
 	flex-wrap: wrap;
