@@ -263,7 +263,8 @@ nav.settings a {
 
 .app-page > main > nav footer {
 	position: absolute;
-	bottom: 1em;
+	bottom: 0;
+	margin: 0 1em 1em 0;
 }
 
 .app-page > main > nav h2 {
