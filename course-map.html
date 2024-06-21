@@ -50,10 +50,10 @@
 
 	<pre class="mermaid">
 		graph TD
-			Prealgebra[<button type="button">➕</button> Prealgebra <input type="checkbox" />] ---> Algebra-Fundementals[Algebra Fundementals <input type="checkbox" />]
-			Algebra-Fundementals ---> Algebra-and-Trigonometry[Algebra and Trigonometry <input type="checkbox" />]
-			Algebra-and-Trigonometry ---> Statistics-Fundementals[Statistics Fundementals <input type="checkbox" />]
-			Algebra-and-Trigonometry ---> Calculus[Calculus <input type="checkbox" />]
+			Prealgebra[Prealgebra <input type="checkbox" checked />] ---> Algebra-Fundementals[Algebra Fundementals <input type="checkbox" checked />]
+			Algebra-Fundementals ---> Algebra-and-Trigonometry[Algebra and Trigonometry <input type="checkbox" checked />]
+			Algebra-and-Trigonometry ---> Statistics-Fundementals[Statistics Fundementals <button type="button">➕</button> <input type="checkbox" />]
+			Algebra-and-Trigonometry ---> Calculus[Calculus <button type="button">➖</button>]
 	</pre>
 	<pre class="mermaid">
 		graph TD
