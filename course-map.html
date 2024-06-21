@@ -7,7 +7,7 @@
 		mermaid.initialize({
 			startOnLoad: true,
 			theme: 'base',
-			wrap: false,
+
 			themeVariables: {
 				fontSize: '16px',
 				fontFamily: 'sans-serif',
@@ -28,6 +28,9 @@
 				secondaryBorderColor: 'lightgray',
 				tertiaryBorderColor: 'lightgray',
 				noteBorderColor: 'lightgray',
+			},
+			flowchart: {
+				useMaxWidth: false
 			}
 		});
 	</script>
@@ -41,21 +44,21 @@
 <!-- See https://github.com/mermaid-js/mermaid-cli -->
 <!-- https://mermaid.js.org/syntax/flowchart.html -->
 
-<body>
-	<nav class="settings">
-		<a href="homepage.html">Exit 🚪</a>
-	</nav>
-	<h1>🗺️ Course Map</h1>
-
-
-	<pre class="mermaid">
-		graph TD
-			Prealgebra[Prealgebra <input type="checkbox" checked />] ---> Algebra-Fundementals[Algebra Fundementals <input type="checkbox" checked />]
-			Algebra-Fundementals ---> Algebra-and-Trigonometry[Algebra and Trigonometry <input type="checkbox" checked />]
-			Algebra-and-Trigonometry ---> Statistics-Fundementals[Statistics Fundementals <button type="button">➕</button> <input type="checkbox" />]
-			Algebra-and-Trigonometry ---> Calculus[Calculus <button type="button">➖</button>]
-	</pre>
-	<pre class="mermaid">
+<body class="course-map app-page">
+	<header>
+		<h1>🗺️ Course Map</h1>
+		<nav>
+			<a href="homepage.html">Exit 🚪</a>
+		</nav>
+	</header>
+	<main>
+		<nav>
+			<h2>Your Course Maps</h2>
+			<ul>
+				<li>test</li>
+			</ul>
+		</nav>
+		<pre class="mermaid">
 		graph TD
 		subgraph Mathematics
 		Prealgebra --> Algebra-Fundementals
@@ -121,4 +124,5 @@
 			end
 			end
 	</pre>
+	</main>
 </body>

@@ -214,11 +214,15 @@ nav.settings a {
 
 /* Course Viewer-specific CSS */
 
-.course-viewer {
+.app-page {
 	margin: 0;
 }
 
-.course-viewer > header {
+.app-page header h1 {
+	font-size: 1.3em;
+}
+
+.app-page > header {
 	background-color: tan;
 	height: 1.2em;
 	padding: 1.2em;
@@ -228,12 +232,12 @@ nav.settings a {
 	border-bottom: 0.1em solid gray;
 }
 
-.course-viewer > header > nav {
+.app-page > header > nav {
 	display: flex;
 	align-items: center;
 }
 
-.course-viewer > header > nav a {
+.app-page > header > nav a {
 	margin-left: 1em;
 	padding: 0.5em;
 	background-color: beige;
@@ -242,18 +246,65 @@ nav.settings a {
 	border-radius: 0.2em;
 }
 
-.course-viewer-inner {
+.app-page > main {
 	display: flex;
 	height: calc(100vh - (1.2em + (1.2em * 2) + 0.1em));
 }
 
-.course-viewer-inner > nav {
+.app-page > main > nav {
 	background-color: antiquewhite;
 	padding: 1em 0.75em 1em 1em;
 	overflow: auto;
 	border-right: 0.1em solid gray;
 	width: 15em;
 	resize: horizontal;
+}
+
+.app-page > main > nav h2 {
+	margin-top: 0;
+	margin-bottom: 0.6em;
+	font-size: 1.2em;
+}
+
+.app-page > main > nav a {
+	text-decoration: unset;
+}
+
+.app-page > main > nav a:hover {
+	text-decoration: underline;
+}
+
+.app-page > main > nav ul,
+.app-page > main > nav ol {
+	margin: 0;
+	padding-left: 1.5em;
+}
+
+.app-page > main > nav ol ul {
+	list-style: none;
+}
+
+.app-page > main > nav details {
+	padding-left: 0.5em;
+}
+
+.app-page > main > nav details ul {
+	padding-left: 2.5em;
+}
+
+.app-page > main > nav li {
+	margin: 0.2em 0;
+}
+
+@media (max-width: 55em) {
+	.app-page > main > nav {
+		width: unset !important;
+		resize: none;
+	}
+
+	.app-page > main > nav:not(:hover) > * {
+		display: none;
+	}
 }
 
 @media (max-width: 43.5em) {
@@ -268,59 +319,31 @@ nav.settings a {
 	}
 }
 
-@media (max-width: 55em) {
-	.course-viewer-inner > nav {
-		width: unset !important;
-		resize: none;
-	}
-
-	.course-viewer-inner > nav:not(:hover) ul,
-	.course-viewer-inner > nav:not(:hover) ol {
-		display: none;
-	}
-}
-
-.course-viewer-inner > nav a {
-	text-decoration: unset;
-}
-
-.course-viewer-inner > nav a:hover {
-	text-decoration: underline;
-}
-
-.course-viewer-inner > nav ul,
-.course-viewer-inner > nav ol {
-	margin: 0;
-	padding-left: 1.5em;
-}
-
-.course-viewer-inner > nav ol ul {
-	list-style: none;
-}
-
-.course-viewer-inner > nav details {
-	padding-left: 0.5em;
-}
-
-.course-viewer-inner > nav details ul {
-	padding-left: 2.5em;
-}
-
-.course-viewer-inner > nav li {
-	margin: 0.2em 0;
-}
-
-.course-viewer-inner > iframe {
+.app-page > main > :not(nav) {
 	border: none;
 	flex-grow: 1;
 }
 
-.course-viewer h1 {
-	font-size: 1.2em;
+/* Course Map -specific CSS */
+
+/*.course-map > main > nav {
+	width: unset !important;
+	resize: none;
 }
 
-/* Course Map -specific CSS */
+.course-map > main > nav:not(:hover) > * {
+	display: none;
+}*/
 
 svg button[type="button"] {
 	padding: 0.12em;
+}
+
+pre.mermaid {
+	display: inline-block;
+	width: 100%;
+	overflow: auto;
+	margin: 0;
+	/*height: 85vh;*/
+	/*border: 0.1em solid lightgray;*/
 }
