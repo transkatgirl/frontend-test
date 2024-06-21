@@ -9,7 +9,7 @@
 			theme: 'base',
 
 			themeVariables: {
-				fontSize: '0.9em',
+				fontSize: '0.95em',
 				fontFamily: 'sans-serif',
 				background: 'white',
 				mainBkg: 'bisque',
@@ -65,9 +65,9 @@
 			<br>
 			<h2>Your Courses</h2>
 			<ul>
-				<li>Course Name</li>
-				<li>Course Name</li>
-				<li>Course Name</li>
+				<li>Course Name <input type="checkbox" checked /></li>
+				<li>Course Name <button type="button">➖</button></li>
+				<li>Course Name <button type="button">➕</button> <button type="button">✔️</button></li>
 			</ul>
 			<br>
 			<footer>
@@ -76,70 +76,15 @@
 
 		</nav>
 		<pre class="mermaid">
+		---
+		title: Course Map Name
+		---
 		graph TD
-		subgraph Mathematics
-		Prealgebra --> Algebra-Fundementals
-		Algebra-Fundementals --> Algebra-and-Trigonometry
-		Algebra-and-Trigonometry --> Statistics-Fundementals
-		Algebra-and-Trigonometry --> Calculus
-		end
-
-		Calculus --> Physics-Fundementals
-
-		Statistics-Fundementals -->|Corequisite| Natural-Science
-
-		subgraph Natural-Science
-		subgraph Physical-Science
-		subgraph Chemistry
-		Chemistry-Fundementals
-		end
-		subgraph Physics
-		Physics-Fundementals
-		end
-		end
-
-		Chemistry-Fundementals -->|Corequisite| Biology-Fundementals
-
-		subgraph Life-Science
-		subgraph Biology
-		Biology-Fundementals
-		end
-		Biology-Fundementals -->|Corequisite| Anatomy-and-Physiology
-		end
-		end
-
-		Statistics-Fundementals -->|Corequisite| Social-Science
-
-		Calculus ---> Economics-Fundementals
-
-		subgraph Humanities
-		World-History
-		Introductory-Philosophy
-		end
-
-		World-History -->|Corequisite| Social-Science
-
-		subgraph Social-Science
-		subgraph Political-Science
-		Political-Science-Fundementals
-		end
-
-		Sociology-Fundementals <-->|Optional Corequisite| Introductory-Anthropology
-
-			subgraph Sociology
-			Sociology-Fundementals
-			end
-
-			subgraph Economics
-			Economics-Fundementals
-			Economics-Fundementals ---> Macroeconomics
-			Economics-Fundementals ---> Microeconomics
-			end
-
-			subgraph Psychology
-			Psychology-Fundementals
-			end
-			end
+		Prealgebra[Prealgebra <input type="checkbox" checked />] ---> Algebra-Fundementals[Algebra Fundementals <input
+			type="checkbox" checked />]
+		Algebra-Fundementals ---> Algebra-and-Trigonometry[Algebra and Trigonometry <input type="checkbox" checked />]
+		Algebra-and-Trigonometry ---> Statistics-Fundementals[Introductory Statistics <button type="button">➕</button> <button type="button">✔️</button>]
+		Algebra-and-Trigonometry ---> Calculus[Calculus <button type="button">➖</button>]
 	</pre>
 	</main>
 </body>

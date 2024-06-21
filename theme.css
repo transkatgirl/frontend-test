@@ -37,7 +37,7 @@ section h3 {
 }
 
 button[type="button"] {
-	font-size: 0.8em;
+	font-size: 0.75em;
 	padding: 0.4em;
 	border: 0.1em solid lightgray;
 	background-color: beige;
@@ -333,7 +333,8 @@ nav.settings a {
 
 /* Course Map -specific CSS */
 
-svg button[type="button"] {
+svg button[type="button"],
+li button[type="button"] {
 	padding: 0.12em;
 }
 
