@@ -3,6 +3,7 @@
 body {
 	font: 1em/1.2 sans-serif;
 	margin: 1.2em;
+	background-color: floralwhite;
 }
 
 a {
@@ -10,9 +11,36 @@ a {
 }
 
 section,
-.subsection {
-	border: 0.1em solid lightgray;
+.subsection,
+button[type="button"],
+nav.settings a,
+.app-page > header > nav a {
+	border: 0.1em solid hsl(0, 0%, 75%);
 	border-radius: 0.1em;
+}
+
+.app-page > header,
+.app-page > main > nav {
+	border: 0.1em solid hsl(0, 0%, 55%);
+}
+
+button[type="button"],
+nav.settings a,
+.app-page > header > nav a {
+	background-color: beige;
+	text-decoration: none;
+	cursor: pointer;
+	border-radius: 0.35em;
+	padding: 0.5em;
+	font-size: 1em;
+}
+
+.app-page > header {
+	background-color: hsl(34, 44%, 69%);
+}
+
+.app-page > main > nav {
+	background-color: antiquewhite;
 }
 
 section {
@@ -20,6 +48,10 @@ section {
 	padding: 1.5em;
 	display: inline-block;
 	margin: 0 1.2em 1.2em 0;
+}
+
+.subsection {
+	background-color: bisque;
 }
 
 .subsection {
@@ -34,19 +66,6 @@ section h3 {
 
 section h3 {
 	font-size: 1.2em;
-}
-
-button[type="button"] {
-	font-size: 0.75em;
-	padding: 0.4em;
-	border: 0.1em solid lightgray;
-	background-color: beige;
-	border-radius: 0.4em;
-	cursor: pointer;
-}
-
-section button[type="button"] {
-	background-color: bisque;
 }
 
 /* Homescreen-specific CSS */
@@ -64,19 +83,6 @@ nav.settings {
 
 nav.settings a {
 	margin-left: 0.6em;
-	padding: 0.5em;
-	background-color: beige;
-	text-decoration: none;
-	border: 0.1em solid lightgray;
-	border-radius: 0.2em;
-}
-
-.course-card {
-	width: 18em;
-}
-
-.course-card button {
-	float: right;
 }
 
 .course-card .subsection a {
@@ -84,7 +90,7 @@ nav.settings a {
 }
 
 .course-card .subsection table {
-	margin: 0 auto;
+	margin: 0.1em 0.2em;
 }
 
 .progress-map tbody,
@@ -118,46 +124,43 @@ nav.settings a {
 	height: 1.1em;
 }
 
-.progress-map.chapter-progress-map tbody td {
+.progress-map.hourly-progress-map tbody td,
+.progress-map.daily-time-progress-map tbody td,
+.progress-map.chapter-progress-map tbody td,
+.progress-map.daily-chapter-progress-map tbody td {
 	border: 0.1em solid transparent;
-	background-color: rgba(16, 4, 4, 0.1);
 }
 
-.progress-map.chapter-progress-map .finished {
-	background-color: rgb(165, 42, 42);
-}
-
-.progress-map.chapter-progress-map .in-progress {
-	background-color: rgba(165, 42, 42, 0.55);
-}
-
-.progress-map.hourly-progress-map tbody td {
-	border: 0.1em solid transparent;
+.progress-map.hourly-progress-map tbody td,
+.progress-map.daily-time-progress-map tbody td {
 	background-color: rgba(0, 16, 0, 0.1);
 }
 
-.progress-map.hourly-progress-map .finished {
-	background-color: rgb(0, 128, 0);
+.progress-map.chapter-progress-map tbody td,
+.progress-map.daily-chapter-progress-map tbody td {
+	background-color: rgba(16, 4, 4, 0.1);
 }
 
-.progress-map.hourly-progress-map .in-progress {
-	background-color: rgba(0, 128, 0, 0.55);
+.progress-map.daily-time-progress-map .in-progress,
+.progress-map.daily-chapter-progress-map .in-progress {
+	border: 0.1em solid black;
+}
+
+.progress-map.daily-time-progress-map .no-data,
+.progress-map.daily-chapter-progress-map .no-data {
+	background-color: unset;
 }
 
 .progress-map.hourly-progress-map th {
 	opacity: 1;
 }
 
-.progress-map.daily-time-progress-map tbody td {
-	border: 0.1em solid transparent;
-	background-color: rgba(0, 16, 0, 0.1);
-}
-
 .progress-map.daily-time-progress-map .level-1 {
 	background-color: rgba(0, 128, 0, 0.4);
 }
 
-.progress-map.daily-time-progress-map .level-2 {
+.progress-map.daily-time-progress-map .level-2,
+.progress-map.hourly-progress-map .in-progress {
 	background-color: rgba(0, 128, 0, 0.55);
 }
 
@@ -169,21 +172,13 @@ nav.settings a {
 	background-color: rgba(0, 128, 0, 0.85);
 }
 
-.progress-map.daily-time-progress-map .level-5 {
+.progress-map.daily-time-progress-map .level-5,
+.progress-map.hourly-progress-map .finished {
 	background-color: rgba(0, 128, 0, 1);
 }
 
-.progress-map.daily-time-progress-map .in-progress {
-	border: 0.1em solid black;
-}
-
-.progress-map.daily-time-progress-map .no-data {
-	background-color: unset;
-}
-
-.progress-map.daily-chapter-progress-map tbody td {
-	border: 0.1em solid transparent;
-	background-color: rgba(16, 4, 4, 0.1);
+.progress-map.chapter-progress-map .in-progress {
+	background-color: rgba(165, 42, 42, 0.55);
 }
 
 .progress-map.daily-chapter-progress-map .level-1 {
@@ -194,16 +189,9 @@ nav.settings a {
 	background-color: rgba(165, 42, 42, 0.75);
 }
 
-.progress-map.daily-chapter-progress-map .level-3 {
+.progress-map.daily-chapter-progress-map .level-3,
+.progress-map.chapter-progress-map .finished {
 	background-color: rgba(165, 42, 42, 1);
-}
-
-.progress-map.daily-chapter-progress-map .in-progress {
-	border: 0.1em solid black;
-}
-
-.progress-map.daily-chapter-progress-map .no-data {
-	background-color: unset;
 }
 
 @media (max-width: 49em) {
@@ -223,13 +211,14 @@ nav.settings a {
 }
 
 .app-page > header {
-	background-color: tan;
 	height: 1.2em;
 	padding: 1.2em;
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
-	border-bottom: 0.1em solid gray;
+	border-top: unset;
+	border-left: unset;
+	border-right: unset;
 }
 
 .app-page > header > nav {
@@ -239,11 +228,6 @@ nav.settings a {
 
 .app-page > header > nav a {
 	margin-left: 1em;
-	padding: 0.5em;
-	background-color: beige;
-	text-decoration: none;
-	border: 0.1em solid lightgray;
-	border-radius: 0.2em;
 }
 
 .app-page > main {
@@ -252,10 +236,11 @@ nav.settings a {
 }
 
 .app-page > main > nav {
-	background-color: antiquewhite;
 	padding: 1em 0.75em 1em 1em;
 	overflow: auto;
-	border-right: 0.1em solid gray;
+	border-top: unset;
+	border-bottom: unset;
+	border-left: unset;
 	width: 15em;
 	resize: horizontal;
 	position: relative;
@@ -329,12 +314,14 @@ nav.settings a {
 .app-page > main > :not(nav) {
 	border: none;
 	flex-grow: 1;
+	background-color: white;
 }
 
 /* Course Map -specific CSS */
 
 svg button[type="button"],
 li button[type="button"] {
+	font-size: 0.75em;
 	padding: 0.12em;
 }
 
@@ -343,6 +330,4 @@ pre.mermaid {
 	width: 100%;
 	overflow: auto;
 	margin: 0;
-	/*height: 85vh;*/
-	/*border: 0.1em solid lightgray;*/
 }
