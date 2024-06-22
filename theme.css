@@ -1,9 +1,25 @@
 /* Common CSS, shared with all pages */
 
+:root {
+	--background-color: hsl(47, 100%, 97%);
+
+	--primary-card-color: hsl(60, 57%, 90%);
+	--secondary-card-color: hsl(34, 100%, 90%);
+
+	--button-color: hsl(60, 57%, 90%);
+
+	--top-navbar-color: hsl(34, 45%, 70%);
+	--side-navbar-color: hsl(34, 75%, 90%);
+
+	--primary-border-color: hsl(0, 0%, 75%);
+	--secondary-border-color: hsl(0, 0%, 60%);
+	--tertiary-border-color: hsl(0, 0%, 55%);
+}
+
 body {
 	font: 1em/1.2 sans-serif;
 	margin: 1.2em;
-	background-color: floralwhite;
+	background-color: var(--background-color);
 }
 
 a {
@@ -13,21 +29,35 @@ a {
 section,
 .subsection,
 button[type="button"],
-nav.settings a,
-.app-page > header > nav a {
-	border: 0.1em solid hsl(0, 0%, 75%);
+nav.settings a {
+	border: 0.1em solid var(--primary-border-color);
 	border-radius: 0.1em;
 }
 
 .app-page > header,
 .app-page > main > nav {
-	border: 0.1em solid hsl(0, 0%, 55%);
+	border: 0.1em solid var(--tertiary-border-color);
+}
+
+.app-page > header > nav a,
+nav button[type="button"],
+svg button[type="button"] {
+	border: 0.1em solid var(--tertiary-border-color);
 }
 
 button[type="button"],
 nav.settings a,
 .app-page > header > nav a {
-	background-color: beige;
+	background-color: var(--button-color);
+}
+
+section {
+	background-color: var(--primary-card-color);
+}
+
+button[type="button"],
+nav.settings a,
+.app-page > header > nav a {
 	text-decoration: none;
 	cursor: pointer;
 	border-radius: 0.35em;
@@ -35,27 +65,30 @@ nav.settings a,
 	font-size: 1em;
 }
 
+button[type="button"] {
+	font-size: 0.8em;
+	padding: 0.4em;
+}
+
+.subsection {
+	background-color: var(--secondary-card-color);
+}
+
 .app-page > header {
-	background-color: hsl(34, 44%, 69%);
+	background-color: var(--top-navbar-color);
 }
 
 .app-page > main > nav {
-	background-color: antiquewhite;
+	background-color: var(--side-navbar-color);
 }
 
 section {
-	background-color: beige;
 	padding: 1.5em;
 	display: inline-block;
 	margin: 0 1.2em 1.2em 0;
 }
 
 .subsection {
-	background-color: bisque;
-}
-
-.subsection {
-	background-color: bisque;
 	padding: 0.5em;
 }
 
@@ -321,7 +354,6 @@ nav.settings a {
 
 svg button[type="button"],
 li button[type="button"] {
-	font-size: 0.75em;
 	padding: 0.12em;
 }
 
