@@ -260,12 +260,11 @@ td {
 		font-size: 0.8em;
 		padding: var(--button-padding);
 		cursor: pointer;
+		box-shadow: var(--tertiary-shadow);
 	}
 
-
-	button[type="button"],
-	input[type="checkbox"] {
-		box-shadow: var(--tertiary-shadow);
+	input {
+		box-shadow: inset var(--tertiary-shadow);
 	}
 
 	svg button[type="button"],
@@ -417,6 +416,6 @@ td {
 
 	input,
 	textarea {
-		box-shadow: var(--tertiary-shadow);
+		box-shadow: inset var(--tertiary-shadow);
 	}
 }
