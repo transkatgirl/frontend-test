@@ -1,24 +1,31 @@
-/* Common CSS, shared with all pages */
-
 :root {
 	--background-color: hsl(47, 100%, 97%);
 
 	--primary-card-color: hsl(60, 57%, 90%);
 	--secondary-card-color: hsl(34, 100%, 90%);
+	--card-border-radius: 0.2lh;
+	--large-card-padding: 1.25lh;
+	--small-card-padding: 0.5lh;
 
-	--button-color: hsl(60, 57%, 90%);
+	--button-color: hwb(60 84% 4%);
+	--button-border-radius: 0.3lh;
+	--button-padding: 0.4lh;
 
 	--top-navbar-color: hsl(34, 45%, 70%);
 	--side-navbar-color: hsl(34, 75%, 90%);
 
 	--primary-border-color: hsl(0, 0%, 75%);
-	--secondary-border-color: hsl(0, 0%, 60%);
-	--tertiary-border-color: hsl(0, 0%, 55%);
+	--secondary-border-color: hsl(0, 0%, 55%);
+
+	--primary-border: 0.1em solid var(--primary-border-color);
+	--secondary-border: 0.1em solid var(--secondary-border-color);
 }
+
+/* Common CSS, shared with all pages */
 
 body {
 	font: 1em/1.2 sans-serif;
-	margin: 1.2em;
+	margin: 1lh;
 	background-color: var(--background-color);
 }
 
@@ -26,70 +33,24 @@ a {
 	color: unset;
 }
 
-section,
-.subsection,
-button[type="button"],
-nav.settings a {
-	border: 0.1em solid var(--primary-border-color);
-	border-radius: 0.1em;
-}
-
-.app-page > header,
-.app-page > main > nav {
-	border: 0.1em solid var(--tertiary-border-color);
-}
-
-.app-page > header > nav a,
-nav button[type="button"],
-svg button[type="button"] {
-	border: 0.1em solid var(--tertiary-border-color);
-}
-
-button[type="button"],
-nav.settings a,
-.app-page > header > nav a {
-	background-color: var(--button-color);
-}
+/* Section card specific CSS */
 
 section {
 	background-color: var(--primary-card-color);
-}
-
-button[type="button"],
-nav.settings a,
-.app-page > header > nav a {
-	text-decoration: none;
-	cursor: pointer;
-	border-radius: 0.35em;
-	padding: 0.5em;
-	font-size: 1em;
-}
-
-button[type="button"] {
-	font-size: 0.8em;
-	padding: 0.4em;
+	padding: var(--large-card-padding);
+	display: inline-block;
+	margin: 0 1lh 1lh 0;
 }
 
 .subsection {
 	background-color: var(--secondary-card-color);
+	padding: var(--small-card-padding);
 }
 
-.app-page > header {
-	background-color: var(--top-navbar-color);
-}
-
-.app-page > main > nav {
-	background-color: var(--side-navbar-color);
-}
-
-section {
-	padding: 1.5em;
-	display: inline-block;
-	margin: 0 1.2em 1.2em 0;
-}
-
+section,
 .subsection {
-	padding: 0.5em;
+	border: var(--primary-border);
+	border-radius: var(--card-border-radius);
 }
 
 section h2,
@@ -98,8 +59,13 @@ section h3 {
 }
 
 section h3 {
-	font-size: 1.2em;
+	font-size: 1lh;
 }
+
+
+
+
+
 
 /* Homescreen-specific CSS */
 
@@ -111,28 +77,196 @@ section h3 {
 
 nav.settings {
 	float: right;
-	margin-top: 0.6em;
+	margin-top: 0.5lh;
 }
 
 nav.settings a {
-	margin-left: 0.6em;
+	background-color: var(--button-color);
+	border: var(--primary-border);
+	border-radius: var(--button-border-radius);
+	padding: var(--button-padding);
+	margin-left: 0.5lh;
+	text-decoration: none;
 }
 
 .course-card .subsection a {
 	text-decoration: unset;
 }
 
-.course-card .subsection table {
-	margin: 0.1em 0.2em;
+
+/* wip */
+
+@media (max-width: calc((2lh + 0.2em + 2.5lh) + (4em + 2px) + (24lh + 4.8em + 48px))) {
+	.progress-map .expanded-data {
+		display: none;
+	}
 }
 
-.progress-map tbody,
-.progress-map tfoot th {
-	text-align: right;
+
+
+
+
+/* App Page specific CSS */
+
+.app-page {
+	margin: 0;
+	border-collapse: collapse;
 }
 
-.progress-map tfoot {
-	text-align: center;
+.app-page header h1 {
+	font-size: 1.1lh;
+}
+
+.app-page > header {
+	background-color: var(--top-navbar-color);
+	border-bottom: var(--secondary-border);
+	height: 1lh;
+	padding: 1lh;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+
+.app-page > header > nav {
+	display: flex;
+	align-items: center;
+}
+
+.app-page > header > nav a {
+	background-color: var(--button-color);
+	border: var(--secondary-border);
+	border-radius: var(--button-border-radius);
+	padding: var(--button-padding);
+	text-decoration: none;
+	margin-left: 0.8lh;
+}
+
+.app-page > main > nav {
+	background-color: var(--side-navbar-color);
+	border-right: var(--secondary-border);
+	padding: 0.8lh 0.8em 0.8lh 0.8lh;
+	overflow: auto;
+	width: calc(2lh + 20ch);
+	resize: horizontal;
+	position: relative;
+}
+
+.app-page > main {
+	display: flex;
+	height: calc(100vh - (3lh + 0.1em));
+}
+
+.app-page > main > nav h2 {
+	margin-top: 0;
+	margin-bottom: 0.5lh;
+	font-size: 1lh;
+}
+
+.app-page > main > nav a {
+	text-decoration: unset;
+}
+
+.app-page > main > nav a:hover {
+	text-decoration: underline;
+}
+
+.app-page > main > nav ul,
+.app-page > main > nav ol {
+	margin: 0;
+	padding-left: 1lh;
+}
+
+.app-page > main > nav li {
+	margin: calc((1lh - 1ch)/2) 0;
+}
+
+.app-page > main > nav ol ul {
+	list-style: none;
+}
+
+.app-page > main > nav details {
+	padding-left: calc(1lh - 1ic);
+}
+
+.app-page > main > nav details ul {
+	padding-left: calc(2lh - (1lh - 1ic));
+}
+
+.app-page > main > nav footer {
+	position: absolute;
+	bottom: 0;
+	margin: 0 0.8lh 0.8lh 0;
+}
+
+.app-page > main > :not(nav) {
+	border: none;
+	flex-grow: 1;
+	background-color: white;
+}
+
+@media (max-width: calc(2lh + 120ch + (2lh + 20ch + 0.8em + 0.8lh + 0.1em))) {
+	.app-page > main > nav {
+		width: unset !important;
+		resize: none;
+	}
+
+	.app-page > main > nav:not(:hover) > * {
+		display: none;
+	}
+}
+
+/* calc((2lh + 1ic + 1ch) + 30ch + (1ic + 5lh + 12px) + ())*/
+
+@media (max-width: 43.5em) {
+	.course-viewer > header table {
+		display: none;
+	}
+}
+
+@media (max-width: 43.6em) {
+	.course-viewer > header table td.expanded-data {
+		display: none;
+	}
+}
+
+
+
+/* Course Map -specific CSS */
+
+button[type="button"] {
+	background-color: var(--button-color);
+	border: var(--secondary-border);
+	border-radius: var(--button-border-radius);
+	font-size: 0.8em;
+	padding: var(--button-padding);
+	cursor: pointer;
+}
+
+svg button[type="button"],
+li button[type="button"] {
+	font-size: 0.75em;
+	padding: 0.1lh;
+}
+
+pre.mermaid {
+	display: inline-block;
+	width: 100%;
+	overflow: auto;
+	margin: 0;
+}
+
+
+
+
+
+
+
+/* Progress Map specific CSS */
+
+.progress-map tbody td {
+	width: 1lh;
+	height: 1lh;
+	border-radius: 10%;
 }
 
 .progress-map th,
@@ -141,10 +275,12 @@ nav.settings a {
 	opacity: 0.5;
 }
 
-.progress-map tbody td {
-	width: 1.2em;
-	height: 1.2em;
-	border-radius: 0.1em;
+.progress-map th {
+	text-align: right;
+}
+
+.progress-map tfoot {
+	text-align: center;
 }
 
 .progress-map.color-key {
@@ -153,8 +289,8 @@ nav.settings a {
 }
 
 .progress-map.color-key tbody td {
-	width: 1.1em;
-	height: 1.1em;
+	width: 0.9lh;
+	height: 0.9lh;
 }
 
 .progress-map.hourly-progress-map tbody td,
@@ -225,141 +361,4 @@ nav.settings a {
 .progress-map.daily-chapter-progress-map .level-3,
 .progress-map.chapter-progress-map .finished {
 	background-color: rgba(165, 42, 42, 1);
-}
-
-@media (max-width: 49em) {
-	.progress-map .expanded-data {
-		display: none;
-	}
-}
-
-/* Course Viewer-specific CSS */
-
-.app-page {
-	margin: 0;
-}
-
-.app-page header h1 {
-	font-size: 1.3em;
-}
-
-.app-page > header {
-	height: 1.2em;
-	padding: 1.2em;
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-	border-top: unset;
-	border-left: unset;
-	border-right: unset;
-}
-
-.app-page > header > nav {
-	display: flex;
-	align-items: center;
-}
-
-.app-page > header > nav a {
-	margin-left: 1em;
-}
-
-.app-page > main {
-	display: flex;
-	height: calc(100vh - (1.2em + (1.2em * 2) + 0.1em));
-}
-
-.app-page > main > nav {
-	padding: 1em 0.75em 1em 1em;
-	overflow: auto;
-	border-top: unset;
-	border-bottom: unset;
-	border-left: unset;
-	width: 15em;
-	resize: horizontal;
-	position: relative;
-}
-
-.app-page > main > nav footer {
-	position: absolute;
-	bottom: 0;
-	margin: 0 1em 1em 0;
-}
-
-.app-page > main > nav h2 {
-	margin-top: 0;
-	margin-bottom: 0.6em;
-	font-size: 1.2em;
-}
-
-.app-page > main > nav a {
-	text-decoration: unset;
-}
-
-.app-page > main > nav a:hover {
-	text-decoration: underline;
-}
-
-.app-page > main > nav ul,
-.app-page > main > nav ol {
-	margin: 0;
-	padding-left: 1.5em;
-}
-
-.app-page > main > nav ol ul {
-	list-style: none;
-}
-
-.app-page > main > nav details {
-	padding-left: 0.5em;
-}
-
-.app-page > main > nav details ul {
-	padding-left: 2.5em;
-}
-
-.app-page > main > nav li {
-	margin: 0.2em 0;
-}
-
-@media (max-width: 55em) {
-	.app-page > main > nav {
-		width: unset !important;
-		resize: none;
-	}
-
-	.app-page > main > nav:not(:hover) > * {
-		display: none;
-	}
-}
-
-@media (max-width: 43.5em) {
-	.course-viewer > header table {
-		display: none;
-	}
-}
-
-@media (max-width: 43.6em) {
-	.course-viewer > header table td.expanded-data {
-		display: none;
-	}
-}
-
-.app-page > main > :not(nav) {
-	border: none;
-	flex-grow: 1;
-	background-color: white;
-}
-
-/* Course Map -specific CSS */
-
-svg button[type="button"],
-li button[type="button"] {
-	padding: 0.12em;
-}
-
-pre.mermaid {
-	display: inline-block;
-	width: 100%;
-	overflow: auto;
-	margin: 0;
 }
