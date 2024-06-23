@@ -21,6 +21,10 @@
 
 	--primary-border: 0.1em solid var(--primary-border-color);
 	--secondary-border: 0.1em solid var(--secondary-border-color);
+
+	--primary-shadow: 0.04lh 0.04lh 0.12lh var(--primary-border-color);
+	--secondary-shadow: 0.03lh 0.03lh 0.09lh var(--primary-border-color);
+	--tertiary-shadow: 0.02lh 0.02lh 0.06lh var(--primary-border-color);
 }
 
 body {
@@ -36,43 +40,6 @@ a {
 th,
 td {
 	padding: 0.05em;
-}
-
-@scope (.settings) {
-	nav {
-		float: right;
-		margin-top: 0.5lh;
-	}
-
-	nav a {
-		background-color: var(--button-color);
-		border: var(--primary-border);
-		border-radius: var(--button-border-radius);
-		padding: var(--button-padding);
-		margin-left: 0.5lh;
-		text-decoration: none;
-	}
-
-	fieldset {
-		width: fit-content;
-		border: var(--secondary-border);
-		border-radius: var(--card-border-radius);
-		background-color: antiquewhite;
-		margin: 1lh 0;
-	}
-
-	fieldset legend {
-		background-color: lavender;
-		padding: 0.15lh 0.3lh;
-	}
-
-	textarea {
-		width: 24em;
-		height: 12em;
-		border: var(--secondary-border);
-		border-radius: var(--card-border-radius);
-		font: 1em monospace;
-	}
 }
 
 @scope (.homepage) {
@@ -125,6 +92,15 @@ td {
 		padding: var(--button-padding);
 		margin-left: 0.5lh;
 		text-decoration: none;
+	}
+
+	section,
+	nav.related a {
+		box-shadow: var(--primary-shadow);
+	}
+
+	.subsection {
+		box-shadow: var(--secondary-shadow);
 	}
 
 	@media (max-width: 768px) {
@@ -183,7 +159,6 @@ td {
 			overflow: auto;
 			width: calc(2lh + 20ch);
 			resize: horizontal;
-			position: relative;
 		}
 
 		h2 {
@@ -229,6 +204,21 @@ td {
 		}
 	}
 
+	header {
+		box-shadow: var(--primary-shadow);
+		z-index: 2;
+		position: relative;
+	}
+
+	main > nav {
+		box-shadow: var(--primary-shadow);
+		z-index: 1;
+	}
+
+	header nav a {
+		box-shadow: var(--tertiary-shadow);
+	}
+
 	main > :not(nav) {
 		border: none;
 		flex-grow: 1;
@@ -270,6 +260,12 @@ td {
 		font-size: 0.8em;
 		padding: var(--button-padding);
 		cursor: pointer;
+	}
+
+
+	button[type="button"],
+	input[type="checkbox"] {
+		box-shadow: var(--tertiary-shadow);
 	}
 
 	svg button[type="button"],
@@ -377,5 +373,50 @@ td {
 	:scope.daily-chapter-progress-map .level-3,
 	:scope.chapter-progress-map .finished {
 		background-color: rgba(165, 42, 42, 1);
+	}
+}
+
+@scope (.settings) {
+	nav {
+		float: right;
+		margin-top: 0.5lh;
+	}
+
+	nav a {
+		background-color: var(--button-color);
+		border: var(--primary-border);
+		border-radius: var(--button-border-radius);
+		padding: var(--button-padding);
+		margin-left: 0.5lh;
+		text-decoration: none;
+		box-shadow: var(--primary-shadow);
+	}
+
+	fieldset {
+		width: fit-content;
+		border: var(--secondary-border);
+		border-radius: var(--card-border-radius);
+		background-color: antiquewhite;
+		margin: 1lh 0;
+		box-shadow: var(--primary-shadow);
+	}
+
+	fieldset legend {
+		background-color: lavender;
+		padding: 0.15lh 0.3lh;
+		box-shadow: var(--secondary-shadow);
+	}
+
+	textarea {
+		width: 24em;
+		height: 12em;
+		border: var(--secondary-border);
+		border-radius: var(--card-border-radius);
+		font: 1em monospace;
+	}
+
+	input,
+	textarea {
+		box-shadow: var(--tertiary-shadow);
 	}
 }
