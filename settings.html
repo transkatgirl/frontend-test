@@ -1,56 +1,10 @@
 <!DOCTYPE html>
 
 <head>
-	<style>
-		body {
-			font: 1em/1.2 sans-serif;
-			margin: 1lh;
-			background-color: floralwhite;
-		}
-
-		a {
-			color: unset;
-		}
-
-		fieldset {
-			width: fit-content;
-			border: 0.1em solid gray;
-			background-color: antiquewhite;
-			/*padding: 0.5em 1em 0.5em;*/
-			margin: 1lh 0;
-			border-radius: 0.2lh;
-		}
-
-		fieldset legend {
-			background-color: lavender;
-			padding: 0.15lh 0.3lh;
-		}
-
-		nav {
-			float: right;
-			margin: 0.5lh;
-		}
-
-		nav a {
-			background-color: beige;
-			border: 0.1em solid gray;
-			text-decoration: none;
-			border-radius: 0.3lh;
-			padding: 0.4lh;
-		}
-
-		textarea {
-			width: 24em;
-			height: 12em;
-			border: 0.1em solid gray;
-			border-radius: 0.2lh;
-			font: 1em monospace;
-		}
-
-	</style>
+	<link rel="stylesheet" href="theme.css" />
 </head>
 
-<body>
+<body class="settings">
 	<nav>
 		<a href="homepage.html">Exit 🚪</a>
 	</nav>
@@ -60,7 +14,7 @@
 		<section>
 			<h2>Appearance Settings</h2>
 			<fieldset>
-				<legend>Theme (does not apply to Settings page)</legend>
+				<legend>Theme</legend>
 				<input type="radio" id="theme-default" name="theme" checked />
 				<label for="theme-default">Default</label>
 				<input type="radio" id="theme-custom" name="theme" />
@@ -68,10 +22,10 @@
 			</fieldset>
 			<fieldset>
 				<legend>Theme-specific Settings</legend>
-				<label for="custom-css">Custom CSS:</label><br>
+				<label for="custom-css">Custom CSS (does not apply to Settings page):</label><br>
 				<textarea id="custom-css"></textarea>
 				<br>
-				<label for="custom-mermaid">Course Map Renderer (Mermaid) Settings:</label><br>
+				<label for="custom-mermaid">Chart Renderer (Mermaid) Settings:</label><br>
 				<textarea id="custom-mermaid"></textarea>
 				<br>
 				<label for="custom-course-css">Custom course CSS (see Course Settings -> Section viewing):</label><br>

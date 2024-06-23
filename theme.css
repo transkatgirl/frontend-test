@@ -1,3 +1,5 @@
+/* TODO: convert as many adjustments into attributes to variables as reasonably possible, to allow for creating new theming with minimal effort */
+
 :root {
 	--background-color: hsl(47, 100%, 97%);
 
@@ -36,34 +38,71 @@ td {
 	padding: 0.05em;
 }
 
-section {
-	background-color: var(--primary-card-color);
-	padding: var(--large-card-padding);
-	display: inline-block;
-	margin: 0 1lh 1lh 0;
-}
+@scope (.settings) {
+	nav {
+		float: right;
+		margin-top: 0.5lh;
+	}
 
-.subsection {
-	background-color: var(--secondary-card-color);
-	padding: var(--small-card-padding);
-}
+	nav a {
+		background-color: var(--button-color);
+		border: var(--primary-border);
+		border-radius: var(--button-border-radius);
+		padding: var(--button-padding);
+		margin-left: 0.5lh;
+		text-decoration: none;
+	}
 
-section,
-.subsection {
-	border: var(--primary-border);
-	border-radius: var(--card-border-radius);
-}
+	fieldset {
+		width: fit-content;
+		border: var(--secondary-border);
+		border-radius: var(--card-border-radius);
+		background-color: antiquewhite;
+		margin: 1lh 0;
+	}
 
-section h2,
-section h3 {
-	margin-top: 0;
-}
+	fieldset legend {
+		background-color: lavender;
+		padding: 0.15lh 0.3lh;
+	}
 
-section h3 {
-	font-size: 1lh;
+	textarea {
+		width: 24em;
+		height: 12em;
+		border: var(--secondary-border);
+		border-radius: var(--card-border-radius);
+		font: 1em monospace;
+	}
 }
 
 @scope (.homepage) {
+	section {
+		background-color: var(--primary-card-color);
+		padding: var(--large-card-padding);
+		display: inline-block;
+		margin: 0 1lh 1lh 0;
+	}
+
+	.subsection {
+		background-color: var(--secondary-card-color);
+		padding: var(--small-card-padding);
+	}
+
+	section,
+	.subsection {
+		border: var(--primary-border);
+		border-radius: var(--card-border-radius);
+	}
+
+	section h2,
+	section h3 {
+		margin-top: 0;
+	}
+
+	section h3 {
+		font-size: 1lh;
+	}
+
 	.active-courses {
 		display: flex;
 		flex-wrap: wrap;
@@ -74,12 +113,12 @@ section h3 {
 		text-decoration: unset;
 	}
 
-	nav.settings {
+	nav.related {
 		float: right;
 		margin-top: 0.5lh;
 	}
 
-	nav.settings a {
+	nav.related a {
 		background-color: var(--button-color);
 		border: var(--primary-border);
 		border-radius: var(--button-border-radius);
