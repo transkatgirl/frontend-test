@@ -1,4 +1,4 @@
-/* TODO: convert as many adjustments into attributes to variables as reasonably possible, to allow for creating new theming with minimal effort */
+/* TODO: convert as many adjustments to variables as reasonably possible, to allow for creating new theming with minimal effort */
 
 :root {
 	--background-color: hsl(47, 100%, 97%);
