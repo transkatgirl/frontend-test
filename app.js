@@ -27,9 +27,8 @@ function Book(name, description, chapters) {
 	};
 }
 
-function Chapter(chapter_type = "chapter", name, sections = [], ordering = 0) {
+function Chapter(chapter_type = "chapter", name, base_url, sections = []) {
 	this.name = name;
-	this.sections = sections;
 
 	switch (chapter_type) {
 		case "introduction":
@@ -41,13 +40,28 @@ function Chapter(chapter_type = "chapter", name, sections = [], ordering = 0) {
 		default:
 			this.chapter_type = "chapter";
 	}
-	this.ordering = Number(ordering);
 
-	this.get_progress = function () {
-		const progress = new Map();
-		for (const section of sections) {
+	this.sections = {};
+	for (const section of sections) {
+		const section_object = new Section(section.section_type, section.name, base_url, section.url, section.is_completable, section.is_complete);
 
+		if (!Object.values(this.sections).includes(section_object.section_type)) {
+			this.sections[section_object.section_type] = [];
 		}
+
+		this.sections[section_object.section_type].append(section_object);
+	}
+
+	this.is_complete = function () {
+		for (const grouping in Object.entries(this.sections)) {
+			for (const section of grouping) {
+				if (section.completable && !section.is_complete) {
+					return false;
+				}
+			}
+		}
+
+		return true;
 	};
 
 	this.build_content_listing = function () {
@@ -55,14 +69,14 @@ function Chapter(chapter_type = "chapter", name, sections = [], ordering = 0) {
 	};
 }
 
-function Section(section_type = "section", name, content, ordering = 0, is_completable = true, is_complete = false) {
+function Section(section_type = "section", name, base_url, content_url, is_completable = true, is_complete = false) {
 	this.name = String(name);
-	this.content = content;
+	this.url = new URL(content_url, base_url);
 
 	switch (section_type) {
 		case "introduction":
 			this.section_type = "introduction";
-			this.is_completable = Boolean(is_completable);
+			this.completable = Boolean(is_completable);
 
 		case "conclusion":
 			this.section_type = "conclusion";
@@ -80,7 +94,6 @@ function Section(section_type = "section", name, content, ordering = 0, is_compl
 			this.section_type = "section";
 			this.completable = Boolean(is_completable);
 	}
-	this.ordering = Number(ordering);
 
 	if (this.completable) {
 		this.is_complete = Boolean(is_complete);
