@@ -41,15 +41,15 @@ function Chapter(chapter_type = "chapter", name, sections = []) {
 			this.chapter_type = "chapter";
 	}
 
-	this.sections = {};
+	this.sections = new Map();
 	for (const section of sections) {
-		const section_object = new Section(section.section_type, section.name, base_url, section.url, section.is_completable, section.is_complete);
+		const section_object = new Section(section.section_type, section.name, section.url, section.completable, section.is_complete);
 
-		if (!Object.values(this.sections).includes(section_object.section_type)) {
-			this.sections[section_object.section_type] = [];
+		if (!this.sections.has(section_object.section_type)) {
+			this.sections.set(section_object.section_type, []);
 		}
 
-		this.sections[section_object.section_type].append(section_object);
+		this.sections.get(section_object.section_type).push(section_object);
 	}
 
 	this.is_complete = function () {
@@ -64,14 +64,14 @@ function Chapter(chapter_type = "chapter", name, sections = []) {
 		return true;
 	};
 
-	this.build_content_listing = function (flatten, base_url, target) {
-		levels = {};
+	this.build_content_listing = function (flatten = false, base_url, target) {
+		if (flatten && this.sections.size == 1 && this.sections.values[0].length == 1) {
+			return this.sections.values[0][0].build_link(base_url, target);
+		}
 
-		for (const [key, value] of Object.entries(this.sections)) {
-			if (value.length == 1 && flatten) {
-				return value[0].build_link(base_url, target);
-			}
+		const groupings = new Map();
 
+		for (const [key, value] of this.sections.entries()) {
 			let list;
 
 			switch (key) {
@@ -98,26 +98,28 @@ function Chapter(chapter_type = "chapter", name, sections = []) {
 					details.appendChild(summary);
 					details.appendChild(list);
 
-					return details;
+					groupings.set(key, details);
 
 				default:
-					return list;
+					groupings.set(key, list);
 			}
 		}
 
+		const root = document.createElement("div");
 
-		/*const listing = document.createElement("div");
+		for (const section_type of ["introduction", "section", "conclusion", "summary", "assignment"]) {
+			if (groupings.has(section_type)) {
+				root.appendChild(groupings.get(section_type));
+			}
+		}
 
-		listing.appendChild(level_intro);
-		listing.appendChild(level_main);
-		listing.appendChild(level_conclu);
-		listing.appendChild(level_supp);*/
+		return root;
 	};
 }
 
-function Section(section_type = "section", name, content_url, is_completable = true, is_complete = false) {
+function Section(section_type = "section", name, url, is_completable = true, is_complete = false) {
 	this.name = String(name);
-	this.url = String(content_url);
+	this.url = String(url);
 
 	switch (section_type) {
 		case "introduction":
@@ -192,6 +194,17 @@ function ProgressMap(map_type, header, footer, contents) {
 
 	};
 }
+
+
+/*let sections = [
+	new Section(undefined, "testaa", "testaa", false),
+	new Section(undefined, "test", "test", false)
+];
+
+let chapter = new Chapter(undefined, "test", sections);
+
+document.body.appendChild(chapter.build_content_listing(false));*/
+
 
 /*let section = new Section(undefined, "test", "yeet", false, false);
 
