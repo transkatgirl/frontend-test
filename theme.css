@@ -1,25 +1,23 @@
 /* TODO: convert as many adjustments to variables as reasonably possible, to allow for creating new theming with minimal effort */
 
-/* See https: //developer.mozilla.org/en-US/docs/Web/CSS/CSS_colors/Relative_colors */
-
 :root {
-	--background-color: hsl(47, 100%, 97%);
+	--background-color: oklch(98% 0.02 90);
 
-	--primary-card-color: hsl(60, 57%, 90%);
-	--secondary-card-color: hsl(34, 100%, 90%);
+	--primary-card-color: oklch(95% 0.03 calc(75 + 30));
+	--secondary-card-color: oklch(95% 0.04 75);
 	--card-border-radius: 0.2lh;
 	--large-card-padding: 1.25lh;
 	--small-card-padding: 0.5lh;
 
-	--button-color: hwb(60 84% 4%);
+	--button-color: var(--primary-card-color);
 	--button-border-radius: 0.3lh;
 	--button-padding: 0.4lh;
 
-	--top-navbar-color: hsl(34, 45%, 70%);
-	--side-navbar-color: hsl(34, 75%, 90%);
+	--top-navbar-color: oklch(80% 0.06 75);
+	--side-navbar-color: oklch(90% 0.04 75);
 
-	--primary-border-color: hsl(0, 0%, 75%);
-	--secondary-border-color: hsl(0, 0%, 55%);
+	--primary-border-color: oklch(75% 0 0);
+	--secondary-border-color: oklch(65% 0 0);
 
 	--primary-border: 0.1em solid var(--primary-border-color);
 	--secondary-border: 0.1em solid var(--secondary-border-color);
@@ -27,6 +25,12 @@
 	--primary-shadow: 0.04lh 0.04lh 0.12lh var(--primary-border-color);
 	--secondary-shadow: 0.03lh 0.03lh 0.09lh var(--primary-border-color);
 	--tertiary-shadow: 0.02lh 0.02lh 0.06lh var(--primary-border-color);
+
+	--time-progress-color: oklch(50% 0.16 140);
+	--chapter-progress-color: oklch(50% 0.16 calc(140 - (360/3)));
+
+	--form-card-color: oklch(95% 0.03 75);
+	--form-card-title-color: oklch(92.5% 0.03 calc(360 - 75));
 }
 
 @layer base {
@@ -83,57 +87,63 @@
 
 			:scope.hourly-progress-map tbody td,
 			:scope.daily-time-progress-map tbody td {
-				background-color: rgba(0, 16, 0, 0.1);
+				background-color: oklch(from var(--time-progress-color) 2.5% c h / 0.1);
 			}
 
 			:scope.chapter-progress-map tbody td,
 			:scope.daily-chapter-progress-map tbody td {
-				background-color: rgba(16, 4, 4, 0.1);
+				background-color: oklch(from var(--chapter-progress-color) 2.5% c h / 0.1);
+			}
+
+			:scope.hourly-progress-map .in-progress {
+				background-color: oklch(from var(--time-progress-color) l c h / 0.55);
 			}
 
 			:scope.daily-time-progress-map .level-1 {
-				background-color: rgba(0, 128, 0, 0.4);
+				background-color: oklch(from var(--time-progress-color) l c h / 0.4);
 			}
 
-			:scope.daily-time-progress-map .level-2,
-			:scope.hourly-progress-map .in-progress {
-				background-color: rgba(0, 128, 0, 0.55);
+			:scope.daily-time-progress-map .level-2 {
+				background-color: oklch(from var(--time-progress-color) l c h / 0.55);
 			}
 
 			:scope.daily-time-progress-map .level-3 {
-				background-color: rgba(0, 128, 0, 0.7);
+				background-color: oklch(from var(--time-progress-color) l c h / 0.7);
 			}
 
 			:scope.daily-time-progress-map .level-4 {
-				background-color: rgba(0, 128, 0, 0.85);
+				background-color: oklch(from var(--time-progress-color) l c h / 0.85);
 			}
 
 			:scope.daily-time-progress-map .level-5,
 			:scope.hourly-progress-map .finished {
-				background-color: rgba(0, 128, 0, 1);
+				background-color: var(--time-progress-color);
 			}
 
 			:scope.chapter-progress-map .in-progress {
-				background-color: rgba(165, 42, 42, 0.55);
+				background-color: oklch(from var(--chapter-progress-color) l c h / 0.55);
 			}
 
 			:scope.daily-chapter-progress-map .level-1 {
-				background-color: rgba(165, 42, 42, 0.5);
+				background-color: oklch(from var(--chapter-progress-color) l c h / 0.5);
 			}
 
 			:scope.daily-chapter-progress-map .level-2 {
-				background-color: rgba(165, 42, 42, 0.75);
+				background-color: oklch(from var(--chapter-progress-color) l c h / 0.75);
 			}
 
 			:scope.daily-chapter-progress-map .level-3,
 			:scope.chapter-progress-map .finished {
-				background-color: rgba(165, 42, 42, 1);
+				background-color: var(--chapter-progress-color);
 			}
 		}
 
-		:scope.daily-time-progress-map .in-progress,
+		:scope.daily-time-progress-map .in-progress {
+			border: 0.12lh solid oklch(from var(--time-progress-color) 2.5% c h);
+		}
+
 		:scope.daily-chapter-progress-map .in-progress {
-			border: 0.12lh solid black;
+			border: 0.12lh solid oklch(from var(--chapter-progress-color) 2.5% c h);
 		}
 
 		:scope.hourly-progress-map th {
@@ -407,13 +417,13 @@
 			width: fit-content;
 			border: var(--secondary-border);
 			border-radius: var(--card-border-radius);
-			background-color: antiquewhite;
+			background-color: var(--form-card-color);
 			margin: 1lh 0;
 			box-shadow: var(--primary-shadow);
 		}
 
 		fieldset legend {
-			background-color: lavender;
+			background-color: var(--form-card-title-color);
 			padding: 0.15lh 0.3lh;
 			box-shadow: var(--secondary-shadow);
 		}
