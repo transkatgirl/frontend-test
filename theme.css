@@ -1,5 +1,7 @@
 /* TODO: convert as many adjustments to variables as reasonably possible, to allow for creating new theming with minimal effort */
 
+/* See https: //developer.mozilla.org/en-US/docs/Web/CSS/CSS_colors/Relative_colors */
+
 :root {
 	--background-color: hsl(47, 100%, 97%);
 
@@ -52,16 +54,15 @@
 		}
 
 		:scope.color-key tbody td {
-			width: 1lh;
-			height: 1lh;
+			width: 1.1lh;
+			height: 1.1lh;
 		}
 
 		tbody td {
 			width: 1.2lh;
 			height: 1.2lh;
 			box-sizing: border-box;
-			border-radius: 10%;
-			border: 0.1em solid transparent;
+			border-radius: 15%;
 		}
 
 		th,
@@ -132,7 +133,7 @@
 
 		:scope.daily-time-progress-map .in-progress,
 		:scope.daily-chapter-progress-map .in-progress {
-			border: 0.1em solid black;
+			border: 0.12lh solid black;
 		}
 
 		:scope.hourly-progress-map th {
