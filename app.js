@@ -53,25 +53,53 @@ function Chapter(chapter_type = "chapter", name, base_url, sections = []) {
 	}
 
 	this.is_complete = function () {
-		for (const grouping in Object.entries(this.sections)) {
-			for (const section of grouping) {
+		Object.entries(this.sections).forEach((value) => {
+			for (const section of value) {
 				if (section.completable && !section.is_complete) {
 					return false;
 				}
 			}
-		}
+		});
 
 		return true;
 	};
 
 	this.build_content_listing = function () {
+		levels = {};
 
+		Object.entries(this.sections).forEach((value, key) => {
+			let level;
+
+			switch (key) {
+				case "introduction" | "conclusion":
+					level = document.createElement("ul");
+
+				case "assignment" | "summary":
+					level = document.createElement("details");
+
+				default:
+					level = document.createElement("ol");
+			}
+
+			for (const section of value) {
+				// TODO
+			}
+
+			//levels["test"] = aaaa;
+		});
+
+		/*const listing = document.createElement("div");
+
+		listing.appendChild(level_intro);
+		listing.appendChild(level_main);
+		listing.appendChild(level_conclu);
+		listing.appendChild(level_supp);*/
 	};
 }
 
-function Section(section_type = "section", name, base_url, content_url, is_completable = true, is_complete = false) {
+function Section(section_type = "section", name, content_url, is_completable = true, is_complete = false) {
 	this.name = String(name);
-	this.url = new URL(content_url, base_url);
+	this.url = String(content_url);
 
 	switch (section_type) {
 		case "introduction":
@@ -98,6 +126,40 @@ function Section(section_type = "section", name, base_url, content_url, is_compl
 	if (this.completable) {
 		this.is_complete = Boolean(is_complete);
 	}
+
+	this.build_link = function (base_url, target) {
+		const link = document.createElement("a");
+		if (base_url) {
+			link.setAttribute("href", new URL(this.url, base_url));
+		} else {
+			link.setAttribute("href", this.url);
+		}
+		if (target) {
+			link.setAttribute("target", target);
+		}
+		link.textContent = this.name;
+
+		if (this.completable) {
+			const checkbox = document.createElement("input");
+			checkbox.setAttribute("type", "checkbox");
+
+			if (this.is_complete) {
+				checkbox.setAttribute("checked", "");
+			}
+
+			checkbox.addEventListener("change", (event) => {
+				// TODO
+			});
+
+			const container = document.createElement("span");
+			container.appendChild(link);
+			container.appendChild(checkbox);
+
+			return container;
+		} else {
+			return link;
+		}
+	};
 }
 
 function ProgressMap(map_type, header, footer, contents) {
@@ -112,3 +174,7 @@ function ProgressMap(map_type, header, footer, contents) {
 
 	};
 }
+
+/*let section = new Section(undefined, "test", "yeet", false, false);
+
+document.body.appendChild(section.build_link());*/
