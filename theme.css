@@ -386,7 +386,7 @@
 
 		svg button[type="button"],
 		li button[type="button"] {
-			font-size: 0.75em;
+			font-size: 0.6lh;
 			padding: 0.1lh;
 		}
 
