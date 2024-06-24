@@ -27,7 +27,7 @@ function Book(name, description, chapters) {
 	};
 }
 
-function Chapter(chapter_type = "chapter", name, base_url, sections = []) {
+function Chapter(chapter_type = "chapter", name, sections = []) {
 	this.name = name;
 
 	switch (chapter_type) {
@@ -53,40 +53,58 @@ function Chapter(chapter_type = "chapter", name, base_url, sections = []) {
 	}
 
 	this.is_complete = function () {
-		Object.entries(this.sections).forEach((value) => {
+		for (const [key, value] of Object.entries(this.sections)) {
 			for (const section of value) {
 				if (section.completable && !section.is_complete) {
 					return false;
 				}
 			}
-		});
+		}
 
 		return true;
 	};
 
-	this.build_content_listing = function () {
+	this.build_content_listing = function (flatten, base_url, target) {
 		levels = {};
 
-		Object.entries(this.sections).forEach((value, key) => {
-			let level;
+		for (const [key, value] of Object.entries(this.sections)) {
+			if (value.length == 1 && flatten) {
+				return value[0].build_link(base_url, target);
+			}
+
+			let list;
 
 			switch (key) {
-				case "introduction" | "conclusion":
-					level = document.createElement("ul");
-
-				case "assignment" | "summary":
-					level = document.createElement("details");
+				case "introduction" | "conclusion" | "assignment" | "summary":
+					list = document.createElement("ul");
 
 				default:
-					level = document.createElement("ol");
+					list = document.createElement("ol");
 			}
 
 			for (const section of value) {
-				// TODO
+				const list_item = document.createElement("li");
+				list_item.appendChild(section.build_link(base_url, target));
+
+				list.appendChild(list_item);
 			}
 
-			//levels["test"] = aaaa;
-		});
+			switch (key) {
+				case "assignment" | "summary":
+					const details = document.createElement("details");
+
+					const summary = document.createElement("summary");
+					summary.innerText = key;
+					details.appendChild(summary);
+					details.appendChild(list);
+
+					return details;
+
+				default:
+					return list;
+			}
+		}
+
 
 		/*const listing = document.createElement("div");
 
