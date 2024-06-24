@@ -28,6 +28,16 @@ function Course(uuid = self.crypto.randomUUID(), name, description, books) {
 	this.description = String(description);
 	this.books = books;
 
+	this.is_contents_complete = function () {
+		for (const book of this.books) {
+			if (!book.is_complete()) {
+				return false;
+			}
+		}
+
+		return true;
+	};
+
 	this.build_course_card = function () {
 
 	};
@@ -44,7 +54,17 @@ function Book(uuid = self.crypto.randomUUID(), name, description, chapters) {
 	this.description = String(description);
 	this.chapters = chapters;
 
-	this.get_progress = function () {
+	this.is_complete = function () {
+		for (const chapter of this.chapters) {
+			if (!chapter.is_complete()) {
+				return false;
+			}
+		}
+
+		return true;
+	};
+
+	this.build_progress_map = function () {
 
 	};
 
@@ -245,7 +265,7 @@ function ProgressMap(map_type, header, footer, contents) {
 	};
 }
 
-/*let sections = [
+/*let chapter_1 = new Chapter(undefined, "test", [
 	new Section(undefined, "Section 1", "Section 1", "introduction", true),
 	new Section(undefined, "Section 3", "Section 1", "section", true),
 	new Section(undefined, "Section 7", "Section 1", "conclusion", true),
@@ -258,11 +278,51 @@ function ProgressMap(map_type, header, footer, contents) {
 	new Section(undefined, "Section 8", "Section 1", "conclusion", true),
 	new Section(undefined, "Section 6", "Section 1", "section", true),
 	new Section(undefined, "Section 10", "Section 1", "summary", true),
+], undefined);
+
+
+let chapter_2 = new Chapter(undefined, "test", [
+	new Section(undefined, "Section 1", "Section 1", "introduction", true),
+	new Section(undefined, "Section 3", "Section 1", "section", true),
+	new Section(undefined, "Section 7", "Section 1", "conclusion", true),
+	new Section(undefined, "Section 11", "Section 1", "assignment", true),
+	new Section(undefined, "Section 2", "Section 1", "introduction", true),
+	new Section(undefined, "Section 9", "Section 1", "summary", true),
+	new Section(undefined, "Section 12", "Section 1", "assignment", true),
+	new Section(undefined, "Section 4", "Section 1", "section", true),
+	new Section(undefined, "Section 5", "Section 1", "section", true),
+	new Section(undefined, "Section 8", "Section 1", "conclusion", true),
+	new Section(undefined, "Section 6", "Section 1", "section", true),
+	new Section(undefined, "Section 10", "Section 1", "summary", true),
+], undefined);
+
+
+let chapter_3 = new Chapter(undefined, "test", [
+	new Section(undefined, "Section 1", "Section 1", "introduction", true),
+	new Section(undefined, "Section 3", "Section 1", "section", true),
+	new Section(undefined, "Section 7", "Section 1", "conclusion", true),
+	new Section(undefined, "Section 11", "Section 1", "assignment", true),
+	new Section(undefined, "Section 2", "Section 1", "introduction", true),
+	new Section(undefined, "Section 9", "Section 1", "summary", true),
+	new Section(undefined, "Section 12", "Section 1", "assignment", true),
+	new Section(undefined, "Section 4", "Section 1", "section", true),
+	new Section(undefined, "Section 5", "Section 1", "section", true),
+	new Section(undefined, "Section 8", "Section 1", "conclusion", true),
+	new Section(undefined, "Section 6", "Section 1", "section", true),
+	new Section(undefined, "Section 10", "Section 1", "summary", true),
+], undefined);
+
+let chapters = [
+	chapter_1,
+	chapter_2,
+	chapter_3
 ];
 
-let chapter = new Chapter(undefined, "test", sections, undefined);
+let book = new Book(undefined, "test", "test", chapters);
 
-document.body.appendChild(chapter.build_content_listing(false));*/
+document.body.appendChild(chapter_1.build_content_listing(false));
+document.body.appendChild(chapter_2.build_content_listing(false));
+document.body.appendChild(chapter_3.build_content_listing(false));*/
 
 
 /*
