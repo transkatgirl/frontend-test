@@ -1,21 +1,47 @@
 
-function Course(name, description, books, is_marked_complete) {
-	this.name = name;
-	this.description = description;
+
+const userProgressTracker = {
+	inner: new Map(), // ! Temporary
+	get_item_completion(item_id) {
+		// ! Temporary
+		if (!this.inner.has(item_id)) {
+			this.inner.set(item_id, false);
+			return false;
+		}
+
+		return this.inner.get(item_id);
+	},
+	set_item_completion(item_id, is_complete) {
+		// ! Temporary
+		this.inner.set(item_id, is_complete);
+	}
+};
+
+/*
+Idea for progress tracking: Every Course / Book / Chapter / Section has a globally unique ID
+This ID can be used to map between a Course / Book / Chapter / Section, and it's completion, using a getCompletionStatus function.
+*/
+
+function Course(uuid = self.crypto.randomUUID(), name, description, books) {
+	this.uuid = uuid;
+	this.name = String(name);
+	this.description = String(description);
 	this.books = books;
-	this.is_marked_complete = is_marked_complete;
+
 	this.build_course_card = function () {
 
 	};
+
 	this.get_progress = function () {
 
 	};
 
 }
 
-function Book(name, description, chapters) {
-	this.name = name;
-	this.description = description;
+function Book(uuid = self.crypto.randomUUID(), name, description, chapters) {
+	this.uuid = uuid;
+	this.name = String(name);
+	this.description = String(description);
 	this.chapters = chapters;
 
 	this.get_progress = function () {
@@ -27,8 +53,9 @@ function Book(name, description, chapters) {
 	};
 }
 
-function Chapter(chapter_type = "chapter", name, sections = []) {
-	this.name = name;
+function Chapter(uuid = self.crypto.randomUUID(), name, sections = [], chapter_type = "chapter") {
+	this.uuid = uuid;
+	this.name = String(name);
 
 	switch (chapter_type) {
 		case "introduction":
@@ -44,19 +71,17 @@ function Chapter(chapter_type = "chapter", name, sections = []) {
 
 	this.sections = new Map();
 	for (const section of sections) {
-		section_object = section;
-
-		if (!this.sections.has(section_object.section_type)) {
-			this.sections.set(section_object.section_type, []);
+		if (!this.sections.has(section.section_type)) {
+			this.sections.set(section.section_type, []);
 		}
 
-		this.sections.get(section_object.section_type).push(section_object);
+		this.sections.get(section.section_type).push(section);
 	}
 
 	this.is_complete = function () {
-		for (const [key, value] of Object.entries(this.sections)) {
+		for (const [key, value] of this.sections.entries()) {
 			for (const section of value) {
-				if (section.completable && !section.is_complete) {
+				if (section.completable && !userProgressTracker.get_item_completion(section.uuid)) {
 					return false;
 				}
 			}
@@ -65,9 +90,9 @@ function Chapter(chapter_type = "chapter", name, sections = []) {
 		return true;
 	};
 
-	this.build_content_listing = function (flatten = false, base_url, target) {
+	this.build_content_listing = function (flatten = false, target) {
 		if (flatten && this.sections.size == 1 && this.sections.values[0].length == 1) {
-			return this.sections.values[0][0].build_link(base_url, target);
+			return this.sections.values[0][0].build_link(target);
 		}
 
 		const groupings = new Map();
@@ -89,7 +114,7 @@ function Chapter(chapter_type = "chapter", name, sections = []) {
 
 			for (const section of value) {
 				const list_item = document.createElement("li");
-				list_item.appendChild(section.build_link(base_url, target));
+				list_item.appendChild(section.build_link(target));
 
 				list.appendChild(list_item);
 			}
@@ -130,7 +155,8 @@ function Chapter(chapter_type = "chapter", name, sections = []) {
 	};
 }
 
-function Section(section_type = "section", name, url, is_completable = true, is_complete = false) {
+function Section(uuid = self.crypto.randomUUID(), name, url, section_type = "section", is_completable = true) {
+	this.uuid = uuid;
 	this.name = String(name);
 	this.url = String(url);
 
@@ -157,17 +183,9 @@ function Section(section_type = "section", name, url, is_completable = true, is_
 			break;
 	}
 
-	if (this.completable) {
-		this.is_complete = Boolean(is_complete);
-	}
-
-	this.build_link = function (base_url, target) {
+	this.build_link = function (target) {
 		const link = document.createElement("a");
-		if (base_url) {
-			link.setAttribute("href", new URL(this.url, base_url));
-		} else {
-			link.setAttribute("href", this.url);
-		}
+		link.setAttribute("href", this.url);
 		if (target) {
 			link.setAttribute("target", target);
 		}
@@ -177,12 +195,13 @@ function Section(section_type = "section", name, url, is_completable = true, is_
 			const checkbox = document.createElement("input");
 			checkbox.setAttribute("type", "checkbox");
 
-			if (this.is_complete) {
+			if (userProgressTracker.get_item_completion(this.uuid)) {
 				checkbox.setAttribute("checked", "");
 			}
 
+			const item_uuid = this.uuid;
 			checkbox.addEventListener("change", (event) => {
-				// TODO
+				userProgressTracker.set_item_completion(item_uuid, event.target.checked);
 			});
 
 			const container = document.createElement("span");
@@ -210,14 +229,16 @@ function ProgressMap(map_type, header, footer, contents) {
 }
 
 
-/*let sections = [
-	new Section("summary", "testaa", "testaa", false),
-	new Section(undefined, "test", "test", false)
+let sections = [
+	new Section(undefined, "testaa", "testaa", "assignment", true),
+	new Section(undefined, "test", "test", undefined, true)
 ];
 
-let chapter = new Chapter(undefined, "test", sections);
+let chapter = new Chapter(undefined, "test", sections, undefined);
 
-document.body.appendChild(chapter.build_content_listing(false));*/
+/*console.log(chapter.is_complete());*/
+
+document.body.appendChild(chapter.build_content_listing(false));
 
 
 /*let section = new Section(undefined, "test", "yeet", false, false);
