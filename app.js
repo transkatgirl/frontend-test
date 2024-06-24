@@ -13,7 +13,7 @@ const userProgressTracker = {
 	},
 	set_item_completion(item_id, is_complete) {
 		// ! Temporary
-		this.inner.set(item_id, is_complete);
+		this.inner.set(item_id, Boolean(is_complete));
 	}
 };
 
@@ -90,6 +90,18 @@ function Chapter(uuid = self.crypto.randomUUID(), name, sections = [], chapter_t
 		return true;
 	};
 
+	this.is_started = function () {
+		for (const [key, value] of this.sections.entries()) {
+			for (const section of value) {
+				if (section.completable && userProgressTracker.get_item_completion(section.uuid)) {
+					return true;
+				}
+			}
+		}
+
+		return false;
+	};
+
 	this.build_content_listing = function (flatten = false, target) {
 		if (flatten && this.sections.size == 1 && this.sections.values[0].length == 1) {
 			return this.sections.values[0][0].build_link(target);
@@ -150,6 +162,11 @@ function Chapter(uuid = self.crypto.randomUUID(), name, sections = [], chapter_t
 				root.appendChild(groupings.get(section_type));
 			}
 		}
+
+		/*const item = this;
+		root.addEventListener("change", (event) => {
+			userProgressTracker.set_item_completion(item.uuid, item.is_complete());
+		});*/
 
 		return root;
 	};
@@ -228,19 +245,26 @@ function ProgressMap(map_type, header, footer, contents) {
 	};
 }
 
-
-let sections = [
-	new Section(undefined, "testaa", "testaa", "assignment", true),
-	new Section(undefined, "test", "test", undefined, true)
+/*let sections = [
+	new Section(undefined, "Section 1", "Section 1", "introduction", true),
+	new Section(undefined, "Section 3", "Section 1", "section", true),
+	new Section(undefined, "Section 7", "Section 1", "conclusion", true),
+	new Section(undefined, "Section 11", "Section 1", "assignment", true),
+	new Section(undefined, "Section 2", "Section 1", "introduction", true),
+	new Section(undefined, "Section 9", "Section 1", "summary", true),
+	new Section(undefined, "Section 12", "Section 1", "assignment", true),
+	new Section(undefined, "Section 4", "Section 1", "section", true),
+	new Section(undefined, "Section 5", "Section 1", "section", true),
+	new Section(undefined, "Section 8", "Section 1", "conclusion", true),
+	new Section(undefined, "Section 6", "Section 1", "section", true),
+	new Section(undefined, "Section 10", "Section 1", "summary", true),
 ];
 
 let chapter = new Chapter(undefined, "test", sections, undefined);
 
-/*console.log(chapter.is_complete());*/
-
-document.body.appendChild(chapter.build_content_listing(false));
+document.body.appendChild(chapter.build_content_listing(false));*/
 
 
-/*let section = new Section(undefined, "test", "yeet", false, false);
+/*
 
 document.body.appendChild(section.build_link());*/
