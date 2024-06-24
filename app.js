@@ -33,17 +33,18 @@ function Chapter(chapter_type = "chapter", name, sections = []) {
 	switch (chapter_type) {
 		case "introduction":
 			this.chapter_type = "introduction";
-
+			break;
 		case "conclusion":
 			this.chapter_type = "conclusion";
-
+			break;
 		default:
 			this.chapter_type = "chapter";
+			break;
 	}
 
 	this.sections = new Map();
 	for (const section of sections) {
-		const section_object = new Section(section.section_type, section.name, section.url, section.completable, section.is_complete);
+		section_object = section;
 
 		if (!this.sections.has(section_object.section_type)) {
 			this.sections.set(section_object.section_type, []);
@@ -75,11 +76,15 @@ function Chapter(chapter_type = "chapter", name, sections = []) {
 			let list;
 
 			switch (key) {
-				case "introduction" | "conclusion" | "assignment" | "summary":
+				case "introduction":
+				case "conclusion":
+				case "assignment":
+				case "summary":
 					list = document.createElement("ul");
-
+					break;
 				default:
 					list = document.createElement("ol");
+					break;
 			}
 
 			for (const section of value) {
@@ -90,18 +95,26 @@ function Chapter(chapter_type = "chapter", name, sections = []) {
 			}
 
 			switch (key) {
-				case "assignment" | "summary":
+				case "assignment":
+				case "summary":
 					const details = document.createElement("details");
+					details.setAttribute("open", "");
 
 					const summary = document.createElement("summary");
-					summary.innerText = key;
+					if (key == "assignment") {
+						summary.innerText = "Assignments";
+					} else if (key == "summary") {
+						summary.innerText = "Summary";
+					}
+
 					details.appendChild(summary);
 					details.appendChild(list);
 
 					groupings.set(key, details);
-
+					break;
 				default:
 					groupings.set(key, list);
+					break;
 			}
 		}
 
@@ -125,22 +138,23 @@ function Section(section_type = "section", name, url, is_completable = true, is_
 		case "introduction":
 			this.section_type = "introduction";
 			this.completable = Boolean(is_completable);
-
+			break;
 		case "conclusion":
 			this.section_type = "conclusion";
 			this.completable = Boolean(is_completable);
-
+			break;
 		case "assignment":
 			this.section_type = "assignment";
 			this.completable = true;
-
+			break;
 		case "summary":
 			this.section_type = "summary";
 			this.completable = false;
-
+			break;
 		default:
 			this.section_type = "section";
 			this.completable = Boolean(is_completable);
+			break;
 	}
 
 	if (this.completable) {
@@ -197,7 +211,7 @@ function ProgressMap(map_type, header, footer, contents) {
 
 
 /*let sections = [
-	new Section(undefined, "testaa", "testaa", false),
+	new Section("summary", "testaa", "testaa", false),
 	new Section(undefined, "test", "test", false)
 ];
 
