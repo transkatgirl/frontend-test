@@ -80,11 +80,6 @@
 
 		@layer {
 
-			:scope.daily-time-progress-map .in-progress,
-			:scope.daily-chapter-progress-map .in-progress {
-				border: 0.1em solid black;
-			}
-
 			:scope.hourly-progress-map tbody td,
 			:scope.daily-time-progress-map tbody td {
 				background-color: rgba(0, 16, 0, 0.1);
@@ -133,6 +128,11 @@
 			:scope.chapter-progress-map .finished {
 				background-color: rgba(165, 42, 42, 1);
 			}
+		}
+
+		:scope.daily-time-progress-map .in-progress,
+		:scope.daily-chapter-progress-map .in-progress {
+			border: 0.1em solid black;
 		}
 
 		:scope.hourly-progress-map th {
