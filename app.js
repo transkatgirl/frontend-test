@@ -18,8 +18,9 @@ const userProgressTracker = {
 };
 
 /*
-Idea for progress tracking: Every Course / Book / Chapter / Section has a globally unique ID
-This ID can be used to map between a Course / Book / Chapter / Section, and it's completion, using a getCompletionStatus function.
+Welp, time for a new plan:
+	- Use epub.js + pdf.js to load ebooks
+	- Use an accompanying JSON file to override ebook metadata (title, description, etc) and convert books into courses (mark sections as completable, mark assignments, connect assignments with their answer key)
 */
 
 function Course(uuid = self.crypto.randomUUID(), name, description, books) {
@@ -78,11 +79,14 @@ function Chapter(uuid = self.crypto.randomUUID(), name, sections = [], chapter_t
 	this.name = String(name);
 
 	switch (chapter_type) {
-		case "introduction":
-			this.chapter_type = "introduction";
+		case "preface":
+			this.chapter_type = "preface";
 			break;
-		case "conclusion":
-			this.chapter_type = "conclusion";
+		case "appendix":
+			this.chapter_type = "appendix";
+			break;
+		case "index":
+			this.chapter_type = "index";
 			break;
 		default:
 			this.chapter_type = "chapter";
