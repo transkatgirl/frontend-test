@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+
+<head>
+	<script src="./dependencies/mermaid.min.js"></script>
+	<script src="./dependencies/jszip.min.js"></script>
+	<script src="./dependencies/epub.min.js"></script>
+
+	<script src="app.js"></script>
+
+	<style>
+		body {
+			margin: 2em;
+		}
+
+		a {
+			text-decoration: unset;
+			cursor: pointer;
+		}
+
+		a:hover {
+			text-decoration: underline;
+		}
+
+		#book_toc {
+			border: 0.1em solid black;
+			float: left;
+			width: 25em;
+			height: calc(100vh - 4.2em);
+			overflow: auto;
+		}
+
+		#book_toc>ol {
+			padding: 0;
+		}
+
+		#book_section {
+			border: 0.1em solid black;
+			float: right;
+			width: 60em;
+			height: calc(100vh - 4.2em);
+		}
+
+	</style>
+
+	<!-- <script src="./dependencies/pdfjs-dist/build/pdf.mjs" type="module"></script> -->
+</head>
+
+<body>
+	<div id="book_toc"></div>
+	<div id="book_section"></div>
+	<script src="book.js" defer></script>
+</body>

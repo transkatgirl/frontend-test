@@ -20,7 +20,7 @@ const userProgressTracker = {
 /*
 Welp, time for a new plan:
 	- Use epub.js + pdf.js to load ebooks
-	- Use an accompanying JSON file to override ebook metadata (title, description, etc) and convert books into courses (mark sections as completable, mark assignments, connect assignments with their answer key)
+	- Use an accompanying JSON file to override ebook metadata (title, description, etc) and convert books into courses (mark sections as completable, mark assignments, connect assignments with their answers)
 */
 
 function Course(uuid = self.crypto.randomUUID(), name, description, books) {
