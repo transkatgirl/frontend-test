@@ -183,12 +183,27 @@ class Textbook {
 					this.#inner.document.getOutline().then((outline) => {
 						this.#inner.outline = outline;
 
+						const document = this.#inner.document;
 						content_lister.render(
 							this.#inner.outline,
 							(item) => item.dest,
 							(item) => {
-								if (item.dest) {
-									console.log(item.dest);
+								if (typeof item.dest === "string") {
+									document.getDestination(item.dest).then((destArray) => {
+										document.getPageIndex(destArray[0]).then((pageNumber) => {
+											pdf_viewer.pdfViewer.scrollPageIntoView({
+												pageNumber: pageNumber + 1,
+												destArray,
+											});
+										});
+									});
+								} else {
+									document.getPageIndex(item[0]).then((pageNumber) => {
+										pdf_viewer.pdfViewer.scrollPageIntoView({
+											pageNumber: pageNumber + 1,
+											item,
+										});
+									});
 								}
 							}
 						);
@@ -236,10 +251,10 @@ class Textbook {
 */
 
 
-let textbook = new Textbook("epub", "./textbook-scraper/test.epub/OEBPS/9780137675807.opf");
+//let textbook = new Textbook("epub", "./textbook-scraper/test.epub/OEBPS/9780137675807.opf");
 
 //let textbook = new Textbook("epub", "./textbook-scraper/alice.epub");
 
-//let textbook = new Textbook("pdf", "./textbook-scraper/test.pdf");
+let textbook = new Textbook("pdf", "./textbook-scraper/test.pdf");
 
 textbook.render(toc_container, section_container);
