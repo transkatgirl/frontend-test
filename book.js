@@ -1,5 +1,14 @@
 // TODO: Sandbox ePubs
 
+// TODO: Automatically close <details> elements
+
+const dependency_prefix = "./dependencies";
+
+const pdfjs_prefix = dependency_prefix + "/pdfjs-dist";
+pdfjsLib.GlobalWorkerOptions.workerSrc = pdfjs_prefix + "/build/pdf.worker.mjs";
+
+
+
 class Textbook {
 	#type;
 	#inner;
@@ -8,22 +17,28 @@ class Textbook {
 			case "epub":
 				this.#type = "epub";
 				this.#inner = {
-					book: ePub(url, {
-						manager: "continuous",
-					}),
+					book: ePub(url),
 				};
-
 				break;
-
 			case "pdf":
 				this.#type = "pdf";
-
+				this.#inner = {
+					loadingTask: pdfjsLib.getDocument({
+						url,
+						cMapUrl: pdfjs_prefix + "/cmaps/",
+						cMapPacked: true,
+						enableXfa: true,
+					}),
+				};
 				break;
 			default:
 				this.#type = "custom";
 
 				break;
 		}
+
+		// ! Temporary
+		this.test = this.#inner;
 	}
 	render(toc_container, section_container) {
 		switch (this.#type) {
@@ -49,7 +64,7 @@ class Textbook {
 						const root = document.createElement("ol");
 
 						nav_items.forEach((nav_item) => {
-							const item_container = document.createElement("ul");
+							const item_container = document.createElement("li");
 
 							const item_link = document.createElement("a");
 							item_link.innerText = nav_item.label;
@@ -83,10 +98,40 @@ class Textbook {
 					toc_container.appendChild(build_nav(this.#inner.navigation));
 				});
 
-				this.test = this.#inner;
-
 				break;
 			case "pdf":
+				this.#inner.eventBus = new pdfjsViewer.EventBus();
+				this.#inner.pdfLinkService = new pdfjsViewer.PDFLinkService({
+					eventBus: this.#inner.eventBus,
+				});
+				this.#inner.pdfFindController = new pdfjsViewer.PDFFindController({
+					eventBus: this.#inner.eventBus,
+					linkService: this.#inner.pdfFindController,
+				});
+				this.#inner.pdfScriptingManager = new pdfjsViewer.PDFScriptingManager({
+					eventBus: this.#inner.eventBus,
+					sandboxBundleSrc: pdfjs_prefix + "/build/pdf.sandbox.min.mjs",
+				});
+				this.#inner.pdfSinglePageViewer = new pdfjsViewer.PDFSinglePageViewer({
+					container: section_container,
+					eventBus: this.#inner.eventBus,
+					linkService: this.#inner.pdfLinkService,
+					findController: this.#inner.pdfFindController,
+					scriptingManager: this.#inner.pdfScriptingManager,
+				});
+				this.#inner.pdfLinkService.setViewer(this.#inner.pdfSinglePageViewer);
+				this.#inner.pdfScriptingManager.setViewer(this.#inner.pdfSinglePageViewer);
+				this.#inner.eventBus.on("pagesinit", () => {
+					this.#inner.pdfSinglePageViewer.currentScaleValue = "page-width";
+				});
+
+				this.#inner.loadingTask.promise.then((pdf) => {
+					this.#inner.pdf = pdf;
+					//console.log(pdf);
+
+					this.#inner.pdfSinglePageViewer.setDocument(this.#inner.pdf);
+					this.#inner.pdfLinkService.setDocument(this.#inner.pdf, null);
+				});
 
 				break;
 			default:
@@ -112,8 +157,10 @@ class Textbook {
 const toc_container = document.getElementById("book_toc");
 const section_container = document.getElementById("book_section");
 
-let textbook = new Textbook("epub", "./textbook-scraper/test.epub/OEBPS/9780137675807.opf");
+//let textbook = new Textbook("epub", "./textbook-scraper/test.epub/OEBPS/9780137675807.opf");
 
 //let textbook = new Textbook("epub", "./textbook-scraper/alice.epub");
+
+let textbook = new Textbook("pdf", "./textbook-scraper/test.pdf");
 
 textbook.render(toc_container, section_container);

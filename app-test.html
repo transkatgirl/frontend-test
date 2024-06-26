@@ -4,8 +4,10 @@
 	<script src="./dependencies/mermaid.min.js"></script>
 	<script src="./dependencies/jszip.min.js"></script>
 	<script src="./dependencies/epub.min.js"></script>
-
-	<script src="app.js"></script>
+	<link rel="stylesheet" href="./dependencies/pdfjs/web/pdf_viewer.css">
+	<script src="./dependencies/pdfjs/build/pdf.min.mjs" type="module"></script>
+	<script src="./dependencies/pdfjs/web/pdf_viewer.mjs" type="module"></script>
+	<script src="app.js" defer></script>
 
 	<style>
 		body {
@@ -25,28 +27,45 @@
 			border: 0.1em solid black;
 			float: left;
 			width: 25em;
-			height: calc(100vh - 4.2em);
+			height: calc(100vh - 4em);
 			overflow: auto;
+			padding: 1em;
+			box-sizing: border-box;
 		}
 
 		#book_toc>ol {
 			padding: 0;
+			margin: 0;
+		}
+
+		ol {
+			list-style: none;
 		}
 
 		#book_section {
 			border: 0.1em solid black;
 			float: right;
 			width: 60em;
-			height: calc(100vh - 4.2em);
+			height: calc(100vh - 4em);
+			box-sizing: border-box;
+			overflow: auto;
+		}
+
+		#book_section {
+			/* required by pdf.js */
+			position: absolute;
+			right: 1em;
 		}
 
 	</style>
 
-	<!-- <script src="./dependencies/pdfjs-dist/build/pdf.mjs" type="module"></script> -->
+
 </head>
 
 <body>
 	<div id="book_toc"></div>
-	<div id="book_section"></div>
+	<div id="book_section">
+		<div></div>
+	</div>
 	<script src="book.js" defer></script>
 </body>
