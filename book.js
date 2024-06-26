@@ -198,12 +198,11 @@ class Textbook {
 		// ! Temporary
 		return this.#inner;
 	}
-	render(allowScripts, customCSSUrl) {
+	render(allowScripts) {
 		switch (this.type) {
 			case "epub":
 			case "epub_unpacked":
 				this.#inner.rendition = this.#inner.book.renderTo(section_container, {
-					//method: "continuous",
 					//manager: "continuous",
 					view: "iframe",
 					flow: "scrolled-doc",
@@ -213,9 +212,6 @@ class Textbook {
 					//offset: 1000,
 					allowScriptedContent: allowScripts
 				});
-				if (customCSSUrl) {
-					this.#inner.rendition.themes.default(customCSSUrl);
-				}
 
 				this.#inner.rendition.display();
 
