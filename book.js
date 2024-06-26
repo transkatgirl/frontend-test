@@ -112,6 +112,61 @@ function initalizedContentLister(container) {
 	this.reset();
 }
 
+function build_metadata_object(data) {
+	let output = {
+		title: null,
+		description: null,
+		author: null,
+		publisher: null,
+		language: null,
+		license: null,
+	};
+
+	if (data.title) {
+		output.title = data.title;
+	} else if (data.Title) {
+		output.title = data.Title;
+	}
+
+	if (data.language) {
+		output.language = data.language;
+	} else if (data.Language) {
+		output.language = data.Language;
+	}
+
+	if (data.description) {
+		output.description = data.description;
+	} else if (data.Description) {
+		output.description = data.Description;
+	}
+
+	if (data.creator) {
+		output.author = data.creator;
+	} if (data.author) {
+		output.author = data.author;
+	} else if (data.Author) {
+		output.author = data.Author;
+	}
+
+	if (data.publisher) {
+		output.publisher = data.publisher;
+	} else if (data.Publisher) {
+		output.publisher = data.Publisher;
+	}
+
+	if (data.license) {
+		output.license = data.license;
+	} else if (data.License) {
+		output.license = data.License;
+	} else if (data.rights) {
+		output.license = data.rights;
+	} else if (data.Rights) {
+		output.license = data.Rights;
+	}
+
+	return output;
+}
+
 const toc_container = document.getElementById("book_toc");
 const section_container = document.getElementById("book_section");
 
@@ -123,23 +178,21 @@ const pdf_viewer = new initalizedPdfViewer(
 const content_lister = new initalizedContentLister(toc_container);
 
 class Textbook {
-	#type;
-	#url;
 	#inner;
 	constructor (type, url) {
-		this.#url = url;
-		this.#type = type;
+		this.url = url;
+		this.type = type;
 		this.#inner = null;
 
 		const options = {};
-		switch (this.#type) {
+		switch (this.type) {
 			case "epub_unpacked":
-				if (this.#url.substr(this.#url.length - 1) != "/") {
-					this.#url = this.#url + "/";
+				if (this.url.substr(this.url.length - 1) != "/") {
+					this.url = this.url + "/";
 				};
 				options.openAs = "directory";
 			case "epub":
-				return ePub(this.#url, options).opened.then((book) => {
+				return ePub(this.url, options).opened.then((book) => {
 					this.#inner = {
 						book
 					};
@@ -151,6 +204,8 @@ class Textbook {
 						this.#inner.metadata = metadata;
 						this.#inner.navigation = navigation;
 
+						this.metadata = build_metadata_object(this.#inner.metadata);
+
 						// TODO
 
 						return this;
@@ -158,7 +213,7 @@ class Textbook {
 				});
 			case "pdf":
 				return pdfjsLib.getDocument({
-					url: this.#url,
+					url: this.url,
 					cMapUrl: pdf_viewer.pdfjsPrefix + "/cmaps/",
 					cMapPacked: true,
 					enableXfa: true,
@@ -174,6 +229,8 @@ class Textbook {
 						this.#inner.metadata = metadata;
 						this.#inner.outline = outline;
 
+						this.metadata = build_metadata_object(this.#inner.metadata.info);
+
 						// TODO
 
 						return this;
@@ -183,8 +240,12 @@ class Textbook {
 				break;
 		}
 	}
+	getInner() {
+		// ! Temporary
+		return this.#inner;
+	}
 	render() {
-		switch (this.#type) {
+		switch (this.type) {
 			case "epub":
 			case "epub_unpacked":
 				this.#inner.rendition = this.#inner.book.renderTo(section_container, {
@@ -242,16 +303,10 @@ class Textbook {
 				break;
 			default:
 				break;
-
 		}
-
-		// ! Temporary
-
-		this.test = this.#inner;
-
 	}
 	destroy() {
-		switch (this.#type) {
+		switch (this.type) {
 			case "epub":
 			case "epub_unpacked":
 				this.#inner.book.destroy();
