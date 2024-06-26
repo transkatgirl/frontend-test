@@ -112,61 +112,6 @@ function initalizedContentLister(container) {
 	this.reset();
 }
 
-function build_metadata_object(data) {
-	let output = {
-		title: null,
-		description: null,
-		author: null,
-		publisher: null,
-		language: null,
-		license: null,
-	};
-
-	if (data.title) {
-		output.title = data.title;
-	} else if (data.Title) {
-		output.title = data.Title;
-	}
-
-	if (data.language) {
-		output.language = data.language;
-	} else if (data.Language) {
-		output.language = data.Language;
-	}
-
-	if (data.description) {
-		output.description = data.description;
-	} else if (data.Description) {
-		output.description = data.Description;
-	}
-
-	if (data.creator) {
-		output.author = data.creator;
-	} if (data.author) {
-		output.author = data.author;
-	} else if (data.Author) {
-		output.author = data.Author;
-	}
-
-	if (data.publisher) {
-		output.publisher = data.publisher;
-	} else if (data.Publisher) {
-		output.publisher = data.Publisher;
-	}
-
-	if (data.license) {
-		output.license = data.license;
-	} else if (data.License) {
-		output.license = data.License;
-	} else if (data.rights) {
-		output.license = data.rights;
-	} else if (data.Rights) {
-		output.license = data.Rights;
-	}
-
-	return output;
-}
-
 const toc_container = document.getElementById("book_toc");
 const section_container = document.getElementById("book_section");
 
@@ -204,9 +149,9 @@ class Textbook {
 						this.#inner.metadata = metadata;
 						this.#inner.navigation = navigation;
 
-						this.metadata = build_metadata_object(this.#inner.metadata);
-
-						// TODO
+						if (this.#inner.metadata.title) {
+							this.title = this.#inner.metadata.title;
+						}
 
 						return this;
 					});
@@ -229,9 +174,9 @@ class Textbook {
 						this.#inner.metadata = metadata;
 						this.#inner.outline = outline;
 
-						this.metadata = build_metadata_object(this.#inner.metadata.info);
-
-						// TODO
+						if (this.#inner.metadata.info.Title) {
+							this.title = this.#inner.metadata.info.Title;
+						}
 
 						return this;
 					});
@@ -304,6 +249,12 @@ class Textbook {
 			default:
 				break;
 		}
+
+		if (this.#inner.metadata.language) {
+			section_container.setAttribute("lang", this.#inner.metadata.language);
+		} else if (this.#inner.metadata.info.Language) {
+			section_container.setAttribute("lang", this.#inner.metadata.info.Language);
+		}
 	}
 	destroy() {
 		switch (this.type) {
@@ -321,6 +272,7 @@ class Textbook {
 		}
 		this.#inner = null;
 		content_lister.reset();
+		section_container.removeAttribute("lang");
 	}
 }
 
