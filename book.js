@@ -130,27 +130,63 @@ class Textbook {
 		this.#url = url;
 		this.#type = type;
 		this.#inner = null;
+
+		const options = {};
+		switch (this.#type) {
+			case "epub_unpacked":
+				if (this.#url.substr(this.#url.length - 1) != "/") {
+					this.#url = this.#url + "/";
+				};
+				options.openAs = "directory";
+			case "epub":
+				return ePub(this.#url, options).opened.then((book) => {
+					this.#inner = {
+						book
+					};
+
+					return Promise.all([
+						this.#inner.book.loaded.metadata,
+						this.#inner.book.loaded.navigation
+					]).then(([metadata, navigation]) => {
+						this.#inner.metadata = metadata;
+						this.#inner.navigation = navigation;
+
+						// TODO
+
+						return this;
+					});
+				});
+			case "pdf":
+				return pdfjsLib.getDocument({
+					url: this.#url,
+					cMapUrl: pdf_viewer.pdfjsPrefix + "/cmaps/",
+					cMapPacked: true,
+					enableXfa: true,
+				}).promise.then((document) => {
+					this.#inner = {
+						document
+					};
+
+					return Promise.all([
+						this.#inner.document.getMetadata(),
+						this.#inner.document.getOutline()
+					]).then(([metadata, outline]) => {
+						this.#inner.metadata = metadata;
+						this.#inner.outline = outline;
+
+						// TODO
+
+						return this;
+					});
+				});
+			default:
+				break;
+		}
 	}
 	load() {
 		switch (this.#type) {
 			case "epub":
 			case "epub_unpacked":
-				if (this.#type == "epub_unpacked") {
-					if (this.#url.substr(this.#url.length - 1) != "/") {
-						this.#url = this.#url + "/";
-					};
-
-					this.#inner = {
-						book: ePub(this.#url, {
-							openAs: "directory"
-						}),
-					};
-				} else {
-					this.#inner = {
-						book: ePub(this.#url),
-					};
-				};
-
 				this.#inner.rendition = this.#inner.book.renderTo(section_container, {
 					method: "default",
 					manager: "continuous",
@@ -163,75 +199,45 @@ class Textbook {
 				});
 				this.#inner.rendition.display();
 
-				this.#inner.book.loaded.navigation.then((navigation) => {
-					this.#inner.navigation = navigation;
-
-					const rendition = this.#inner.rendition;
-					content_lister.render(
-						this.#inner.navigation,
-						(item) => item.href,
-						(item) => {
-							if (item.href) {
-								rendition.display(item.href);
-							}
+				const rendition = this.#inner.rendition;
+				content_lister.render(
+					this.#inner.navigation,
+					(item) => item.href,
+					(item) => {
+						if (item.href) {
+							rendition.display(item.href);
 						}
-					);
-				});
-
-				this.#inner.book.loaded.metadata.then((metadata) => {
-					this.#inner.metadata = metadata;
-
-					// TODO
-				});
+					}
+				);
 
 				break;
 			case "pdf":
-				this.#inner = {
-					loadingTask: pdfjsLib.getDocument({
-						url: this.#url,
-						cMapUrl: pdf_viewer.pdfjsPrefix + "/cmaps/",
-						cMapPacked: true,
-						enableXfa: true,
-					}),
-				};
-				this.#inner.loadingTask.promise.then((pdf) => {
-					this.#inner.document = pdf;
-					pdf_viewer.loadPdf(this.#inner.document);
-					this.#inner.document.getOutline().then((outline) => {
-						this.#inner.outline = outline;
+				pdf_viewer.loadPdf(this.#inner.document);
 
-						const document = this.#inner.document;
-						content_lister.render(
-							this.#inner.outline,
-							(item) => item.dest,
-							(item) => {
-								if (typeof item.dest === "string") {
-									document.getDestination(item.dest).then((destArray) => {
-										document.getPageIndex(destArray[0]).then((pageNumber) => {
-											pdf_viewer.pdfViewer.scrollPageIntoView({
-												pageNumber: pageNumber + 1,
-												destArray,
-											});
-										});
+				const document = this.#inner.document;
+				content_lister.render(
+					this.#inner.outline,
+					(item) => item.dest,
+					(item) => {
+						if (typeof item.dest === "string") {
+							document.getDestination(item.dest).then((destArray) => {
+								document.getPageIndex(destArray[0]).then((pageNumber) => {
+									pdf_viewer.pdfViewer.scrollPageIntoView({
+										pageNumber: pageNumber + 1,
+										destArray,
 									});
-								} else {
-									document.getPageIndex(item.dest[0]).then((pageNumber) => {
-										pdf_viewer.pdfViewer.scrollPageIntoView({
-											pageNumber: pageNumber + 1,
-											destArray: item.dest,
-										});
-									});
-								}
-							}
-						);
-					});
-
-					this.#inner.document.getMetadata().then((metadata) => {
-						this.#inner.metadata = metadata;
-
-						// TODO
-					});
-				});
+								});
+							});
+						} else {
+							document.getPageIndex(item.dest[0]).then((pageNumber) => {
+								pdf_viewer.pdfViewer.scrollPageIntoView({
+									pageNumber: pageNumber + 1,
+									destArray: item.dest,
+								});
+							});
+						}
+					}
+				);
 
 				break;
 			default:
@@ -244,7 +250,7 @@ class Textbook {
 		this.test = this.#inner;
 
 	}
-	unload() {
+	destroy() {
 		switch (this.#type) {
 			case "epub":
 			case "epub_unpacked":
@@ -253,8 +259,7 @@ class Textbook {
 			case "pdf":
 				pdf_viewer.pdfViewer.setDocument(null);
 				pdf_viewer.pdfLinkService.setDocument(null);
-				this.#inner.loadingTask.destroy();
-
+				this.#inner.document.destroy();
 				break;
 			default:
 				break;
@@ -275,10 +280,14 @@ class Textbook {
 
 let textbook1 = new Textbook("epub_unpacked", "./textbook-scraper/test.epub");
 
+//let test = await textbook1;
+
 let textbook2 = new Textbook("epub", "./textbook-scraper/alice.epub");
 
 let textbook3 = new Textbook("pdf", "./textbook-scraper/test.pdf");
 
-let textbook4 = new Textbook("pdf", "./textbook-scraper/large.pdf");
+let textbook4 = new Textbook("pdf", "./textbook-scraper/math.pdf");
 
-textbook4.load();
+//textbook1.load();
+
+textbook1.then((textbook) => textbook.load());

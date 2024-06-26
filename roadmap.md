@@ -14,7 +14,6 @@
 	- courses can either be automatically or manually marked as complete
 
 ## v1
-- annotation support
 - built-in note taking functionality
 - search support
 - reference support
