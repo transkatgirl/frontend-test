@@ -1,5 +1,3 @@
-// TODO: Add function to get/restore progress within a textbook
-
 // handle navigation.landmarks
 // - https://www.w3.org/TR/epub-33/#sec-nav-landmarks
 
@@ -25,17 +23,13 @@ function initalizedPdfViewer(pdfjsPrefix, viewerContainer) {
 		scriptingManager: this.pdfScriptingManager,
 	});
 	this.pdfLinkService.setViewer(this.pdfViewer);
+	this.pdfScriptingManager.setViewer(this.pdfViewer);
 
 	this.eventBus.on("pagesinit", () => {
 		this.pdfViewer.currentScaleValue = "page-width";
 	});
 
-	this.loadPdf = function (pdf, allowScripts) {
-		if (allowScripts) {
-			this.pdfScriptingManager.setViewer(this.pdfViewer);
-		} else {
-			this.pdfScriptingManager.setViewer(null);
-		}
+	this.loadPdf = function (pdf) {
 		this.pdfViewer.setDocument(pdf);
 		this.pdfLinkService.setDocument(pdf, null);
 	};
@@ -203,22 +197,28 @@ class Textbook {
 	getInner() {
 		// ! Temporary
 		return this.#inner;
-	}
-	render(allowScripts) {
+	} e;
+	render({ sandbox = true, discreteSections = false, customCssUrl }) {
 		switch (this.type) {
 			case "epub":
 			case "epub_unpacked":
-				this.#inner.rendition = this.#inner.book.renderTo(section_container, {
-					//manager: "continuous",
+				let options = {
 					view: "iframe",
 					flow: "scrolled-doc",
 					width: "100%",
 					height: "100%",
 					spread: "none",
-					//offset: 1000,
-					allowScriptedContent: allowScripts
-				});
+					offset: 1000,
+					allowScriptedContent: !sandbox
+				};
+				if (!discreteSections) {
+					options.manager = "continuous";
+				}
 
+				this.#inner.rendition = this.#inner.book.renderTo(section_container, options);
+				if (customCssUrl) {
+					this.#inner.rendition.themes.register(customCssUrl);
+				}
 				this.#inner.rendition.display();
 
 				const rendition = this.#inner.rendition;
@@ -234,7 +234,7 @@ class Textbook {
 
 				break;
 			case "pdf":
-				pdf_viewer.loadPdf(this.#inner.document, allowScripts);
+				pdf_viewer.loadPdf(this.#inner.document);
 
 				const document = this.#inner.document;
 				content_lister.render(
@@ -276,6 +276,33 @@ class Textbook {
 			toc_container.setAttribute("lang", this.language);
 		}
 	}
+	exportLocationTag() {
+		switch (this.type) {
+			case "epub":
+			case "epub_unpacked":
+				return btoa(this.#inner.rendition.currentLocation().start.cfi);
+			case "pdf":
+				return btoa(JSON.stringify(pdf_viewer.pdfViewer._location));
+			default:
+				break;
+		}
+	}
+	importLocationTag(tag) {
+		switch (this.type) {
+			case "epub":
+			case "epub_unpacked":
+				return this.#inner.rendition.display(atob(tag));
+			case "pdf":
+				let data = JSON.parse(atob(tag));
+
+				pdf_viewer.pdfViewer.scrollPageIntoView({ pageNumber: data.pageNumber }); // ugly hack
+				pdf_viewer.pdfLinkService.setHash(data.pdfOpenParams);
+
+				break;
+			default:
+				break;
+		}
+	}
 	destroy() {
 		switch (this.type) {
 			case "epub":
@@ -298,15 +325,6 @@ class Textbook {
 	}
 }
 
-/*
-
-- Progress tracking:
-	- ePub: rendition.currentLocation()
-		- .start.cfi = location, can be loaded again using rendition.display(location)
-	- PDF: TODO
-
-*/
-
 let textbook1 = new Textbook("epub_unpacked", "./textbook-scraper/test.epub");
 
 let textbook2 = new Textbook("epub", "./textbook-scraper/alice.epub");
@@ -315,4 +333,4 @@ let textbook3 = new Textbook("pdf", "./textbook-scraper/test.pdf");
 
 let textbook4 = new Textbook("pdf", "./textbook-scraper/math.pdf");
 
-textbook1.then((textbook) => textbook.render(true));
+textbook3.then((textbook) => textbook.render({ sandbox: false, discreteSections: false }));
