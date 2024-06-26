@@ -52,26 +52,36 @@ function initalizedContentLister(container) {
 				const item_container = document.createElement("li");
 
 				let item_text_container;
-				if (item.clickHandler || item.href) {
+				if (isClickableCallback && isClickableCallback(item) && onClick) {
 					item_text_container = document.createElement("a");
-					if (isClickableCallback && isClickableCallback(item) && onClick) {
-						item_text_container.addEventListener("click", (event) => onClick(item));
-					} else {
-						item_text_container.href = item.href;
-					}
+					item_text_container.addEventListener("click", (event) => onClick(item));
+				} else if (item.href) {
+					item_text_container = document.createElement("a");
+					item_text_container.href = item.href;
 				} else {
 					item_text_container = document.createElement("span");
 				}
-				item_text_container.innerText = item.label;
+				if (item.label) {
+					item_text_container.innerText = item.label;
+				}
+				if (item.title) {
+					item_text_container.innerText = item.title;
+				}
 
-				if (item.subitems.length > 0) {
+				if ((item.subitems && item.subitems.length > 0) || (item.items && item.items.length > 0)) {
 					const item_subcontainer = document.createElement("details");
 
 					const subcontainer_title = document.createElement("summary");
 					subcontainer_title.appendChild(item_text_container);
 					item_subcontainer.appendChild(subcontainer_title);
 
-					item_subcontainer.appendChild(build_list(item.subitems, isClickableCallback, onClick));
+					if (item.subitems) {
+						item_subcontainer.appendChild(build_list(item.subitems, isClickableCallback, onClick));
+					}
+					if (item.items) {
+						item_subcontainer.appendChild(build_list(item.items, isClickableCallback, onClick));
+					}
+
 
 					item_container.appendChild(item_subcontainer);
 				} else {
@@ -170,6 +180,19 @@ class Textbook {
 				this.#inner.loadingTask.promise.then((pdf) => {
 					this.#inner.document = pdf;
 					pdf_viewer.loadPdf(this.#inner.document);
+					this.#inner.document.getOutline().then((outline) => {
+						this.#inner.outline = outline;
+
+						content_lister.render(
+							this.#inner.outline,
+							(item) => item.dest,
+							(item) => {
+								if (item.dest) {
+									console.log(item.dest);
+								}
+							}
+						);
+					});
 				});
 
 				break;
@@ -207,6 +230,10 @@ class Textbook {
 	}
 }
 
+/* Metadata:
+	- ePub = book.packaging
+	- PDF = document.getMetadata()
+*/
 
 
 let textbook = new Textbook("epub", "./textbook-scraper/test.epub/OEBPS/9780137675807.opf");
