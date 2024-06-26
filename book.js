@@ -203,14 +203,14 @@ class Textbook {
 			case "epub":
 			case "epub_unpacked":
 				this.#inner.rendition = this.#inner.book.renderTo(section_container, {
-					method: "default",
-					manager: "continuous",
+					//method: "continuous",
+					//manager: "continuous",
 					view: "iframe",
 					flow: "scrolled-doc",
 					width: "100%",
 					height: "100%",
 					spread: "none",
-					offset: 1000,
+					//offset: 1000,
 					allowScriptedContent: allowScripts
 				});
 				if (customCSSUrl) {
