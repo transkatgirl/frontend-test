@@ -6,11 +6,15 @@
 
 // TODO: Add function to get/restore progress within a textbook
 
-// TODO: Add annotations support
+// TODO: Add title display
 
-// TODO: Add CSS support for ePub
+// TODO: Add custom CSS support for ePub
 
 // TODO: Review ePub spec to evaluate correctness of implementation
+
+// TODO: Add previous/next section with left/right arrow keys
+
+// TODO: Separate book loading and book display
 
 const dependency_prefix = "./dependencies";
 
@@ -86,7 +90,6 @@ function initalizedContentLister(container) {
 					if (item.items) {
 						item_subcontainer.appendChild(build_list(item.items, isClickableCallback, onClick));
 					}
-
 
 					item_container.appendChild(item_subcontainer);
 				} else {
@@ -212,10 +215,10 @@ class Textbook {
 										});
 									});
 								} else {
-									document.getPageIndex(item[0]).then((pageNumber) => {
+									document.getPageIndex(item.dest[0]).then((pageNumber) => {
 										pdf_viewer.pdfViewer.scrollPageIntoView({
 											pageNumber: pageNumber + 1,
-											item,
+											destArray: item.dest,
 										});
 									});
 								}
@@ -276,4 +279,6 @@ let textbook2 = new Textbook("epub", "./textbook-scraper/alice.epub");
 
 let textbook3 = new Textbook("pdf", "./textbook-scraper/test.pdf");
 
-textbook1.load();
+let textbook4 = new Textbook("pdf", "./textbook-scraper/large.pdf");
+
+textbook4.load();
