@@ -197,7 +197,7 @@ class Textbook {
 	getInner() {
 		// ! Temporary
 		return this.#inner;
-	} e;
+	}
 	render({ sandbox = true, discreteSections = false, customCssUrl }) {
 		switch (this.type) {
 			case "epub":
@@ -232,6 +232,11 @@ class Textbook {
 					}
 				);
 
+				this.#inner.resizeObserver = new ResizeObserver((event) => {
+					rendition.resize();
+				});
+				this.#inner.resizeObserver.observe(section_container);
+
 				break;
 			case "pdf":
 				pdf_viewer.loadPdf(this.#inner.document);
@@ -260,6 +265,12 @@ class Textbook {
 						}
 					}
 				);
+
+				this.#inner.resizeObserver = new ResizeObserver((event) => {
+					pdf_viewer.pdfViewer.currentScaleValue = "page-width";
+					pdf_viewer.pdfViewer.update();
+				});
+				this.#inner.resizeObserver.observe(section_container);
 
 				break;
 			default:
@@ -316,6 +327,9 @@ class Textbook {
 			default:
 				break;
 		}
+		if (this.#inner.resizeObserver) {
+			this.#inner.resizeObserver.unobserve(section_container);
+		}
 		this.#inner = null;
 		title_container.innerText = null;
 		content_lister.reset();
@@ -333,4 +347,4 @@ let textbook3 = new Textbook("pdf", "./textbook-scraper/test.pdf");
 
 let textbook4 = new Textbook("pdf", "./textbook-scraper/math.pdf");
 
-textbook3.then((textbook) => textbook.render({ sandbox: false, discreteSections: false }));
+textbook1.then((textbook) => textbook.render({ sandbox: false, discreteSections: false }));
