@@ -1,16 +1,6 @@
-// TODO: Sandbox ePubs
-
-// TODO: Automatically close <details> elements
-
 // TODO: Add function to get/restore progress within a textbook
 
-// TODO: Add custom CSS support for ePub
-
 // TODO: Review ePub spec to evaluate correctness of implementation
-
-// TODO: Add previous/next section with left/right arrow keys
-
-// TODO: Separate book loading and book display
 
 const dependency_prefix = "./dependencies";
 
@@ -33,14 +23,24 @@ function initalizedPdfViewer(pdfjsPrefix, viewerContainer) {
 		scriptingManager: this.pdfScriptingManager,
 	});
 	this.pdfLinkService.setViewer(this.pdfViewer);
-	this.pdfScriptingManager.setViewer(this.pdfViewer);
+
 	this.eventBus.on("pagesinit", () => {
 		this.pdfViewer.currentScaleValue = "page-width";
 	});
 
-	this.loadPdf = function (pdf) {
+	this.loadPdf = function (pdf, allowScripts) {
+		if (allowScripts) {
+			this.pdfScriptingManager.setViewer(this.pdfViewer);
+		} else {
+			this.pdfScriptingManager.setViewer(null);
+		}
 		this.pdfViewer.setDocument(pdf);
 		this.pdfLinkService.setDocument(pdf, null);
+	};
+
+	this.reset = function () {
+		this.pdfViewer.setDocument(null);
+		this.pdfLinkService.setDocument(null);
 	};
 }
 
@@ -198,7 +198,7 @@ class Textbook {
 		// ! Temporary
 		return this.#inner;
 	}
-	render() {
+	render(allowScripts, customCSSUrl) {
 		switch (this.type) {
 			case "epub":
 			case "epub_unpacked":
@@ -210,8 +210,13 @@ class Textbook {
 					width: "100%",
 					height: "100%",
 					spread: "none",
-					allowScriptedContent: true
+					offset: 1000,
+					allowScriptedContent: allowScripts
 				});
+				if (customCSSUrl) {
+					this.#inner.rendition.themes.default(customCSSUrl);
+				}
+
 				this.#inner.rendition.display();
 
 				const rendition = this.#inner.rendition;
@@ -227,7 +232,7 @@ class Textbook {
 
 				break;
 			case "pdf":
-				pdf_viewer.loadPdf(this.#inner.document);
+				pdf_viewer.loadPdf(this.#inner.document, allowScripts);
 
 				const document = this.#inner.document;
 				content_lister.render(
@@ -276,8 +281,7 @@ class Textbook {
 				this.#inner.book.destroy();
 				break;
 			case "pdf":
-				pdf_viewer.pdfViewer.setDocument(null);
-				pdf_viewer.pdfLinkService.setDocument(null);
+				pdf_viewer.reset();
 				this.#inner.document.destroy();
 				break;
 			default:
@@ -309,4 +313,4 @@ let textbook3 = new Textbook("pdf", "./textbook-scraper/test.pdf");
 
 let textbook4 = new Textbook("pdf", "./textbook-scraper/math.pdf");
 
-textbook1.then((textbook) => textbook.render());
+textbook1.then((textbook) => textbook.render(true));
