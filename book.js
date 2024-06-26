@@ -1,7 +1,3 @@
-// handle navigation.landmarks
-// - https://www.w3.org/TR/epub-33/#sec-nav-landmarks
-
-
 const dependency_prefix = "./dependencies";
 
 function initalizedPdfViewer(pdfjsPrefix, viewerContainer) {
@@ -32,6 +28,11 @@ function initalizedPdfViewer(pdfjsPrefix, viewerContainer) {
 	this.loadPdf = function (pdf) {
 		this.pdfViewer.setDocument(pdf);
 		this.pdfLinkService.setDocument(pdf, null);
+	};
+
+	this.resize = function () {
+		this.pdfViewer.currentScaleValue = "page-width";
+		this.pdfViewer.update();
 	};
 
 	this.reset = function () {
@@ -267,8 +268,7 @@ class Textbook {
 				);
 
 				this.#inner.resizeObserver = new ResizeObserver((event) => {
-					pdf_viewer.pdfViewer.currentScaleValue = "page-width";
-					pdf_viewer.pdfViewer.update();
+					pdf_viewer.resize();
 				});
 				this.#inner.resizeObserver.observe(section_container);
 
@@ -347,4 +347,4 @@ let textbook3 = new Textbook("pdf", "./textbook-scraper/test.pdf");
 
 let textbook4 = new Textbook("pdf", "./textbook-scraper/math.pdf");
 
-textbook1.then((textbook) => textbook.render({ sandbox: false, discreteSections: false }));
+textbook3.then((textbook) => textbook.render({ sandbox: false, discreteSections: false }));
