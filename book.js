@@ -4,6 +4,10 @@
 
 // TODO: Automatically open first level of <details> elements
 
+// TODO: Add function to get/restore progress within a textbook
+
+// TODO: Add annotations support
+
 const dependency_prefix = "./dependencies";
 
 function initalizedPdfViewer(pdfjsPrefix, viewerContainer) {
@@ -128,9 +132,23 @@ class Textbook {
 	load() {
 		switch (this.#type) {
 			case "epub":
-				this.#inner = {
-					book: ePub(this.#url),
+			case "epub_unpacked":
+				if (this.#type == "epub_unpacked") {
+					if (this.#url.substr(this.#url.length - 1) != "/") {
+						this.#url = this.#url + "/";
+					};
+
+					this.#inner = {
+						book: ePub(this.#url, {
+							openAs: "directory"
+						}),
+					};
+				} else {
+					this.#inner = {
+						book: ePub(this.#url),
+					};
 				};
+
 				this.#inner.rendition = this.#inner.book.renderTo(section_container, {
 					method: "default",
 					manager: "continuous",
@@ -227,8 +245,8 @@ class Textbook {
 	unload() {
 		switch (this.#type) {
 			case "epub":
+			case "epub_unpacked":
 				this.#inner.book.destroy();
-
 				break;
 			case "pdf":
 				pdf_viewer.pdfViewer.setDocument(null);
@@ -244,10 +262,10 @@ class Textbook {
 	}
 }
 
-let textbook1 = new Textbook("epub", "./textbook-scraper/test.epub/OEBPS/9780137675807.opf");
+let textbook1 = new Textbook("epub_unpacked", "./textbook-scraper/test.epub");
 
 let textbook2 = new Textbook("epub", "./textbook-scraper/alice.epub");
 
 let textbook3 = new Textbook("pdf", "./textbook-scraper/test.pdf");
 
-textbook3.load();
+textbook1.load();
