@@ -1,6 +1,8 @@
 // TODO: Add function to get/restore progress within a textbook
 
-// TODO: Review ePub spec to evaluate correctness of implementation
+// handle navigation.landmarks
+// - https://www.w3.org/TR/epub-33/#sec-nav-landmarks
+
 
 const dependency_prefix = "./dependencies";
 
@@ -54,6 +56,10 @@ function initalizedContentLister(container) {
 			const root = document.createElement("ol");
 
 			data.forEach((item) => {
+				if (!(item.label || item.title)) {
+					return;
+				}
+
 				const item_container = document.createElement("li");
 
 				let item_text_container;
