@@ -6,8 +6,6 @@
 
 // TODO: Add function to get/restore progress within a textbook
 
-// TODO: Add title display
-
 // TODO: Add custom CSS support for ePub
 
 // TODO: Review ePub spec to evaluate correctness of implementation
@@ -112,6 +110,7 @@ function initalizedContentLister(container) {
 	this.reset();
 }
 
+const title_container = document.getElementById("book_title");
 const toc_container = document.getElementById("book_toc");
 const section_container = document.getElementById("book_section");
 
@@ -153,6 +152,10 @@ class Textbook {
 							this.title = this.#inner.metadata.title;
 						}
 
+						if (this.#inner.metadata.language) {
+							this.language = this.#inner.metadata.language;
+						}
+
 						return this;
 					});
 				});
@@ -176,6 +179,10 @@ class Textbook {
 
 						if (this.#inner.metadata.info.Title) {
 							this.title = this.#inner.metadata.info.Title;
+						}
+
+						if (this.#inner.metadata.info.Language) {
+							this.language = this.#inner.metadata.info.Language;
 						}
 
 						return this;
@@ -250,10 +257,14 @@ class Textbook {
 				break;
 		}
 
-		if (this.#inner.metadata.language) {
-			section_container.setAttribute("lang", this.#inner.metadata.language);
-		} else if (this.#inner.metadata.info.Language) {
-			section_container.setAttribute("lang", this.#inner.metadata.info.Language);
+		if (this.title) {
+			title_container.innerText = this.title;
+		}
+
+		if (this.language) {
+			title_container.setAttribute("lang", this.language);
+			section_container.setAttribute("lang", this.language);
+			toc_container.setAttribute("lang", this.language);
 		}
 	}
 	destroy() {
@@ -271,8 +282,11 @@ class Textbook {
 				break;
 		}
 		this.#inner = null;
+		title_container.innerText = null;
 		content_lister.reset();
+		title_container.removeAttribute("lang");
 		section_container.removeAttribute("lang");
+		toc_container.removeAttribute("lang");
 	}
 }
 
