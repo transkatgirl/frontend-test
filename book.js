@@ -2,6 +2,8 @@
 
 // TODO: Automatically close <details> elements
 
+// TODO: Automatically open first level of <details> elements
+
 const dependency_prefix = "./dependencies";
 
 function initalizedPdfViewer(pdfjsPrefix, viewerContainer) {
@@ -156,6 +158,12 @@ class Textbook {
 					);
 				});
 
+				this.#inner.book.loaded.metadata.then((metadata) => {
+					this.#inner.metadata = metadata;
+
+					// TODO
+				});
+
 				break;
 			case "pdf":
 				this.#inner = {
@@ -197,6 +205,12 @@ class Textbook {
 							}
 						);
 					});
+
+					this.#inner.document.getMetadata().then((metadata) => {
+						this.#inner.metadata = metadata;
+
+						// TODO
+					});
 				});
 
 				break;
@@ -204,6 +218,10 @@ class Textbook {
 				break;
 
 		}
+
+		// ! Temporary
+
+		this.test = this.#inner;
 
 	}
 	unload() {
@@ -226,16 +244,10 @@ class Textbook {
 	}
 }
 
-/* Metadata:
-	- ePub = book.packaging
-	- PDF = document.getMetadata()
-*/
-
-
 let textbook1 = new Textbook("epub", "./textbook-scraper/test.epub/OEBPS/9780137675807.opf");
 
 let textbook2 = new Textbook("epub", "./textbook-scraper/alice.epub");
 
 let textbook3 = new Textbook("pdf", "./textbook-scraper/test.pdf");
 
-textbook1.load();
+textbook3.load();
