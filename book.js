@@ -60,7 +60,7 @@ function initalizedContentLister(container) {
 				if (isClickableCallback && isClickableCallback(item) && onClick) {
 					item_text_container = document.createElement("a");
 					item_text_container.setAttribute("tabindex", 0);
-					item_text_container.setAttribute("aria-role", "button");
+					item_text_container.setAttribute("role", "button");
 					item_text_container.addEventListener("click", (event) => onClick(item));
 					item_text_container.addEventListener("keydown", (event) => {
 						if (event.code == "Enter") {
