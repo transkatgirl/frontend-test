@@ -4,10 +4,45 @@
 
 const dependency_prefix = "./dependencies";
 
-const pdfjs_prefix = dependency_prefix + "/pdfjs-dist";
-pdfjsLib.GlobalWorkerOptions.workerSrc = pdfjs_prefix + "/build/pdf.worker.mjs";
+function initalizedPdfViewer(pdfjsPrefix, viewerContainer) {
+	this.pdfjsPrefix = pdfjsPrefix;
+	pdfjsLib.GlobalWorkerOptions.workerSrc = this.pdfjsPrefix + "/build/pdf.worker.mjs";
 
+	this.eventBus = new pdfjsViewer.EventBus();
+	this.pdfLinkService = new pdfjsViewer.PDFLinkService({
+		eventBus: this.eventBus,
+	});
+	this.pdfFindController = new pdfjsViewer.PDFFindController({
+		eventBus: this.eventBus,
+		linkService: this.pdfLinkService,
+	});
+	this.pdfScriptingManager = new pdfjsViewer.PDFScriptingManager({
+		eventBus: this.eventBus,
+		sandboxBundleSrc: this.pdfjsPrefix + "/build/pdf.sandbox.min.mjs",
+	});
+	this.pdfViewer = new pdfjsViewer.PDFViewer({
+		container: viewerContainer,
+		eventBus: this.eventBus,
+		linkService: this.pdfLinkService,
+		findController: this.pdfFindController,
+		scriptingManager: this.pdfScriptingManager,
+	});
+	this.pdfLinkService.setViewer(this.pdfViewer);
+	this.pdfScriptingManager.setViewer(this.pdfViewer);
+	this.eventBus.on("pagesinit", () => {
+		this.pdfViewer.currentScaleValue = "page-width";
+	});
 
+	this.loadPdf = function (pdf) {
+		this.pdfViewer.setDocument(pdf);
+		this.pdfLinkService.setDocument(pdf, null);
+	};
+}
+
+const pdf_viewer = new initalizedPdfViewer(
+	new URL(dependency_prefix + "/pdfjs-dist", window.location).href,
+	document.getElementById("book_section")
+);
 
 class Textbook {
 	#type;
@@ -25,7 +60,7 @@ class Textbook {
 				this.#inner = {
 					loadingTask: pdfjsLib.getDocument({
 						url,
-						cMapUrl: pdfjs_prefix + "/cmaps/",
+						cMapUrl: pdf_viewer.pdfjsPrefix + "/cmaps/",
 						cMapPacked: true,
 						enableXfa: true,
 					}),
@@ -100,37 +135,9 @@ class Textbook {
 
 				break;
 			case "pdf":
-				this.#inner.eventBus = new pdfjsViewer.EventBus();
-				this.#inner.pdfLinkService = new pdfjsViewer.PDFLinkService({
-					eventBus: this.#inner.eventBus,
-				});
-				this.#inner.pdfFindController = new pdfjsViewer.PDFFindController({
-					eventBus: this.#inner.eventBus,
-					linkService: this.#inner.pdfFindController,
-				});
-				this.#inner.pdfScriptingManager = new pdfjsViewer.PDFScriptingManager({
-					eventBus: this.#inner.eventBus,
-					sandboxBundleSrc: pdfjs_prefix + "/build/pdf.sandbox.min.mjs",
-				});
-				this.#inner.pdfSinglePageViewer = new pdfjsViewer.PDFSinglePageViewer({
-					container: section_container,
-					eventBus: this.#inner.eventBus,
-					linkService: this.#inner.pdfLinkService,
-					findController: this.#inner.pdfFindController,
-					scriptingManager: this.#inner.pdfScriptingManager,
-				});
-				this.#inner.pdfLinkService.setViewer(this.#inner.pdfSinglePageViewer);
-				this.#inner.pdfScriptingManager.setViewer(this.#inner.pdfSinglePageViewer);
-				this.#inner.eventBus.on("pagesinit", () => {
-					this.#inner.pdfSinglePageViewer.currentScaleValue = "page-width";
-				});
-
 				this.#inner.loadingTask.promise.then((pdf) => {
-					this.#inner.pdf = pdf;
-					//console.log(pdf);
-
-					this.#inner.pdfSinglePageViewer.setDocument(this.#inner.pdf);
-					this.#inner.pdfLinkService.setDocument(this.#inner.pdf, null);
+					this.#inner.document = pdf;
+					pdf_viewer.loadPdf(this.#inner.document);
 				});
 
 				break;
