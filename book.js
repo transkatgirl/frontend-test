@@ -120,18 +120,8 @@ class Textbook {
 	#inner;
 	constructor (type, url) {
 		this.#url = url;
+		this.#type = type;
 		this.#inner = null;
-		switch (type) {
-			case "epub":
-				this.#type = "epub";
-				break;
-			case "pdf":
-				this.#type = "pdf";
-				break;
-			default:
-				this.#type = "custom";
-				break;
-		}
 	}
 	load() {
 		switch (this.#type) {
@@ -211,7 +201,6 @@ class Textbook {
 
 				break;
 			default:
-
 				break;
 
 		}
