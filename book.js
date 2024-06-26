@@ -8,6 +8,10 @@
 
 // TODO: Add annotations support
 
+// TODO: Add CSS support for ePub
+
+// TODO: Review ePub spec to evaluate correctness of implementation
+
 const dependency_prefix = "./dependencies";
 
 function initalizedPdfViewer(pdfjsPrefix, viewerContainer) {
@@ -18,10 +22,6 @@ function initalizedPdfViewer(pdfjsPrefix, viewerContainer) {
 	this.pdfLinkService = new pdfjsViewer.PDFLinkService({
 		eventBus: this.eventBus,
 	});
-	this.pdfFindController = new pdfjsViewer.PDFFindController({
-		eventBus: this.eventBus,
-		linkService: this.pdfLinkService,
-	});
 	this.pdfScriptingManager = new pdfjsViewer.PDFScriptingManager({
 		eventBus: this.eventBus,
 		sandboxBundleSrc: this.pdfjsPrefix + "/build/pdf.sandbox.min.mjs",
@@ -30,7 +30,6 @@ function initalizedPdfViewer(pdfjsPrefix, viewerContainer) {
 		container: viewerContainer,
 		eventBus: this.eventBus,
 		linkService: this.pdfLinkService,
-		findController: this.pdfFindController,
 		scriptingManager: this.pdfScriptingManager,
 	});
 	this.pdfLinkService.setViewer(this.pdfViewer);
@@ -114,7 +113,7 @@ const toc_container = document.getElementById("book_toc");
 const section_container = document.getElementById("book_section");
 
 const pdf_viewer = new initalizedPdfViewer(
-	new URL(dependency_prefix + "/pdfjs-dist", window.location).href,
+	new URL(dependency_prefix + "/pdfjs", window.location).href,
 	section_container,
 );
 
@@ -261,6 +260,15 @@ class Textbook {
 		content_lister.reset();
 	}
 }
+
+/*
+
+- Progress tracking:
+	- ePub: rendition.currentLocation()
+		- .start.cfi = location, can be loaded again using rendition.display(location)
+	- PDF: TODO
+
+*/
 
 let textbook1 = new Textbook("epub_unpacked", "./textbook-scraper/test.epub");
 
