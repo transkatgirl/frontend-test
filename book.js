@@ -2,8 +2,6 @@
 
 // TODO: Automatically close <details> elements
 
-// TODO: Automatically open first level of <details> elements
-
 // TODO: Add function to get/restore progress within a textbook
 
 // TODO: Add custom CSS support for ePub
@@ -61,10 +59,14 @@ function initalizedContentLister(container) {
 				let item_text_container;
 				if (isClickableCallback && isClickableCallback(item) && onClick) {
 					item_text_container = document.createElement("a");
+					item_text_container.setAttribute("tabindex", 0);
+					item_text_container.setAttribute("aria-role", "button");
 					item_text_container.addEventListener("click", (event) => onClick(item));
-				} else if (item.href) {
-					item_text_container = document.createElement("a");
-					item_text_container.href = item.href;
+					item_text_container.addEventListener("keydown", (event) => {
+						if (event.code == "Enter") {
+							onClick(item);
+						}
+					});
 				} else {
 					item_text_container = document.createElement("span");
 				}
