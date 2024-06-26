@@ -39,10 +39,70 @@ function initalizedPdfViewer(pdfjsPrefix, viewerContainer) {
 	};
 }
 
+function initalizedContentLister(container) {
+	this.container = container;
+
+	this.render = function (data, isClickableCallback, onClick) {
+		this.container.innerHTML = "";
+
+		function build_list(data, isClickableCallback, onClick) {
+			const root = document.createElement("ol");
+
+			data.forEach((item) => {
+				const item_container = document.createElement("li");
+
+				let item_text_container;
+				if (item.clickHandler || item.href) {
+					item_text_container = document.createElement("a");
+					if (isClickableCallback && isClickableCallback(item) && onClick) {
+						item_text_container.addEventListener("click", (event) => onClick(item));
+					} else {
+						item_text_container.href = item.href;
+					}
+				} else {
+					item_text_container = document.createElement("span");
+				}
+				item_text_container.innerText = item.label;
+
+				if (item.subitems.length > 0) {
+					const item_subcontainer = document.createElement("details");
+
+					const subcontainer_title = document.createElement("summary");
+					subcontainer_title.appendChild(item_text_container);
+					item_subcontainer.appendChild(subcontainer_title);
+
+					item_subcontainer.appendChild(build_list(item.subitems, isClickableCallback, onClick));
+
+					item_container.appendChild(item_subcontainer);
+				} else {
+					item_container.appendChild(item_text_container);
+				}
+
+				root.appendChild(item_container);
+			});
+
+			return root;
+		}
+
+		this.container.appendChild(build_list(data, isClickableCallback, onClick));
+	};
+
+	this.reset = function () {
+		this.container.innerHTML = "";
+	};
+
+	this.reset();
+}
+
+const toc_container = document.getElementById("book_toc");
+const section_container = document.getElementById("book_section");
+
 const pdf_viewer = new initalizedPdfViewer(
 	new URL(dependency_prefix + "/pdfjs-dist", window.location).href,
-	document.getElementById("book_section")
+	section_container,
 );
+
+const content_lister = new initalizedContentLister(toc_container);
 
 class Textbook {
 	#type;
@@ -94,43 +154,15 @@ class Textbook {
 					this.#inner.navigation = navigation;
 
 					const rendition = this.#inner.rendition;
-
-					function build_nav(nav_items) {
-						const root = document.createElement("ol");
-
-						nav_items.forEach((nav_item) => {
-							const item_container = document.createElement("li");
-
-							const item_link = document.createElement("a");
-							item_link.innerText = nav_item.label;
-
-							item_link.addEventListener("click", (event) => {
-								rendition.display(nav_item.href);
-							});
-
-							if (nav_item.subitems.length > 0) {
-								const item_subcontainer = document.createElement("details");
-
-								const subcontainer_title = document.createElement("summary");
-								subcontainer_title.appendChild(item_link);
-								item_subcontainer.appendChild(subcontainer_title);
-
-
-								item_subcontainer.appendChild(build_nav(nav_item.subitems));
-
-								item_container.appendChild(item_subcontainer);
-							} else {
-								item_container.appendChild(item_link);
+					content_lister.render(
+						this.#inner.navigation,
+						(item) => item.href,
+						(item) => {
+							if (item.href) {
+								rendition.display(item.href);
 							}
-
-							root.appendChild(item_container);
-
-						});
-
-						return root;
-					}
-
-					toc_container.appendChild(build_nav(this.#inner.navigation));
+						}
+					);
 				});
 
 				break;
@@ -159,15 +191,28 @@ class Textbook {
 				break;
 		}
 	}
+	unload() {
+		switch (this.#type) {
+			case "epub":
+				this.#inner.book.destroy();
+
+				break;
+			case "pdf":
+
+				break;
+			default:
+				break;
+		}
+		content_lister.reset();
+	}
 }
 
-const toc_container = document.getElementById("book_toc");
-const section_container = document.getElementById("book_section");
 
-//let textbook = new Textbook("epub", "./textbook-scraper/test.epub/OEBPS/9780137675807.opf");
+
+let textbook = new Textbook("epub", "./textbook-scraper/test.epub/OEBPS/9780137675807.opf");
 
 //let textbook = new Textbook("epub", "./textbook-scraper/alice.epub");
 
-let textbook = new Textbook("pdf", "./textbook-scraper/test.pdf");
+//let textbook = new Textbook("pdf", "./textbook-scraper/test.pdf");
 
 textbook.render(toc_container, section_container);
