@@ -116,38 +116,29 @@ const content_lister = new initalizedContentLister(toc_container);
 
 class Textbook {
 	#type;
+	#url;
 	#inner;
 	constructor (type, url) {
+		this.#url = url;
+		this.#inner = null;
 		switch (type) {
 			case "epub":
 				this.#type = "epub";
-				this.#inner = {
-					book: ePub(url),
-				};
 				break;
 			case "pdf":
 				this.#type = "pdf";
-				this.#inner = {
-					loadingTask: pdfjsLib.getDocument({
-						url,
-						cMapUrl: pdf_viewer.pdfjsPrefix + "/cmaps/",
-						cMapPacked: true,
-						enableXfa: true,
-					}),
-				};
 				break;
 			default:
 				this.#type = "custom";
-
 				break;
 		}
-
-		// ! Temporary
-		this.test = this.#inner;
 	}
-	render(toc_container, section_container) {
+	load() {
 		switch (this.#type) {
 			case "epub":
+				this.#inner = {
+					book: ePub(this.#url),
+				};
 				this.#inner.rendition = this.#inner.book.renderTo(section_container, {
 					method: "default",
 					manager: "continuous",
@@ -177,6 +168,14 @@ class Textbook {
 
 				break;
 			case "pdf":
+				this.#inner = {
+					loadingTask: pdfjsLib.getDocument({
+						url: this.#url,
+						cMapUrl: pdf_viewer.pdfjsPrefix + "/cmaps/",
+						cMapPacked: true,
+						enableXfa: true,
+					}),
+				};
 				this.#inner.loadingTask.promise.then((pdf) => {
 					this.#inner.document = pdf;
 					pdf_viewer.loadPdf(this.#inner.document);
@@ -218,17 +217,6 @@ class Textbook {
 		}
 
 	}
-	load_section(id) {
-		switch (this.#type) {
-			case "epub":
-				this.#inner.rendition.display(id);
-				break;
-			case "pdf":
-				break;
-			default:
-				break;
-		}
-	}
 	unload() {
 		switch (this.#type) {
 			case "epub":
@@ -236,11 +224,15 @@ class Textbook {
 
 				break;
 			case "pdf":
+				pdf_viewer.pdfViewer.setDocument(null);
+				pdf_viewer.pdfLinkService.setDocument(null);
+				this.#inner.loadingTask.destroy();
 
 				break;
 			default:
 				break;
 		}
+		this.#inner = null;
 		content_lister.reset();
 	}
 }
@@ -251,10 +243,10 @@ class Textbook {
 */
 
 
-//let textbook = new Textbook("epub", "./textbook-scraper/test.epub/OEBPS/9780137675807.opf");
+let textbook1 = new Textbook("epub", "./textbook-scraper/test.epub/OEBPS/9780137675807.opf");
 
-//let textbook = new Textbook("epub", "./textbook-scraper/alice.epub");
+let textbook2 = new Textbook("epub", "./textbook-scraper/alice.epub");
 
-let textbook = new Textbook("pdf", "./textbook-scraper/test.pdf");
+let textbook3 = new Textbook("pdf", "./textbook-scraper/test.pdf");
 
-textbook.render(toc_container, section_container);
+textbook1.load();
