@@ -1,44 +1,57 @@
 # feature roadmap
 
-## v0 (minimum-viable product)
+## v0 (minimum-viable product / "alpha")
 - ePUB + PDF reader
 - course-based progress tracking
 	- courses are made up of 1 or more books tied together by JSON files
 	- contents of *per-course-map* JSON files:
+		- course map file version
 		- list of courses included
 		- representation of course graph (mermaid.js based graph)
-		- course map metadata
+		- title
 	- contents of *per-course* JSON files:
-		- list of books included
-		- course metadata
-	- contents of *per-book* JSON files:
+		- course file version
+		- list of books included (by file hash)
+		- title
+	- contents of *per-book* "sidecar" JSON files:
+		- sidecar file version
 		- marking which sections are completable
-		- modifying contents tree to pair distant sections together (such as questions with their answer key)
-		- adding/replacing metadata
+		- hash of book file
 	- courses can be automatically or manually marked as complete
 - section-based progress tracking
-	- if a book does not have an accompanying sidecar file, whole-book completion is displayed instead
-	- chapters can either be automatically or manually marked as complete
 - time-based progress tracking
 	- inactivity detection
 
-## v1
+# v0.5 ("beta")
+- improvments to book reader
+	- highlight active page
+	- automatic save/restore of active section
+- improvements to course building
+	- graphical per-book sidecar file builder
+	- graphical course builder
+	- allow modifying contents tree to pair sections together (such as questions w/ answer keys)
+- improvements to course architecture & UI
+	- allow adding metadata to course maps (description, author, tags)
+	- allow adding metadata to courses (description, author, tags)
+	- allow either retrieving metadata from a book (default) or manually overriding it in the sidecar file
+- UI improvements
+	- theming support
+		- custom theme support
+		- ePub theming support
+
+## v1 (first release)
 - improvements to book reader
-	- search
-	- highlighting of current page
+	- search (requires indexing ePubs)
 	- annotations
-	- more reliable progress restoration
+	- note-taking UI
 	- better assignment UI
 		- tracking of individual question completion
 		- tracking of answers to individual questions
 		- split-screen view of answered questions and relevant answers
 - improvements to course building
-	- graphical course builder
+	- graphical course map builder
 	- hybrid (multi-book) course support
 		- support reference books
 		- support problem books
 - UI improvements
-	- custom theme support
-	- ePub custom CSS support
 	- PDF theming support
-- built-in note taking functionality
