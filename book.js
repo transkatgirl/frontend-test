@@ -82,7 +82,7 @@ function contentLister(container) {
 					item_text_container.innerText = item.title;
 				}
 
-				if ((item.subitems && item.subitems.length > 0) || (item.items && item.items.length > 0)) {
+				if ((item.subitems && item.subitems.length > 0 && (item.subitems.length > 1 || (item.subitems[0].label || item.subitems[0].title))) || (item.items && item.items.length > 0 && (item.items.length > 1 || (item.items[0].label || item.items[0].title)))) {
 					const item_subcontainer = document.createElement("details");
 
 					const subcontainer_title = document.createElement("summary");
