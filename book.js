@@ -220,23 +220,22 @@ class Textbook {
 				if (customCssUrl) {
 					this.#inner.rendition.themes.register(customCssUrl);
 				}
-				this.#inner.rendition.display();
+				this.#inner.resizeObserver = new ResizeObserver((event) => {
+					this.#inner.rendition.resize();
+				});
+				this.#inner.rendition.display().then(() => {
+					this.#inner.resizeObserver.observe(section_container);
+				});
 
-				const rendition = this.#inner.rendition;
 				content_lister.render(
 					this.#inner.navigation,
 					(item) => item.href,
 					(item) => {
 						if (item.href) {
-							rendition.display(item.href);
+							this.#inner.rendition.display(item.href);
 						}
 					}
 				);
-
-				this.#inner.resizeObserver = new ResizeObserver((event) => {
-					rendition.resize();
-				});
-				this.#inner.resizeObserver.observe(section_container);
 
 				break;
 			case "pdf":
@@ -293,7 +292,7 @@ class Textbook {
 			case "epub_unpacked":
 				return btoa(this.#inner.rendition.currentLocation().start.cfi);
 			case "pdf":
-				return btoa(JSON.stringify(pdf_viewer.pdfViewer._location));
+				return btoa(JSON.stringify(pdf_viewer.pdfViewer._location)); // hack: uses non-stable API
 			default:
 				break;
 		}
@@ -306,7 +305,8 @@ class Textbook {
 			case "pdf":
 				let data = JSON.parse(atob(tag));
 
-				pdf_viewer.pdfViewer.scrollPageIntoView({ pageNumber: data.pageNumber }); // ugly hack
+				// ugly hack
+				pdf_viewer.pdfViewer.scrollPageIntoView({ pageNumber: data.pageNumber });
 				pdf_viewer.pdfLinkService.setHash(data.pdfOpenParams);
 
 				break;
@@ -347,4 +347,4 @@ let textbook3 = new Textbook("pdf", "./textbook-scraper/test.pdf");
 
 let textbook4 = new Textbook("pdf", "./textbook-scraper/math.pdf");
 
-textbook3.then((textbook) => textbook.render({ sandbox: false, discreteSections: false }));
+textbook1.then((textbook) => textbook.render({ sandbox: false, discreteSections: false }));
