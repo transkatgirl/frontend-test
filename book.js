@@ -41,7 +41,7 @@ function initalizedPdfViewer(pdfjsPrefix, viewerContainer) {
 	};
 }
 
-function initalizedContentLister(container) {
+function contentLister(container) {
 	this.container = container;
 
 	this.render = function (data, isClickableCallback, onClick) {
@@ -62,10 +62,14 @@ function initalizedContentLister(container) {
 					item_text_container = document.createElement("a");
 					item_text_container.setAttribute("tabindex", 0);
 					item_text_container.setAttribute("role", "button");
-					item_text_container.addEventListener("click", (event) => onClick(item));
+					item_text_container.addEventListener("click", (event) => {
+						onClick(item);
+						event.preventDefault();
+					});
 					item_text_container.addEventListener("keydown", (event) => {
 						if (event.code == "Enter") {
 							onClick(item);
+							event.preventDefault();
 						}
 					});
 				} else {
@@ -122,7 +126,7 @@ const pdf_viewer = new initalizedPdfViewer(
 	section_container,
 );
 
-const content_lister = new initalizedContentLister(toc_container);
+const content_lister = new contentLister(toc_container);
 
 class Textbook {
 	#inner;
