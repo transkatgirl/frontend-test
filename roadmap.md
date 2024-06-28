@@ -2,7 +2,7 @@
 
 ## v0 (minimum-viable product / "alpha")
 - [x] ePUB + PDF reader
-	- [ ] highlight active page
+	- [x] highlight active section
 	- [x] save/restore of active section
 - course-based progress tracking
 	- courses are made up of 1 or more books tied together by JSON files

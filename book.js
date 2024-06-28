@@ -144,8 +144,12 @@ function contentLister(container) {
 		this.container.appendChild(build_list(data, isClickableCallback, onClick));
 	};
 
+	this.styles = document.createElement("style");
+	window.document.head.appendChild(this.styles);
+
 	this.reset = function () {
 		this.container.innerHTML = "";
+		this.styles.innerHTML = "";
 	};
 
 	this.reset();
@@ -278,6 +282,8 @@ class Textbook {
 							if (location.href) {
 								const chapter = getChapter(this.#inner.book, { location_href: location.href, location_cfi: location.start });
 								if (chapter.id) {
+									content_lister.styles.innerHTML = "#" + CSS.escape(btoa(chapter.id)) + " {font-weight: bold}";
+
 									const active = window.document.getElementById(btoa(chapter.id));
 
 									let currentItem = active.parentElement.parentElement;
@@ -289,12 +295,6 @@ class Textbook {
 										}
 									}
 								}
-
-								console.log(chapter);
-
-								// Use document.createElement (style) + style.innerHTML to perform document highlighting
-
-								// TODO: Highlight active chapter in ToC
 							}
 						}
 					});
