@@ -1,50 +1,80 @@
 const dependency_prefix = "./dependencies";
 
 function initalizedPdfViewer(pdfjsPrefix, viewerContainer) {
+	const loadPromise = Promise.all([
+		new Promise((resolve, reject) => {
+			let scriptElement1 = document.createElement("script");
+			scriptElement1.setAttribute("type", "module");
+			scriptElement1.setAttribute("src", pdfjsPrefix + "/build/pdf.min.mjs");
+			scriptElement1.async = true;
+			scriptElement1.onload = resolve;
+			window.document.head.appendChild(scriptElement1);
+		}),
+		new Promise((resolve, reject) => {
+			let scriptElement2 = document.createElement("script");
+			scriptElement2.setAttribute("type", "module");
+			scriptElement2.setAttribute("src", pdfjsPrefix + "/web/pdf_viewer.mjs");
+			scriptElement2.async = true;
+			scriptElement2.onload = resolve;
+			window.document.head.appendChild(scriptElement2);
+		}),
+	]);
+
+	let linkElement = document.createElement("link");
+	linkElement.setAttribute("rel", "stylesheet");
+	linkElement.setAttribute("href", pdfjsPrefix + "/web/pdf_viewer.css");
+	window.document.head.appendChild(linkElement);
+
 	this.pdfjsPrefix = pdfjsPrefix;
-	pdfjsLib.GlobalWorkerOptions.workerSrc = this.pdfjsPrefix + "/build/pdf.worker.mjs";
 
-	this.eventBus = new pdfjsViewer.EventBus();
-	this.pdfLinkService = new pdfjsViewer.PDFLinkService({
-		eventBus: this.eventBus,
-	});
-	this.pdfScriptingManager = new pdfjsViewer.PDFScriptingManager({
-		eventBus: this.eventBus,
-		sandboxBundleSrc: this.pdfjsPrefix + "/build/pdf.sandbox.min.mjs",
-	});
-	this.pdfViewer = new pdfjsViewer.PDFViewer({
-		container: viewerContainer,
-		eventBus: this.eventBus,
-		linkService: this.pdfLinkService,
-		scriptingManager: this.pdfScriptingManager,
-	});
-	this.pdfLinkService.setViewer(this.pdfViewer);
-	this.pdfScriptingManager.setViewer(this.pdfViewer);
+	return loadPromise.then(() => {
+		pdfjsLib.GlobalWorkerOptions.workerSrc = this.pdfjsPrefix + "/build/pdf.worker.mjs";
 
-	this.eventBus.on("pagesinit", () => {
-		this.pdfViewer.currentScaleValue = "page-width";
+		this.eventBus = new pdfjsViewer.EventBus();
+		this.pdfLinkService = new pdfjsViewer.PDFLinkService({
+			eventBus: this.eventBus,
+		});
+		this.pdfScriptingManager = new pdfjsViewer.PDFScriptingManager({
+			eventBus: this.eventBus,
+			sandboxBundleSrc: this.pdfjsPrefix + "/build/pdf.sandbox.min.mjs",
+		});
+		this.pdfViewer = new pdfjsViewer.PDFViewer({
+			container: viewerContainer,
+			eventBus: this.eventBus,
+			linkService: this.pdfLinkService,
+			scriptingManager: this.pdfScriptingManager,
+		});
+		this.pdfLinkService.setViewer(this.pdfViewer);
+		this.pdfScriptingManager.setViewer(this.pdfViewer);
+
+		this.eventBus.on("pagesinit", () => {
+			this.pdfViewer.currentScaleValue = "page-width";
+		});
+		this.eventBus.on("pagechanging", () => {
+			this.pageCallback();
+		});
+
+		this.loadPdf = function (pdf, pageCallback) {
+			this.pageCallback = pageCallback;
+			this.pdfViewer.setDocument(pdf);
+			this.pdfLinkService.setDocument(pdf, null);
+		};
+
+		this.resize = function () {
+			this.pdfViewer.currentScaleValue = "page-width";
+			this.pdfViewer.update();
+		};
+
+		this.reset = function () {
+			this.pdfViewer.setDocument(null);
+			this.pdfLinkService.setDocument(null);
+			this.pageCallback = null;
+		};
+
+		return this;
 	});
-	this.eventBus.on("pagechanging", () => {
-		this.pageCallback();
-	});
-
-	this.loadPdf = function (pdf, pageCallback) {
-		this.pageCallback = pageCallback;
-		this.pdfViewer.setDocument(pdf);
-		this.pdfLinkService.setDocument(pdf, null);
-	};
-
-	this.resize = function () {
-		this.pdfViewer.currentScaleValue = "page-width";
-		this.pdfViewer.update();
-	};
-
-	this.reset = function () {
-		this.pdfViewer.setDocument(null);
-		this.pdfLinkService.setDocument(null);
-		this.pageCallback = null;
-	};
 }
+
 
 const EpubCFI = ePub.CFI;
 
@@ -160,14 +190,12 @@ function contentLister(container) {
 	this.reset();
 }
 
-const title_container = document.getElementById("book_title");
-const toc_container = document.getElementById("book_toc");
-const section_container = document.getElementById("book_section");
+const title_container = document.getElementById("contentTitle");
+const toc_container = document.getElementById("contentListing");
+const section_container = document.getElementById("contentViewer");
 
-const pdf_viewer = new initalizedPdfViewer(
-	new URL(dependency_prefix + "/pdfjs", window.location).href,
-	section_container,
-);
+let pdf_viewer;
+let pdfPromise;
 
 const content_lister = new contentLister(toc_container);
 
@@ -217,32 +245,43 @@ class Textbook {
 					});
 				});
 			case "pdf":
-				return pdfjsLib.getDocument({
-					url: this.url,
-					cMapUrl: pdf_viewer.pdfjsPrefix + "/cmaps/",
-					cMapPacked: true,
-					enableXfa: true,
-				}).promise.then((document) => {
-					this.#inner = {
-						document
-					};
+				if (!pdfPromise) {
+					pdfPromise = new initalizedPdfViewer(
+						new URL(dependency_prefix + "/pdfjs", window.location).href,
+						section_container,
+					).then((resolved) => {
+						pdf_viewer = resolved;
+					});
+				}
 
-					return Promise.all([
-						this.#inner.document.getMetadata(),
-						this.#inner.document.getOutline()
-					]).then(([metadata, outline]) => {
-						this.#inner.metadata = metadata;
-						this.#inner.outline = outline;
+				return pdfPromise.then(() => {
+					return pdfjsLib.getDocument({
+						url: this.url,
+						cMapUrl: pdf_viewer.pdfjsPrefix + "/cmaps/",
+						cMapPacked: true,
+						enableXfa: true,
+					}).promise.then((document) => {
+						this.#inner = {
+							document
+						};
 
-						if (this.#inner.metadata.info.Title) {
-							this.title = this.#inner.metadata.info.Title;
-						}
+						return Promise.all([
+							this.#inner.document.getMetadata(),
+							this.#inner.document.getOutline()
+						]).then(([metadata, outline]) => {
+							this.#inner.metadata = metadata;
+							this.#inner.outline = outline;
 
-						if (this.#inner.metadata.info.Language) {
-							this.language = this.#inner.metadata.info.Language;
-						}
+							if (this.#inner.metadata.info.Title) {
+								this.title = this.#inner.metadata.info.Title;
+							}
 
-						return this;
+							if (this.#inner.metadata.info.Language) {
+								this.language = this.#inner.metadata.info.Language;
+							}
+
+							return this;
+						});
 					});
 				});
 			default:
@@ -405,13 +444,3 @@ class Textbook {
 		toc_container.removeAttribute("lang");
 	}
 }
-
-/*let textbook1 = new Textbook("epub_unpacked", "./textbook-scraper/test.epub", { sandbox: false });
-
-let textbook2 = new Textbook("epub", "./textbook-scraper/alice.epub", { sandbox: true });
-
-let textbook3 = new Textbook("pdf", "./textbook-scraper/test.pdf", {});
-
-let textbook4 = new Textbook("pdf", "./textbook-scraper/math.pdf", {});
-
-textbook1.then((textbook) => textbook.render());*/

@@ -4,18 +4,15 @@
 	<script src="./dependencies/mermaid.min.js"></script>
 	<script src="./dependencies/jszip.min.js"></script>
 	<script src="./dependencies/epub.min.js"></script>
-	<link rel="stylesheet" href="./dependencies/pdfjs/web/pdf_viewer.css">
-	<script src="./dependencies/pdfjs/build/pdf.min.mjs" type="module"></script>
-	<script src="./dependencies/pdfjs/web/pdf_viewer.mjs" type="module"></script>
-	<script src="app.js" defer></script>
 	<script src="book-viewer.js" defer></script>
+	<script src="app.js" defer></script>
 
 	<style>
 		body {
 			margin: 0;
 		}
 
-		#book_toc a {
+		#contentListing a {
 			text-decoration: unset;
 			cursor: pointer;
 		}
@@ -24,11 +21,11 @@
 			cursor: pointer;
 		}
 
-		#book_toc a:hover {
+		#contentListing a:hover {
 			text-decoration: underline;
 		}
 
-		#book_toc {
+		#contentListing {
 			border: 0.1em solid black;
 			width: 22.5em;
 			height: calc(100vh - 4em);
@@ -37,7 +34,7 @@
 			box-sizing: border-box;
 		}
 
-		#book_toc>ol {
+		#contentListing>ol {
 			padding: 0;
 			margin: 0;
 		}
@@ -46,7 +43,7 @@
 			list-style: none;
 		}
 
-		#book_section {
+		#contentViewer {
 			border: 0.1em solid black;
 			width: 65em;
 			height: calc(100vh - 4em);
@@ -54,7 +51,7 @@
 			overflow: auto;
 		}
 
-		#book_section {
+		#contentViewer {
 			/* required by pdf.js */
 			position: absolute;
 			right: 0.5em;
@@ -67,9 +64,9 @@
 </head>
 
 <body>
-	<span id="book_title">Loading...</span>
-	<div id="book_toc"></div>
-	<div id="book_section">
+	<span id="contentTitle">Loading...</span>
+	<div id="contentListing"></div>
+	<div id="contentViewer">
 		<div id="viewer" class="pdfViewer"></div>
 	</div>
 </body>
