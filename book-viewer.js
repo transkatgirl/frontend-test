@@ -75,7 +75,6 @@ function initalizedPdfViewer(pdfjsPrefix, viewerContainer) {
 	});
 }
 
-
 const EpubCFI = ePub.CFI;
 
 // Copied from https://github.com/futurepress/epub.js/issues/759#issuecomment-1399499918

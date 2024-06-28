@@ -203,8 +203,8 @@
 					border-right: var(--secondary-border);
 					padding: 0.8lh 0.8em 0.8lh 0.8lh;
 					overflow: auto;
-					width: calc(1.6lh + 20ch);
-					resize: horizontal;
+					width: calc(1.6lh + 30ch);
+					box-sizing: border-box;
 				}
 
 				h2 {
@@ -215,32 +215,37 @@
 
 				a {
 					text-decoration: unset;
+					cursor: pointer;
+				}
+
+				details summary {
+					cursor: pointer;
 				}
 
 				a:hover {
 					text-decoration: underline;
 				}
 
+				:scope#contentListing > ol {
+					padding: 0;
+					margin: 0;
+				}
+
+				:scope#contentListing > ol > li:first-of-type {
+					margin-top: 0;
+				}
+
 				ul,
 				ol {
-					margin: 0;
-					padding-left: 1lh;
+					padding-left: 1.75lh;
+				}
+
+				:scope#contentListing ol {
+					list-style: none;
 				}
 
 				li {
 					margin: calc((1lh - 1ch)/2) 0;
-				}
-
-				ol ul {
-					list-style: none;
-				}
-
-				details {
-					padding-left: calc(1lh - 1ic);
-				}
-
-				details ul {
-					padding-left: calc(2lh - (1lh - 1ic));
 				}
 
 				footer {
@@ -266,23 +271,36 @@
 			}
 
 			main > :not(nav) {
-				border: none;
-				flex-grow: 1;
+				position: absolute;
+				box-sizing: border-box;
+				width: calc(100vw - (1.6lh + 30ch + 0.1em));
+				height: calc(100vh - (3lh + 0.1em));
+				right: 0;
+				bottom: 0;
 				color: black;
 				background-color: white;
+				overflow: auto;
 			}
 		}
 
-		@media (max-width: calc(238px + 2lh + 110ch)) {
-			main > nav {
+		@media (max-width: calc((1.6lh + 30ch + 0.1em) + 120ch)) {
+			main > :not(nav) {
+				width: calc(100vw - (1.6lh + 0.1em));
+			}
+
+			main > nav:not(:hover) {
 				width: unset;
-				resize: none;
 			}
 
 			main > nav:not(:hover) > * {
 				display: none;
 			}
 		}
+	}
+
+	.epub-view {
+		padding: 1.2em 0;
+		/* Hacky fix */
 	}
 }
 
@@ -391,9 +409,11 @@
 		}
 
 		pre.mermaid {
-			display: inline-block;
-			overflow: auto;
 			margin: 0;
+		}
+
+		pre.mermaid svg {
+			padding: 1lh;
 		}
 	}
 

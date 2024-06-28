@@ -52,8 +52,6 @@
 		- split-screen view of answered questions and relevant answers
 - improvements to course building
 	- graphical course map builder
-	- hybrid (multi-book) course support
-		- support reference books
-		- support problem books
+	- support document tree -like courses
 - UI improvements
 	- PDF theming support
