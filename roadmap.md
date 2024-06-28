@@ -1,7 +1,9 @@
 # feature roadmap
 
 ## v0 (minimum-viable product / "alpha")
-- ePUB + PDF reader
+- [x] ePUB + PDF reader
+	- [ ] highlight active page
+	- [x] save/restore of active section
 - course-based progress tracking
 	- courses are made up of 1 or more books tied together by JSON files
 	- contents of *per-course-map* JSON files:
@@ -9,23 +11,21 @@
 		- list of courses included
 		- representation of course graph (mermaid.js based graph)
 		- title
-	- contents of *per-course* JSON files:
+	- [ ] contents of *per-course* JSON files:
 		- course file version
 		- list of books included (by file hash)
 		- title
-	- contents of *per-book* "sidecar" JSON files:
+	- [ ] contents of *per-book* "sidecar" JSON files:
 		- sidecar file version
 		- marking which sections are completable
-		- hash of book file
-	- courses can be automatically or manually marked as complete
-- section-based progress tracking
-- time-based progress tracking
-	- inactivity detection
+		- hash of book file (JSON title file)
+	- [ ] courses can be automatically or manually marked as complete
+- [ ] section-based progress tracking
+- [ ] time-based progress tracking
+	- [ ] graphical progress display
+	- [ ] inactivity detection
 
 # v0.5 ("beta")
-- improvments to book reader
-	- highlight active page
-	- automatic save/restore of active section
 - improvements to course building
 	- graphical per-book sidecar file builder
 	- graphical course builder

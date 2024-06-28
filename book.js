@@ -276,10 +276,24 @@ class Textbook {
 								this.percentage = location.percentage * 100;
 							}
 							if (location.href) {
-								let chapter = getChapter(this.#inner.book, { location_href: location.href, location_cfi: location.start });
-								//console.log(chapter);
+								const chapter = getChapter(this.#inner.book, { location_href: location.href, location_cfi: location.start });
+								if (chapter.id) {
+									const active = window.document.getElementById(btoa(chapter.id));
 
-								// TODO: Loop through parents
+									let currentItem = active.parentElement.parentElement;
+									while (currentItem.parentElement != toc_container) {
+										currentItem = currentItem.parentElement;
+
+										if (currentItem.tagName == "DETAILS") {
+											currentItem.setAttribute("open", "");
+										}
+									}
+								}
+
+								console.log(chapter);
+
+								// Use document.createElement (style) + style.innerHTML to perform document highlighting
+
 								// TODO: Highlight active chapter in ToC
 							}
 						}
