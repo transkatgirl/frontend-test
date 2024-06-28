@@ -41,6 +41,37 @@ function initalizedPdfViewer(pdfjsPrefix, viewerContainer) {
 	};
 }
 
+const EpubCFI = ePub.CFI;
+
+// Copied from https://github.com/futurepress/epub.js/issues/759#issuecomment-1399499918
+function flatten(chapters) {
+	return [].concat.apply([], chapters.map((chapter) => [].concat.apply([chapter], flatten(chapter.subitems))));
+}
+
+// Copied from https://github.com/futurepress/epub.js/issues/759#issuecomment-1399499918
+function getCfiFromHref(book, href) {
+	const [_, id] = href.split('#');
+	const section = book.spine.get(href);
+	const el = (id ? section.document.getElementById(id) : section.document.body);
+	return section.cfiFromElement(el);
+}
+
+// Based on https://github.com/futurepress/epub.js/issues/759#issuecomment-1399499918
+function getChapter(book, { location_href, location_cfi }) {
+	const locationHref = location_href;
+
+	let match = flatten(book.navigation.toc)
+		.filter((chapter) => {
+			return book.canonical(chapter.href).includes(book.canonical(locationHref));
+		}, null)
+		.reduce((result, chapter) => {
+			const locationAfterChapter = EpubCFI.prototype.compare(location_cfi, getCfiFromHref(book, chapter.href)) > 0;
+			return locationAfterChapter ? chapter : result;
+		}, null);
+
+	return match;
+};
+
 function contentLister(container) {
 	this.container = container;
 
@@ -80,6 +111,9 @@ function contentLister(container) {
 				}
 				if (item.title) {
 					item_text_container.innerText = item.title;
+				}
+				if (item.id) {
+					item_text_container.setAttribute("id", btoa(item.id));
 				}
 
 				if ((item.subitems && item.subitems.length > 0 && (item.subitems.length > 1 || (item.subitems[0].label || item.subitems[0].title))) || (item.items && item.items.length > 0 && (item.items.length > 1 || (item.items[0].label || item.items[0].title)))) {
@@ -130,10 +164,12 @@ const content_lister = new contentLister(toc_container);
 
 class Textbook {
 	#inner;
-	constructor (type, url) {
+	constructor (type, url, { sandbox = true, customCssPath }) {
 		this.url = url;
 		this.type = type;
 		this.#inner = null;
+		this.sandbox = sandbox;
+		this.customCssPath = customCssPath;
 
 		const options = {};
 		switch (this.type) {
@@ -147,6 +183,10 @@ class Textbook {
 					this.#inner = {
 						book
 					};
+
+					this.#inner.book.locations.generate(150).then((locations) => {
+						this.#inner.locations = locations;
+					});
 
 					return Promise.all([
 						this.#inner.book.loaded.metadata,
@@ -203,32 +243,47 @@ class Textbook {
 		// ! Temporary
 		return this.#inner;
 	}
-	render({ sandbox = true, discreteSections = false, customCssUrl }) {
+	render() {
 		switch (this.type) {
 			case "epub":
 			case "epub_unpacked":
 				let options = {
+					//manager: "continuous",
 					view: "iframe",
 					flow: "scrolled-doc",
 					width: "100%",
 					height: "100%",
 					spread: "none",
-					offset: 1000,
-					allowScriptedContent: !sandbox
+					//offset: 1000,
+					allowScriptedContent: !this.sandbox
 				};
-				if (!discreteSections) {
-					options.manager = "continuous";
-				}
 
 				this.#inner.rendition = this.#inner.book.renderTo(section_container, options);
-				if (customCssUrl) {
-					this.#inner.rendition.themes.register(customCssUrl);
+				if (this.customCssPath) {
+					this.#inner.rendition.themes.register(this.customCssPath);
 				}
 				this.#inner.resizeObserver = new ResizeObserver((event) => {
 					this.#inner.rendition.resize();
 				});
 				this.#inner.rendition.display().then(() => {
 					this.#inner.resizeObserver.observe(section_container);
+
+					this.#inner.rendition.on('locationChanged', (location) => {
+						if (location.start) {
+							this.location_tag = location.start;
+
+							if (location.percentage > 0) {
+								this.percentage = location.percentage * 100;
+							}
+							if (location.href) {
+								let chapter = getChapter(this.#inner.book, { location_href: location.href, location_cfi: location.start });
+								//console.log(chapter);
+
+								// TODO: Loop through parents
+								// TODO: Highlight active chapter in ToC
+							}
+						}
+					});
 				});
 
 				content_lister.render(
@@ -290,29 +345,13 @@ class Textbook {
 			toc_container.setAttribute("lang", this.language);
 		}
 	}
-	exportLocationTag() {
-		switch (this.type) {
-			case "epub":
-			case "epub_unpacked":
-				return btoa(this.#inner.rendition.currentLocation().start.cfi);
-			case "pdf":
-				return btoa(JSON.stringify(pdf_viewer.pdfViewer._location)); // hack: uses non-stable API
-			default:
-				break;
-		}
-	}
 	importLocationTag(tag) {
 		switch (this.type) {
 			case "epub":
 			case "epub_unpacked":
-				return this.#inner.rendition.display(atob(tag));
+				this.#inner.rendition.display(tag);
+				break;
 			case "pdf":
-				let data = JSON.parse(atob(tag));
-
-				// ugly hack
-				pdf_viewer.pdfViewer.scrollPageIntoView({ pageNumber: data.pageNumber });
-				pdf_viewer.pdfLinkService.setHash(data.pdfOpenParams);
-
 				break;
 			default:
 				break;
@@ -343,12 +382,12 @@ class Textbook {
 	}
 }
 
-let textbook1 = new Textbook("epub_unpacked", "./textbook-scraper/test.epub");
+let textbook1 = new Textbook("epub_unpacked", "./textbook-scraper/test.epub", { sandbox: false });
 
-let textbook2 = new Textbook("epub", "./textbook-scraper/alice.epub");
+let textbook2 = new Textbook("epub", "./textbook-scraper/alice.epub", { sandbox: true });
 
-let textbook3 = new Textbook("pdf", "./textbook-scraper/test.pdf");
+let textbook3 = new Textbook("pdf", "./textbook-scraper/test.pdf", {});
 
-let textbook4 = new Textbook("pdf", "./textbook-scraper/math.pdf");
+let textbook4 = new Textbook("pdf", "./textbook-scraper/math.pdf", {});
 
-textbook1.then((textbook) => textbook.render({ sandbox: false, discreteSections: false }));
+textbook1.then((textbook) => textbook.render());
