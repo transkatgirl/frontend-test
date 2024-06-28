@@ -243,10 +243,10 @@ class Textbook {
 				break;
 		}
 	}
-	getInner() {
+	/*getInner() {
 		// ! Temporary
 		return this.#inner;
-	}
+	}*/
 	render() {
 		switch (this.type) {
 			case "epub":
@@ -396,7 +396,7 @@ class Textbook {
 	}
 }
 
-let textbook1 = new Textbook("epub_unpacked", "./textbook-scraper/test.epub", { sandbox: false });
+/*let textbook1 = new Textbook("epub_unpacked", "./textbook-scraper/test.epub", { sandbox: false });
 
 let textbook2 = new Textbook("epub", "./textbook-scraper/alice.epub", { sandbox: true });
 
@@ -404,4 +404,4 @@ let textbook3 = new Textbook("pdf", "./textbook-scraper/test.pdf", {});
 
 let textbook4 = new Textbook("pdf", "./textbook-scraper/math.pdf", {});
 
-textbook1.then((textbook) => textbook.render());
+textbook1.then((textbook) => textbook.render());*/
