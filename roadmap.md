@@ -17,8 +17,10 @@
 		- title
 	- [ ] contents of *per-book* "sidecar" JSON files:
 		- sidecar file version
+		- book metadata (title, description, author, license, tags)
 		- marking which sections are completable
-		- hash of book file (JSON title file)
+			- sections are indexed by number (x.y, x.y.z, x.y.z.a), starting from index 1
+		- hash of book file (as JSON filename)
 	- [ ] courses can be automatically or manually marked as complete
 - [ ] section-based progress tracking
 - [ ] time-based progress tracking
@@ -33,7 +35,7 @@
 - improvements to course architecture & UI
 	- allow adding metadata to course maps (description, author, tags)
 	- allow adding metadata to courses (description, author, tags)
-	- allow either retrieving metadata from a book (default) or manually overriding it in the sidecar file
+	- allow displaying book metadata
 - UI improvements
 	- theming support
 		- custom theme support
