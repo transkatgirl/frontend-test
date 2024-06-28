@@ -24,8 +24,12 @@ function initalizedPdfViewer(pdfjsPrefix, viewerContainer) {
 	this.eventBus.on("pagesinit", () => {
 		this.pdfViewer.currentScaleValue = "page-width";
 	});
+	this.eventBus.on("pagechanging", () => {
+		this.pageCallback();
+	});
 
-	this.loadPdf = function (pdf) {
+	this.loadPdf = function (pdf, pageCallback) {
+		this.pageCallback = pageCallback;
 		this.pdfViewer.setDocument(pdf);
 		this.pdfLinkService.setDocument(pdf, null);
 	};
@@ -38,6 +42,7 @@ function initalizedPdfViewer(pdfjsPrefix, viewerContainer) {
 	this.reset = function () {
 		this.pdfViewer.setDocument(null);
 		this.pdfLinkService.setDocument(null);
+		this.pageCallback = null;
 	};
 }
 
@@ -312,7 +317,9 @@ class Textbook {
 
 				break;
 			case "pdf":
-				pdf_viewer.loadPdf(this.#inner.document);
+				pdf_viewer.loadPdf(this.#inner.document, () => {
+					this.percentage = (pdf_viewer.pdfViewer.currentPageNumber / pdf_viewer.pdfViewer.pagesCount) * 100;
+				});
 
 				const document = this.#inner.document;
 				content_lister.render(
