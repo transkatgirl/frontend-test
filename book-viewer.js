@@ -193,9 +193,10 @@ class Textbook {
 						book
 					};
 
-					this.#inner.book.locations.generate(150).then((locations) => {
+					// Note: Use book.locations.save() and book.locations.load() to cache location data
+					/*this.#inner.locationPromise = this.#inner.book.locations.generate(150).then((locations) => {
 						this.#inner.locations = locations;
-					});
+					});*/
 
 					return Promise.all([
 						this.#inner.book.loaded.metadata,
@@ -277,13 +278,14 @@ class Textbook {
 				this.#inner.rendition.display().then(() => {
 					this.#inner.resizeObserver.observe(section_container);
 
+					//this.#inner.locationPromise.then(() => {
 					this.#inner.rendition.on('locationChanged', (location) => {
 						if (location.start) {
 							this.location_tag = location.start;
 
-							if (location.percentage > 0) {
+							/*if (location.percentage > 0) {
 								this.percentage = location.percentage * 100;
-							}
+							}*/
 							if (location.href) {
 								const chapter = getChapter(this.#inner.book, { location_href: location.href, location_cfi: location.start });
 								if (chapter.id) {
@@ -303,6 +305,7 @@ class Textbook {
 							}
 						}
 					});
+					//});
 				});
 
 				content_lister.render(
