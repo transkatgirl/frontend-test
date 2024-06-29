@@ -148,6 +148,8 @@ function contentLister(container) {
 				}
 				if (item.id) {
 					item_text_container.setAttribute("id", item.id);
+				} else if (item.dest) {
+					item_text_container.setAttribute("id", JSON.stringify(item.dest));
 				}
 
 				if ((item.subitems && item.subitems.length > 0 && (item.subitems.length > 1 || (item.subitems[0].label || item.subitems[0].title))) || (item.items && item.items.length > 0 && (item.items.length > 1 || (item.items[0].label || item.items[0].title)))) {
