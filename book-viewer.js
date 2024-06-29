@@ -3,7 +3,7 @@ const dependency_prefix = "./dependencies";
 function initalizedPdfViewer(pdfjsPrefix, viewerContainer) {
 	const loadPromise = Promise.all([
 		new Promise((resolve, reject) => {
-			let scriptElement1 = document.createElement("script");
+			const scriptElement1 = document.createElement("script");
 			scriptElement1.setAttribute("type", "module");
 			scriptElement1.setAttribute("src", pdfjsPrefix + "/build/pdf.min.mjs");
 			scriptElement1.async = true;
@@ -11,7 +11,7 @@ function initalizedPdfViewer(pdfjsPrefix, viewerContainer) {
 			window.document.head.appendChild(scriptElement1);
 		}),
 		new Promise((resolve, reject) => {
-			let scriptElement2 = document.createElement("script");
+			const scriptElement2 = document.createElement("script");
 			scriptElement2.setAttribute("type", "module");
 			scriptElement2.setAttribute("src", pdfjsPrefix + "/web/pdf_viewer.mjs");
 			scriptElement2.async = true;
@@ -20,7 +20,7 @@ function initalizedPdfViewer(pdfjsPrefix, viewerContainer) {
 		}),
 	]);
 
-	let linkElement = document.createElement("link");
+	const linkElement = document.createElement("link");
 	linkElement.setAttribute("rel", "stylesheet");
 	linkElement.setAttribute("href", pdfjsPrefix + "/web/pdf_viewer.css");
 	window.document.head.appendChild(linkElement);
@@ -94,7 +94,7 @@ function getCfiFromHref(book, href) {
 function getChapter(book, { location_href, location_cfi }) {
 	const locationHref = location_href;
 
-	let match = flatten(book.navigation.toc)
+	const match = flatten(book.navigation.toc)
 		.filter((chapter) => {
 			return book.canonical(chapter.href).includes(book.canonical(locationHref));
 		}, null)
@@ -297,7 +297,7 @@ class Textbook {
 		switch (this.type) {
 			case "epub":
 			case "epub_unpacked":
-				let options = {
+				this.#inner.rendition = this.#inner.book.renderTo(section_container, {
 					//manager: "continuous",
 					view: "iframe",
 					flow: "scrolled-doc",
@@ -306,9 +306,7 @@ class Textbook {
 					spread: "none",
 					//offset: 1000,
 					allowScriptedContent: !this.sandbox
-				};
-
-				this.#inner.rendition = this.#inner.book.renderTo(section_container, options);
+				});
 				if (this.customCssPath) {
 					this.#inner.rendition.themes.register(this.customCssPath);
 				}
