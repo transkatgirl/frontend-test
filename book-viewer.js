@@ -147,7 +147,7 @@ function contentLister(container) {
 					item_text_container.innerText = item.title;
 				}
 				if (item.id) {
-					item_text_container.setAttribute("id", btoa(item.id));
+					item_text_container.setAttribute("id", item.id);
 				}
 
 				if ((item.subitems && item.subitems.length > 0 && (item.subitems.length > 1 || (item.subitems[0].label || item.subitems[0].title))) || (item.items && item.items.length > 0 && (item.items.length > 1 || (item.items[0].label || item.items[0].title)))) {
@@ -327,9 +327,9 @@ class Textbook {
 							if (location.href) {
 								const chapter = getChapter(this.#inner.book, { location_href: location.href, location_cfi: location.start });
 								if (chapter.id) {
-									content_lister.styles.innerHTML = "#" + CSS.escape(btoa(chapter.id)) + " {font-weight: bold}";
+									content_lister.styles.innerHTML = "#" + CSS.escape(chapter.id) + " {font-weight: bold}";
 
-									const active = window.document.getElementById(btoa(chapter.id));
+									const active = window.document.getElementById(chapter.id);
 
 									let currentItem = active.parentElement.parentElement;
 									while (currentItem.parentElement != toc_container) {
