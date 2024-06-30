@@ -33,6 +33,11 @@
 	--form-card-title-color: oklch(92.5% 0.03 calc(360 - 75));
 }
 
+/* hack to fix webkit font rendering bug */
+#contentListing {
+	-webkit-font-smoothing: antialiased;
+}
+
 @layer base {
 	body {
 		font: 1em/1.2 sans-serif;
