@@ -63,7 +63,7 @@ class CourseBook {
 			this.positionTag = String(positionTag);
 		}
 		this.chapters = chapters;
-		this.completed = completed;
+		this.completed = new Set(completed);
 	}
 	prefetch() {
 		if ((!this.#textbook && !this.#textbookPromise) || (this.#textbook && this.#textbook.destroyed)) {
@@ -84,29 +84,48 @@ class CourseBook {
 			checkbox.addEventListener("change", callback);
 		}
 		element.parentElement.appendChild(checkbox);
+
+		return checkbox;
+	}
+	#updateCompleted(id, isCompleted) {
+		if (isCompleted && !this.completed.has(id)) {
+			this.completed.add(id);
+		} else if (!isCompleted && this.completed.has(id)) {
+			this.completed.delete(id);
+		}
+	}
+	#updateChapterCompletion(chapter, chapterCheckbox) {
+		console.log(chapter);
+
+		for (let section of chapter.sections) {
+			if (typeof section == "string") {
+				if (!this.completed.has(section)) {
+					this.#updateCompleted(chapter.id, false);
+					chapterCheckbox.checked = false;
+					return;
+				}
+			} else {
+				let sectionGroup = section;
+
+				for (let section of sectionGroup) {
+					if (!this.completed.has(section)) {
+						this.#updateCompleted(chapter.id, false);
+						chapterCheckbox.checked = false;
+						return;
+					}
+				}
+			}
+		}
+
+		this.#updateCompleted(chapter.id, true);
+		chapterCheckbox.checked = true;
 	}
 	#buildListingProgressTracker() {
 		for (const chapter of this.chapters) {
 			const element = document.getElementById(chapter.id);
 
-			/*
-			Flow:
-			- section checkbox change ->
-				- in sectiongroups?
-					- true
-						- iterate over sectionGroups, check if all sections in a sectionGroup are checked
-						- if so, mark sectionGroup as complete and proceed to next step
-					- false
-						- proceed to next step
-			- sectionGroup state change ->
-				- iterate over chapter sectionGroups, check if all sectionGroups are checked
-					- if so, mark chapter as complete
-			*/
-
-			this.#addListingLinkCheckbox(element, this.completed.includes(chapter.id), (event) => {
-				console.log(chapter, event);
-
-				// TODO
+			const chapterCheckbox = this.#addListingLinkCheckbox(element, this.completed.has(chapter.id), (event) => {
+				this.#updateCompleted(chapter.id, event.target.checked);
 			});
 
 			if (chapter.sections) {
@@ -114,10 +133,9 @@ class CourseBook {
 					if (typeof section == "string") {
 						const element = document.getElementById(section);
 
-						this.#addListingLinkCheckbox(element, this.completed.includes(section), (event) => {
-							console.log(section, event);
-
-							// TODO
+						this.#addListingLinkCheckbox(element, this.completed.has(section), (event) => {
+							this.#updateCompleted(section, event.target.checked);
+							this.#updateChapterCompletion(chapter, chapterCheckbox);
 						});
 					} else {
 						let sectionGroup = section;
@@ -125,10 +143,9 @@ class CourseBook {
 						for (let section of sectionGroup) {
 							const element = document.getElementById(section);
 
-							this.#addListingLinkCheckbox(element, this.completed.includes(section), (event) => {
-								console.log(section, sectionGroup, event);
-
-								// TODO
+							this.#addListingLinkCheckbox(element, this.completed.has(section), (event) => {
+								this.#updateCompleted(section, event.target.checked);
+								this.#updateChapterCompletion(chapter, chapterCheckbox);
 							});
 						}
 					}
@@ -164,7 +181,7 @@ class CourseBook {
 			chapters: this.chapters,
 			progressData: {
 				positionTag: this.positionTag,
-				completed: this.completed,
+				completed: Array.from(this.completed),
 			}
 		};
 	}
@@ -220,8 +237,7 @@ let course1 = new CourseBook(
 		]
 	},
 	{
-		completedSections: [
-			"ch01.xhtml#ch1",
+		completed: [
 			"ch02.xhtml#ch2"
 		],
 	}
@@ -237,31 +253,3 @@ course1.load({});
 course2.prefetch();
 course3.prefetch();
 course4.prefetch();
-
-/*textbook1.then((textbook) => {
-	textbook.render();
-	//console.log(toc_container);
-
-	const completableSections = ["ch01.xhtml#ch1", "ch02.xhtml#ch2", "ch03.xhtml#ch3", "ch04.xhtml#ch4", "ch05.xhtml#ch5"];
-
-	const completedSections = ["ch01.xhtml#ch1"];
-
-	let tocChapters = toc_container.getElementsByTagName("a");
-
-	for (let chapterLink of tocChapters) {
-		const checkbox = document.createElement("input");
-		checkbox.setAttribute("type", "checkbox");
-
-		if (completableSections.includes(chapterLink.id)) {
-			if (completedSections.includes(chapterLink.id)) {
-				checkbox.setAttribute("checked", "");
-			}
-			chapterLink.parentElement.appendChild(checkbox);
-		}
-	}
-
-	// TODO: Import and export textbook.location_tag
-
-	console.log(tocChapters);
-	// toc_container.children[0].children
-});*/
