@@ -1,23 +1,3 @@
-/*let textbook1 = new Textbook("epub_unpacked", "./textbook-scraper/test.epub", { scripting: false });
-
-let textbook2 = new Textbook("epub", "./textbook-scraper/alice.epub", { scripting: true });*/
-
-//let textbook3 = new Textbook("pdf", "./textbook-scraper/test.pdf", {});
-
-//let textbook4 = new Textbook("pdf", "./textbook-scraper/math.pdf", {});
-
-/*
-Plans:
-- Split textbooks into chapters
-- Split chapters into sections
-	- Chapters are split into (non-user-facing) section groups, allowing chapter completion to be represented fractionally
-	- When all sections in a chapter are marked as completed, the chapter itself is marked as completed as well
-	- When marking a chapter/section as completed, all items within it (sections/subsections) are hidden (closing the <details> element)
-
-*/
-
-//
-
 /*
 TODO: Fix race conditions in Textbook class
 
@@ -101,8 +81,6 @@ class CourseBook {
 		}
 	}
 	#updateChapterCompletion(chapter, chapterCheckbox) {
-		console.log(chapter);
-
 		for (let section of chapter.sections) {
 			if (typeof section == "string") {
 				if (!this.completed.has(section)) {
@@ -125,6 +103,9 @@ class CourseBook {
 
 		this.#updateCompleted(chapter.id, true);
 		chapterCheckbox.checked = true;
+		if (chapterCheckbox.parentElement.parentElement.tagName == "DETAILS") {
+			chapterCheckbox.parentElement.parentElement.open = false;
+		}
 	}
 	#buildListingProgressTracker() {
 		for (const chapter of this.chapters) {
@@ -132,6 +113,10 @@ class CourseBook {
 
 			const chapterCheckbox = this.#addListingLinkCheckbox(element, this.completed.has(chapter.id), (event) => {
 				this.#updateCompleted(chapter.id, event.target.checked);
+
+				if (event.target.checked && event.target.parentElement.parentElement.tagName == "DETAILS") {
+					event.target.parentElement.parentElement.open = false;
+				}
 			});
 
 			if (chapter.sections) {
