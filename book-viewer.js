@@ -49,11 +49,13 @@ function initalizedPdfViewer(pdfjsPrefix, viewerContainer) {
 
 		this.eventBus.on("pagesinit", () => {
 			this.pdfViewer.currentScaleValue = "page-width";
+			this.initCallback();
 		});
 
-		this.loadPdf = function (pdf) {
+		this.loadPdf = function (pdf, initCallback) {
 			this.pdfViewer.setDocument(pdf);
 			this.pdfLinkService.setDocument(pdf, null);
+			this.initCallback = initCallback;
 		};
 
 		this.resize = function () {
@@ -64,6 +66,7 @@ function initalizedPdfViewer(pdfjsPrefix, viewerContainer) {
 		this.reset = function () {
 			this.pdfViewer.setDocument(null);
 			this.pdfLinkService.setDocument(null);
+			this.initCallback = null;
 		};
 
 		return this;
@@ -346,7 +349,7 @@ class Textbook {
 		// ! Temporary
 		return this.#inner;
 	}*/
-	render(cssUrl) {
+	render(cssUrl, position) {
 		switch (this.type) {
 			case "epub":
 			case "epub_unpacked":
@@ -362,7 +365,7 @@ class Textbook {
 				this.#inner.resizeObserver = new ResizeObserver((event) => {
 					this.#inner.rendition.resize();
 				});
-				return this.#inner.rendition.display().then(() => {
+				return this.#inner.rendition.display(position).then(() => {
 					this.#inner.resizeObserver.observe(section_container);
 
 					this.#inner.rendition.on('locationChanged', (location) => {
@@ -391,7 +394,11 @@ class Textbook {
 					});
 				});
 			case "pdf":
-				pdf_viewer.loadPdf(this.#inner.document);
+				pdf_viewer.loadPdf(this.#inner.document, () => {
+					if (position) {
+						pdf_viewer.pdfViewer.scrollPageIntoView({ pageNumber: Number(position) });
+					}
+				});
 
 				this.#inner.resizeObserver = new ResizeObserver((event) => {
 					pdf_viewer.resize();
@@ -453,7 +460,7 @@ class Textbook {
 					this.#inner.rendition.display(tag);
 					break;
 				case "pdf":
-					pdf_viewer.pdfViewer.scrollPageIntoView({ pageNumber: tag });
+					pdf_viewer.pdfViewer.scrollPageIntoView({ pageNumber: Number(tag) });
 					break;
 				default:
 					break;

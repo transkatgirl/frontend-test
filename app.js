@@ -38,6 +38,7 @@ function unloadActiveCourse() {
 class CourseBook {
 	#textbook;
 	#textbookPromise;
+	#positionTag;
 	constructor ({ type, url, interactive = false }, { chapters = [] }, { positionTag, completed = [] }) {
 		if (type) {
 			if (type == "epub" || type == "pdf" || type == "epub_unpacked") {
@@ -60,7 +61,7 @@ class CourseBook {
 		this.interactive = Boolean(interactive);
 
 		if (positionTag) {
-			this.positionTag = String(positionTag);
+			this.#positionTag = String(positionTag);
 		}
 		this.chapters = chapters;
 		this.completed = new Set(completed);
@@ -213,12 +214,16 @@ class CourseBook {
 			this.#textbook = textbook;
 
 			activeTextbook = this.#textbook;
-			activeTextbook.render(cssUrl).then(() => {
+			activeTextbook.render(cssUrl, this.#positionTag).then(() => {
 				this.#buildListingProgressTracker();
 			});
 		});
 	}
-	save() {
+	export() {
+		if (this.#textbook.rendered) {
+			this.#positionTag = this.#textbook.location;
+		}
+
 		return {
 			bookFile: {
 				type: this.type,
@@ -227,7 +232,7 @@ class CourseBook {
 			},
 			chapters: this.chapters,
 			progressData: {
-				positionTag: this.positionTag,
+				positionTag: this.#positionTag,
 				completed: Array.from(this.completed),
 			}
 		};
