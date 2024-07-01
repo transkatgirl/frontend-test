@@ -50,12 +50,8 @@ function initalizedPdfViewer(pdfjsPrefix, viewerContainer) {
 		this.eventBus.on("pagesinit", () => {
 			this.pdfViewer.currentScaleValue = "page-width";
 		});
-		this.eventBus.on("pagechanging", () => {
-			this.pageCallback();
-		});
 
-		this.loadPdf = function (pdf, pageCallback) {
-			this.pageCallback = pageCallback;
+		this.loadPdf = function (pdf) {
 			this.pdfViewer.setDocument(pdf);
 			this.pdfLinkService.setDocument(pdf, null);
 		};
@@ -68,7 +64,6 @@ function initalizedPdfViewer(pdfjsPrefix, viewerContainer) {
 		this.reset = function () {
 			this.pdfViewer.setDocument(null);
 			this.pdfLinkService.setDocument(null);
-			this.pageCallback = null;
 		};
 
 		return this;
@@ -372,7 +367,7 @@ class Textbook {
 
 					this.#inner.rendition.on('locationChanged', (location) => {
 						if (location.start) {
-							this.location_tag = location.start;
+							this.#inner.location_tag = location.start;
 
 							if (location.href) {
 								const chapter = getChapter(this.#inner.book, { location_href: location.href, location_cfi: location.start });
@@ -382,6 +377,8 @@ class Textbook {
 							}
 						}
 					});
+
+					this.rendered = true;
 
 					return metadata_displayer.render(this.language, this.title, {
 						listingData: this.#inner.navigation.toc,
@@ -394,15 +391,14 @@ class Textbook {
 					});
 				});
 			case "pdf":
-				pdf_viewer.loadPdf(this.#inner.document, () => {
-					this.percentage = (pdf_viewer.pdfViewer.currentPageNumber / pdf_viewer.pdfViewer.pagesCount) * 100;
-					this.location_tag = pdf_viewer.pdfViewer.currentPageNumber;
-				});
+				pdf_viewer.loadPdf(this.#inner.document);
 
 				this.#inner.resizeObserver = new ResizeObserver((event) => {
 					pdf_viewer.resize();
 				});
 				this.#inner.resizeObserver.observe(section_container);
+
+				this.rendered = true;
 
 				const document = this.#inner.document;
 				return metadata_displayer.render(this.language, this.title, {
@@ -434,17 +430,34 @@ class Textbook {
 
 		return Promise.resolve();
 	}
-	importLocationTag(tag) {
-		switch (this.type) {
-			case "epub":
-			case "epub_unpacked":
-				this.#inner.rendition.display(tag);
-				break;
-			case "pdf":
-				pdf_viewer.pdfViewer.scrollPageIntoView({ pageNumber: tag });
-				break;
-			default:
-				break;
+	get location() {
+		if (this.rendered) {
+			switch (this.type) {
+				case "epub":
+				case "epub_unpacked":
+					return this.#inner.location_tag;
+				case "pdf":
+					return pdf_viewer.pdfViewer.currentPageNumber;
+				default:
+					return null;
+			}
+		} else {
+			return null;
+		}
+	}
+	set location(tag) {
+		if (this.rendered) {
+			switch (this.type) {
+				case "epub":
+				case "epub_unpacked":
+					this.#inner.rendition.display(tag);
+					break;
+				case "pdf":
+					pdf_viewer.pdfViewer.scrollPageIntoView({ pageNumber: tag });
+					break;
+				default:
+					break;
+			}
 		}
 	}
 	destroy() {
@@ -463,6 +476,7 @@ class Textbook {
 		if (this.#inner.resizeObserver) {
 			this.#inner.resizeObserver.unobserve(section_container);
 		}
+		this.rendered = false;
 		this.#inner = null;
 		metadata_displayer.reset();
 		this.destroyed = true;
