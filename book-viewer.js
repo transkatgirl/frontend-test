@@ -396,6 +396,7 @@ class Textbook {
 			case "pdf":
 				pdf_viewer.loadPdf(this.#inner.document, () => {
 					this.percentage = (pdf_viewer.pdfViewer.currentPageNumber / pdf_viewer.pdfViewer.pagesCount) * 100;
+					this.location_tag = pdf_viewer.pdfViewer.currentPageNumber;
 				});
 
 				this.#inner.resizeObserver = new ResizeObserver((event) => {
@@ -440,6 +441,7 @@ class Textbook {
 				this.#inner.rendition.display(tag);
 				break;
 			case "pdf":
+				pdf_viewer.pdfViewer.scrollPageIntoView({ pageNumber: tag });
 				break;
 			default:
 				break;

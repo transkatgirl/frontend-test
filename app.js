@@ -16,6 +16,16 @@ Plans:
 
 */
 
+//
+
+/*
+TODO: Fix race conditions in Textbook class
+
+course1.load({})
+.then(() => course2.load({}))
+.then(() => course1.load({}));
+*/
+
 let activeTextbook;
 
 function unloadActiveCourse() {
@@ -28,7 +38,7 @@ function unloadActiveCourse() {
 class CourseBook {
 	#textbook;
 	#textbookPromise;
-	constructor ({ type, url, interactive = false }, chapterMap, { position, percentage, completed = [] }) {
+	constructor ({ type, url, interactive = false }, { chapters = [] }, { positionTag, completed = [] }) {
 		if (type) {
 			if (type == "epub" || type == "pdf" || type == "epub_unpacked") {
 				this.type = String(type);
@@ -49,16 +59,81 @@ class CourseBook {
 		this.url = String(url);
 		this.interactive = Boolean(interactive);
 
-		this.chapterMap = chapterMap;
-
-		this.position = position;
-		this.percentage = percentage;
+		if (positionTag) {
+			this.positionTag = String(positionTag);
+		}
+		this.chapters = chapters;
 		this.completed = completed;
-
 	}
 	prefetch() {
 		if ((!this.#textbook && !this.#textbookPromise) || (this.#textbook && this.#textbook.destroyed)) {
 			this.#textbookPromise = new Textbook(this.type, this.url, this.interactive);
+		}
+	}
+	getInner() {
+		// ! Temporary
+		return this.#textbook;
+	}
+	#addListingLinkCheckbox(element, completed, callback) {
+		const checkbox = document.createElement("input");
+		checkbox.setAttribute("type", "checkbox");
+		if (completed) {
+			checkbox.setAttribute("checked", "");
+		}
+		if (callback) {
+			checkbox.addEventListener("change", callback);
+		}
+		element.parentElement.appendChild(checkbox);
+	}
+	#buildListingProgressTracker() {
+		for (const chapter of this.chapters) {
+			const element = document.getElementById(chapter.id);
+
+			/*
+			Flow:
+			- section checkbox change ->
+				- in sectiongroups?
+					- true
+						- iterate over sectionGroups, check if all sections in a sectionGroup are checked
+						- if so, mark sectionGroup as complete and proceed to next step
+					- false
+						- proceed to next step
+			- sectionGroup state change ->
+				- iterate over chapter sectionGroups, check if all sectionGroups are checked
+					- if so, mark chapter as complete
+			*/
+
+			this.#addListingLinkCheckbox(element, this.completed.includes(chapter.id), (event) => {
+				console.log(chapter, event);
+
+				// TODO
+			});
+
+			if (chapter.sections) {
+				for (let section of chapter.sections) {
+					if (typeof section == "string") {
+						const element = document.getElementById(section);
+
+						this.#addListingLinkCheckbox(element, this.completed.includes(section), (event) => {
+							console.log(section, event);
+
+							// TODO
+						});
+					} else {
+						let sectionGroup = section;
+
+						for (let section of sectionGroup) {
+							const element = document.getElementById(section);
+
+							this.#addListingLinkCheckbox(element, this.completed.includes(section), (event) => {
+								console.log(section, sectionGroup, event);
+
+								// TODO
+							});
+						}
+					}
+				}
+			}
 		}
 	}
 	load({ cssUrl }) {
@@ -74,15 +149,83 @@ class CourseBook {
 			this.#textbook = textbook;
 
 			activeTextbook = this.#textbook;
-			activeTextbook.render(cssUrl);
-
-			// TODO
+			activeTextbook.render(cssUrl).then(() => {
+				this.#buildListingProgressTracker();
+			});
 		});
 	}
-
+	save() {
+		return {
+			bookFile: {
+				type: this.type,
+				url: this.url,
+				interactive: this.interactive,
+			},
+			chapters: this.chapters,
+			progressData: {
+				positionTag: this.positionTag,
+				completed: this.completed,
+			}
+		};
+	}
 }
 
-let course1 = new CourseBook({ url: "./textbook-scraper/test.epub/", interactive: false }, [], {});
+let course1 = new CourseBook(
+	{ url: "./textbook-scraper/test.epub/", interactive: false },
+	{
+		"chapters": [
+			{
+				"id": "ch01.xhtml#ch1",
+				"sections": [
+					"ch01.xhtml#ch01lev2",
+					"ch01.xhtml#ch01lev15",
+					"ch01.xhtml#ch01lev25",
+					"ch01.xhtml#ch01lev45",
+					"ch01.xhtml#ch01lev62",
+					[
+						"ch01.xhtml#ch01lev63",
+						"ch01.xhtml#ch01lev64",
+						"ch01.xhtml#ch01lev65"
+					]
+
+				]
+			},
+			{
+				"id": "ch02.xhtml#ch2",
+			},
+			{
+				"id": "ch03.xhtml#ch3",
+			},
+			{
+				"id": "ch04.xhtml#ch4",
+			},
+			{
+				"id": "ch05.xhtml#ch5",
+			},
+			{
+				"id": "ch06.xhtml#ch6",
+			},
+			{
+				"id": "ch07.xhtml#ch7",
+			},
+			{
+				"id": "ch08.xhtml#ch8",
+			},
+			{
+				"id": "ch09.xhtml#ch9",
+			},
+			{
+				"id": "ch10.xhtml#ch10",
+			}
+		]
+	},
+	{
+		completedSections: [
+			"ch01.xhtml#ch1",
+			"ch02.xhtml#ch2"
+		],
+	}
+);
 
 let course2 = new CourseBook({ url: "./textbook-scraper/alice.epub", interactive: false }, [], {});
 
