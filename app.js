@@ -27,8 +27,13 @@ course1.load({})
 */
 
 let activeTextbook;
+let activeCourse;
 
 function unloadActiveCourse() {
+	if (activeCourse) {
+		activeCourse._savePositionTag();
+		activeCourse = null;
+	}
 	if (activeTextbook) {
 		activeTextbook.destroy();
 		activeTextbook = null;
@@ -71,10 +76,10 @@ class CourseBook {
 			this.#textbookPromise = new Textbook(this.type, this.url, this.interactive);
 		}
 	}
-	getInner() {
+	/*getInner() {
 		// ! Temporary
 		return this.#textbook;
-	}
+	}*/
 	#addListingLinkCheckbox(element, completed, callback) {
 		const checkbox = document.createElement("input");
 		checkbox.setAttribute("type", "checkbox");
@@ -214,15 +219,19 @@ class CourseBook {
 			this.#textbook = textbook;
 
 			activeTextbook = this.#textbook;
+			activeCourse = this;
 			activeTextbook.render(cssUrl, this.#positionTag).then(() => {
 				this.#buildListingProgressTracker();
 			});
 		});
 	}
-	export() {
+	_savePositionTag() {
 		if (this.#textbook.rendered) {
 			this.#positionTag = this.#textbook.location;
 		}
+	}
+	export() {
+		this._savePositionTag();
 
 		return {
 			bookFile: {
