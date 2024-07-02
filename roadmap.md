@@ -22,7 +22,7 @@
 			- sections are indexed by number (x.y, x.y.z, x.y.z.a), starting from index 1
 		- hash of book file (as JSON filename)
 	- [ ] courses can be automatically or manually marked as complete
-- [ ] section-based progress tracking
+- [x] section-based progress tracking
 - [ ] time-based progress tracking
 	- [ ] graphical progress display
 	- [ ] inactivity detection

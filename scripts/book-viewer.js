@@ -1,4 +1,6 @@
-const dependency_prefix = "./dependencies";
+const dependency_prefix = "/scripts/dependencies";
+
+// TODO: Test code for race conditions
 
 function initalizedPdfViewer(pdfjsPrefix, viewerContainer) {
 	const loadPromise = Promise.all([
