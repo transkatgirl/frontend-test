@@ -102,9 +102,31 @@ class CourseBook {
 		}
 
 		this.#updateCompleted(chapter.id, true);
-		chapterCheckbox.checked = true;
-		if (chapterCheckbox.parentElement.parentElement.tagName == "DETAILS") {
-			chapterCheckbox.parentElement.parentElement.open = false;
+		this.#updateChapterSectionListing(chapter, chapterCheckbox);
+		this.#showNextChapter();
+	}
+	#updateChapterSectionListing(chapter, chapterElement) {
+		const chapterItemContainer = chapterElement.parentElement.parentElement;
+		if (this.completed.has(chapter.id)) {
+			chapterItemContainer.open = false;
+		}
+	}
+	#showNextChapter() {
+		for (const chapter of this.chapters) {
+			const element = document.getElementById(chapter.id);
+
+			const chapterListContainer = element.parentElement.parentElement.parentElement.parentElement.parentElement;
+
+			if (!this.completed.has(chapter.id)) {
+				if (chapterListContainer.tagName == "DETAILS") {
+					chapterListContainer.open = true;
+				}
+				break;
+			} else {
+				if (chapterListContainer.tagName == "DETAILS") {
+					chapterListContainer.open = false;
+				}
+			}
 		}
 	}
 	#buildListingProgressTracker() {
@@ -113,10 +135,8 @@ class CourseBook {
 
 			const chapterCheckbox = this.#addListingLinkCheckbox(element, this.completed.has(chapter.id), (event) => {
 				this.#updateCompleted(chapter.id, event.target.checked);
-
-				if (event.target.checked && event.target.parentElement.parentElement.tagName == "DETAILS") {
-					event.target.parentElement.parentElement.open = false;
-				}
+				this.#updateChapterSectionListing(chapter, chapterCheckbox);
+				this.#showNextChapter();
 			});
 
 			if (chapter.sections) {
@@ -143,6 +163,8 @@ class CourseBook {
 				}
 			}
 		}
+
+		this.#showNextChapter();
 	}
 	get completion() {
 		let completion = [];
@@ -232,70 +254,3 @@ class CourseBook {
 		};
 	}
 }
-
-let course1 = new CourseBook(
-	{ url: "./textbook-scraper/test.epub/", interactive: false },
-	{
-		"chapters": [
-			{
-				"id": "ch01.xhtml#ch1",
-				"sections": [
-					"ch01.xhtml#ch01lev2",
-					"ch01.xhtml#ch01lev15",
-					"ch01.xhtml#ch01lev25",
-					"ch01.xhtml#ch01lev45",
-					"ch01.xhtml#ch01lev62",
-					[
-						"ch01.xhtml#ch01lev63",
-						"ch01.xhtml#ch01lev64",
-						"ch01.xhtml#ch01lev65"
-					]
-
-				]
-			},
-			{
-				"id": "ch02.xhtml#ch2",
-			},
-			{
-				"id": "ch03.xhtml#ch3",
-			},
-			{
-				"id": "ch04.xhtml#ch4",
-			},
-			{
-				"id": "ch05.xhtml#ch5",
-			},
-			{
-				"id": "ch06.xhtml#ch6",
-			},
-			{
-				"id": "ch07.xhtml#ch7",
-			},
-			{
-				"id": "ch08.xhtml#ch8",
-			},
-			{
-				"id": "ch09.xhtml#ch9",
-			},
-			{
-				"id": "ch10.xhtml#ch10",
-			}
-		]
-	},
-	{
-		completed: [
-			"ch02.xhtml#ch2"
-		],
-	}
-);
-
-let course2 = new CourseBook({ url: "./textbook-scraper/alice.epub", interactive: false }, [], {});
-
-let course3 = new CourseBook({ url: "./textbook-scraper/test.pdf", interactive: false }, [], {});
-
-let course4 = new CourseBook({ url: "/textbook-scraper/math.pdf", interactive: false }, [], {});
-
-course1.load({});
-course2.prefetch();
-course3.prefetch();
-course4.prefetch();
