@@ -1,7 +1,5 @@
 const dependency_prefix = "/scripts/dependencies";
 
-// TODO: Achieve feature parity between ePub and PDF reading modes
-
 function initalizedPdfViewer(pdfjsPrefix, viewerContainer) {
 	const loadPromise = Promise.all([
 		new Promise((resolve, reject) => {
@@ -411,7 +409,7 @@ class Textbook {
 						isClickable: (item) => item.href,
 						onClick: (item) => {
 							if (item.href) {
-								this.#inner.rendition.display(item.href);
+								return this.#inner.rendition.display(item.href);
 							}
 						}
 					});
@@ -431,8 +429,8 @@ class Textbook {
 					isClickable: (item) => item.dest,
 					onClick: (item) => {
 						if (typeof item.dest === "string") {
-							document.getDestination(item.dest).then((destArray) => {
-								document.getPageIndex(destArray[0]).then((pageNumber) => {
+							return document.getDestination(item.dest).then((destArray) => {
+								return document.getPageIndex(destArray[0]).then((pageNumber) => {
 									pdf_viewer.pdfViewer.scrollPageIntoView({
 										pageNumber: pageNumber + 1,
 										destArray,
@@ -440,7 +438,7 @@ class Textbook {
 								});
 							});
 						} else {
-							document.getPageIndex(item.dest[0]).then((pageNumber) => {
+							return document.getPageIndex(item.dest[0]).then((pageNumber) => {
 								pdf_viewer.pdfViewer.scrollPageIntoView({
 									pageNumber: pageNumber + 1,
 									destArray: item.dest,
@@ -480,6 +478,7 @@ class Textbook {
 		}
 	}
 	destroy() {
+		let promise = Promise.resolve();
 		switch (this.type) {
 			case "epub":
 			case "epub_unpacked":
@@ -487,7 +486,7 @@ class Textbook {
 				break;
 			case "pdf":
 				pdf_viewer.reset();
-				this.#inner.document.destroy(); // TODO: Error handling, return promise
+				promise = this.#inner.document.destroy();
 				break;
 		}
 		if (this.#inner.resizeObserver) {
@@ -497,6 +496,8 @@ class Textbook {
 		this.#inner = null;
 		metadata_displayer.reset();
 		this.destroyed = true;
+
+		return promise;
 	}
 }
 

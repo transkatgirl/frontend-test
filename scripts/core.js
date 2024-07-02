@@ -7,8 +7,11 @@ function unloadActiveCourse() {
 		activeCourse = null;
 	}
 	if (activeTextbook) {
-		activeTextbook.destroy();
-		activeTextbook = null;
+		return activeTextbook.destroy().then(() => {
+			activeTextbook = null;
+		});
+	} else {
+		return Promise.resolve();
 	}
 }
 
@@ -209,21 +212,25 @@ class CourseBook {
 		return completion;
 	}
 	load({ cssUrl }) {
+		let unloadPromise;
 		if (!this.#textbook) {
 			this.prefetch();
-			unloadActiveCourse();
+			unloadPromise = unloadActiveCourse();
 		} else {
-			unloadActiveCourse();
-			this.prefetch();
+			unloadPromise = unloadActiveCourse().then(() => {
+				this.prefetch();
+			});
 		}
 
-		return this.#textbookPromise.then((textbook) => {
-			this.#textbook = textbook;
+		return unloadPromise.then(() => {
+			return this.#textbookPromise.then((textbook) => {
+				this.#textbook = textbook;
 
-			activeTextbook = this.#textbook;
-			activeCourse = this;
-			return activeTextbook.render(cssUrl, this.#positionTag).then(() => {
-				this.#buildListingProgressTracker();
+				activeTextbook = this.#textbook;
+				activeCourse = this;
+				return activeTextbook.render(cssUrl, this.#positionTag).then(() => {
+					this.#buildListingProgressTracker();
+				});
 			});
 		});
 	}
