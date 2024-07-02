@@ -211,7 +211,7 @@ class CourseBook {
 		});
 	}
 	_savePositionTag() {
-		if (this.#textbook.rendered) {
+		if (this.#textbook && this.#textbook.rendered) {
 			this.#positionTag = this.#textbook.location;
 		}
 	}
