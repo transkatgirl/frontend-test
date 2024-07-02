@@ -102,12 +102,13 @@ class CourseBook {
 		}
 
 		this.#updateCompleted(chapter.id, true);
+		chapterCheckbox.checked = true;
 		this.#updateChapterSectionListing(chapter, chapterCheckbox);
 		this.#showNextChapter();
 	}
 	#updateChapterSectionListing(chapter, chapterElement) {
 		const chapterItemContainer = chapterElement.parentElement.parentElement;
-		if (this.completed.has(chapter.id)) {
+		if (this.completed.has(chapter.id) && chapterItemContainer.tagName == "DETAILS") {
 			chapterItemContainer.open = false;
 		}
 	}
@@ -115,11 +116,15 @@ class CourseBook {
 		for (const chapter of this.chapters) {
 			const element = document.getElementById(chapter.id);
 
+			const chapterItemContainer = element.parentElement.parentElement;
 			const chapterListContainer = element.parentElement.parentElement.parentElement.parentElement.parentElement;
 
 			if (!this.completed.has(chapter.id)) {
 				if (chapterListContainer.tagName == "DETAILS") {
 					chapterListContainer.open = true;
+				}
+				if (chapterItemContainer.tagName == "DETAILS") {
+					chapterItemContainer.open = true;
 				}
 				break;
 			} else {
