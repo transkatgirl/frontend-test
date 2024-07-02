@@ -1,10 +1,6 @@
 const dependency_prefix = "/scripts/dependencies";
 
-// TODO: Test code for race conditions
-
 // TODO: Achieve feature parity between ePub and PDF reading modes
-
-// TODO: Add proper error handling
 
 function initalizedPdfViewer(pdfjsPrefix, viewerContainer) {
 	const loadPromise = Promise.all([
@@ -58,15 +54,18 @@ function initalizedPdfViewer(pdfjsPrefix, viewerContainer) {
 			this.initCallback();
 		});
 
+		this.resizeObserver = new ResizeObserver((event) => {
+			if (this.pdfViewer.pdfDocument) {
+				this.pdfViewer.currentScaleValue = "page-width";
+				this.pdfViewer.update();
+			}
+		});
+		this.resizeObserver.observe(viewerContainer);
+
 		this.loadPdf = function (pdf, initCallback) {
 			this.pdfViewer.setDocument(pdf);
 			this.pdfLinkService.setDocument(pdf, null);
 			this.initCallback = initCallback;
-		};
-
-		this.resize = function () {
-			this.pdfViewer.currentScaleValue = "page-width";
-			this.pdfViewer.update();
 		};
 
 		this.reset = function () {
@@ -270,11 +269,20 @@ const metadata_displayer = new metadataDisplayer({
 
 class Textbook {
 	#inner;
-	constructor (type, url, scripting = false) {
-		this.url = url;
-		this.type = type;
+	constructor (url, scripting = false) {
+		this.url = String(url);
+		if (this.url.toLowerCase().endsWith(".epub")) {
+			this.type = "epub";
+		} else if (this.url.toLowerCase().endsWith(".pdf")) {
+			this.type = "pdf";
+		} else if (this.url.endsWith("/")) {
+			this.type = "epub_unpacked";
+		} else {
+			return null;
+		}
+		this.scripting = Boolean(scripting);
+
 		this.#inner = null;
-		this.scripting = scripting;
 
 		const options = {};
 		switch (this.type) {
@@ -347,8 +355,6 @@ class Textbook {
 						});
 					});
 				});
-			default:
-				break;
 		}
 	}
 	/*getInner() {
@@ -367,10 +373,21 @@ class Textbook {
 					spread: "none",
 					allowScriptedContent: !this.sandbox
 				});
-				this.#inner.rendition.themes.register(cssUrl);
+
+				if (cssUrl) {
+					this.cssUrl = String(cssUrl);
+					this.#inner.rendition.themes.register(this.cssUrl);
+				}
+
 				this.#inner.resizeObserver = new ResizeObserver((event) => {
 					this.#inner.rendition.resize();
 				});
+				if (position) {
+					position = String(position);
+				} else {
+					position = undefined;
+				}
+
 				return this.#inner.rendition.display(position).then(() => {
 					this.#inner.resizeObserver.observe(section_container);
 
@@ -406,11 +423,6 @@ class Textbook {
 					}
 				});
 
-				this.#inner.resizeObserver = new ResizeObserver((event) => {
-					pdf_viewer.resize();
-				});
-				this.#inner.resizeObserver.observe(section_container);
-
 				this.rendered = true;
 
 				const document = this.#inner.document;
@@ -437,40 +449,34 @@ class Textbook {
 						}
 					}
 				});
-			default:
-				break;
 		}
 
 		return Promise.resolve();
 	}
 	get location() {
-		if (this.rendered) {
-			switch (this.type) {
-				case "epub":
-				case "epub_unpacked":
-					return this.#inner.location_tag;
-				case "pdf":
-					return pdf_viewer.pdfViewer.currentPageNumber;
-				default:
-					return null;
-			}
-		} else {
+		if (!this.rendered) {
 			return null;
+		}
+
+		switch (this.type) {
+			case "epub":
+			case "epub_unpacked":
+				return this.#inner.location_tag;
+			case "pdf":
+				return pdf_viewer.pdfViewer.currentPageNumber;
 		}
 	}
 	set location(tag) {
-		if (this.rendered) {
-			switch (this.type) {
-				case "epub":
-				case "epub_unpacked":
-					this.#inner.rendition.display(tag);
-					break;
-				case "pdf":
-					pdf_viewer.pdfViewer.scrollPageIntoView({ pageNumber: Number(tag) });
-					break;
-				default:
-					break;
-			}
+		if (!this.rendered) {
+			Promise.resolve();
+		}
+
+		switch (this.type) {
+			case "epub":
+			case "epub_unpacked":
+				return this.#inner.rendition.display(String(tag));
+			case "pdf":
+				return pdf_viewer.pdfViewer.scrollPageIntoView({ pageNumber: Number(tag) });
 		}
 	}
 	destroy() {
@@ -481,9 +487,7 @@ class Textbook {
 				break;
 			case "pdf":
 				pdf_viewer.reset();
-				this.#inner.document.destroy();
-				break;
-			default:
+				this.#inner.document.destroy(); // TODO: Error handling, return promise
 				break;
 		}
 		if (this.#inner.resizeObserver) {
@@ -495,3 +499,5 @@ class Textbook {
 		this.destroyed = true;
 	}
 }
+
+const viewerReady = true;

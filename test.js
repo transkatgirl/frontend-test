@@ -1,5 +1,5 @@
 
-let course = new CourseBook(
+let course1 = new CourseBook(
 	{ url: "./textbook-scraper/test.epub/", interactive: false },
 	{
 		"chapters": [

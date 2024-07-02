@@ -18,30 +18,13 @@ function unloadActiveCourse() {
 // - Offer an API for sound effects?
 // - Update CourseBook internal structure to match planned JSON structure
 //   - Add toJson and fromJson functions
-// - Add proper errro handling
+// - Add proper error handling
 
 class CourseBook {
 	#textbook;
 	#textbookPromise;
 	#positionTag;
-	constructor ({ type, url, interactive = false }, { chapters = [] }, { positionTag, completed = [] }) {
-		if (type) {
-			if (type == "epub" || type == "pdf" || type == "epub_unpacked") {
-				this.type = String(type);
-			} else {
-				return null;
-			}
-		} else {
-			if (url.toLowerCase().endsWith(".epub")) {
-				this.type = "epub";
-			} else if (url.toLowerCase().endsWith(".pdf")) {
-				this.type = "pdf";
-			} else if (url.endsWith("/")) {
-				this.type = "epub_unpacked";
-			} else {
-				return null;
-			}
-		}
+	constructor ({ url, interactive = false }, { chapters = [] }, { positionTag, completed = [] }) {
 		this.url = String(url);
 		this.interactive = Boolean(interactive);
 
@@ -54,7 +37,7 @@ class CourseBook {
 	}
 	prefetch() {
 		if ((!this.#textbook && !this.#textbookPromise) || (this.#textbook && this.#textbook.destroyed)) {
-			this.#textbookPromise = new Textbook(this.type, this.url, this.interactive);
+			this.#textbookPromise = new Textbook(this.url, this.interactive);
 		}
 	}
 	/*getInner() {
