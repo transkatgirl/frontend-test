@@ -1,11 +1,3 @@
-/*
-TODO: Fix race conditions in Textbook class
-
-course1.load({})
-.then(() => course2.load({}))
-.then(() => course1.load({}));
-*/
-
 let activeTextbook;
 let activeCourse;
 
@@ -238,7 +230,7 @@ class CourseBook {
 
 			activeTextbook = this.#textbook;
 			activeCourse = this;
-			activeTextbook.render(cssUrl, this.#positionTag).then(() => {
+			return activeTextbook.render(cssUrl, this.#positionTag).then(() => {
 				this.#buildListingProgressTracker();
 			});
 		});
