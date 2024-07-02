@@ -3,9 +3,10 @@
 textbook.then((textbook) => textbook.render());*/
 
 let course = new CourseBook(
-	{ url: "./textbook-scraper/test.epub/", interactive: false },
 	{
-		"chapters": [
+		url: "./textbook-scraper/test.epub/",
+		interactive: false,
+		chapters: [
 			{
 				"id": "intro.xhtml#intro"
 			},

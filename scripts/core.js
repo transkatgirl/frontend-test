@@ -19,28 +19,30 @@ function unloadActiveCourse() {
 // - Automatically mark sections as complete when scrolling to the next section?
 // - Keep track of time spent on each chapter
 // - Offer an API for sound effects?
-// - Update CourseBook internal structure to match planned JSON structure
-//   - Add toJson and fromJson functions
 // - Add proper error handling
+// - Save/restore ToC scroll position
 
 class CourseBook {
 	#textbook;
 	#textbookPromise;
 	#positionTag;
-	constructor ({ url, interactive = false }, { chapters = [] }, { positionTag, completed = [] }) {
+	#completed;
+	constructor ({ url, interactive = false, chapters = [] }, { positionTag, completed = [] }) {
 		this.url = String(url);
 		this.interactive = Boolean(interactive);
-
-		this.chapters = chapters;
+		if (chapters && typeof chapters == "object" && Array.isArray(chapters)) {
+			this.chapters = chapters;
+		} else {
+			this.chapters = [];
+		}
 
 		if (positionTag) {
 			this.#positionTag = String(positionTag);
 		}
-		this.completed = new Set(completed);
-	}
-	prefetch() {
-		if ((!this.#textbook && !this.#textbookPromise) || (this.#textbook && this.#textbook.destroyed)) {
-			this.#textbookPromise = new Textbook(this.url, this.interactive);
+		if (completed && typeof completed == "object" && Array.isArray(completed)) {
+			this.#completed = new Set(completed);
+		} else {
+			this.#completed = new Set();
 		}
 	}
 	/*getInner() {
@@ -61,16 +63,16 @@ class CourseBook {
 		return checkbox;
 	}
 	#updateCompleted(id, isCompleted) {
-		if (isCompleted && !this.completed.has(id)) {
-			this.completed.add(id);
-		} else if (!isCompleted && this.completed.has(id)) {
-			this.completed.delete(id);
+		if (isCompleted && !this.#completed.has(id)) {
+			this.#completed.add(id);
+		} else if (!isCompleted && this.#completed.has(id)) {
+			this.#completed.delete(id);
 		}
 	}
 	#updateChapterCompletion(chapter, chapterCheckbox) {
 		for (let section of chapter.sections) {
 			if (typeof section == "string") {
-				if (!this.completed.has(section)) {
+				if (!this.#completed.has(section)) {
 					this.#updateCompleted(chapter.id, false);
 					chapterCheckbox.checked = false;
 					return;
@@ -79,7 +81,7 @@ class CourseBook {
 				let sectionGroup = section;
 
 				for (let section of sectionGroup) {
-					if (!this.completed.has(section)) {
+					if (!this.#completed.has(section)) {
 						this.#updateCompleted(chapter.id, false);
 						chapterCheckbox.checked = false;
 						return;
@@ -101,7 +103,7 @@ class CourseBook {
 			const chapterListContainer = element.parentElement.parentElement.parentElement.parentElement.parentElement;
 
 			if (isFirstIncompleteChapter) {
-				if (!this.completed.has(chapter.id)) {
+				if (!this.#completed.has(chapter.id)) {
 					if (chapterListContainer.tagName == "DETAILS") {
 						chapterListContainer.open = true;
 					}
@@ -118,7 +120,7 @@ class CourseBook {
 					}
 				}
 			} else if (currentChapterId === chapter.id) {
-				if (this.completed.has(chapter.id) && chapterItemContainer.tagName == "DETAILS") {
+				if (this.#completed.has(chapter.id) && chapterItemContainer.tagName == "DETAILS") {
 					chapterItemContainer.open = false;
 				}
 			} else {
@@ -132,7 +134,7 @@ class CourseBook {
 		for (const chapter of this.chapters) {
 			const element = document.getElementById(chapter.id);
 
-			const chapterCheckbox = this.#addListingLinkCheckbox(element, this.completed.has(chapter.id), (event) => {
+			const chapterCheckbox = this.#addListingLinkCheckbox(element, this.#completed.has(chapter.id), (event) => {
 				this.#updateCompleted(chapter.id, event.target.checked);
 				this.#showNextChapter(chapter.id);
 			});
@@ -142,7 +144,7 @@ class CourseBook {
 					if (typeof section == "string") {
 						const element = document.getElementById(section);
 
-						this.#addListingLinkCheckbox(element, this.completed.has(section), (event) => {
+						this.#addListingLinkCheckbox(element, this.#completed.has(section), (event) => {
 							this.#updateCompleted(section, event.target.checked);
 							this.#updateChapterCompletion(chapter, chapterCheckbox);
 						});
@@ -152,7 +154,7 @@ class CourseBook {
 						for (let section of sectionGroup) {
 							const element = document.getElementById(section);
 
-							this.#addListingLinkCheckbox(element, this.completed.has(section), (event) => {
+							this.#addListingLinkCheckbox(element, this.#completed.has(section), (event) => {
 								this.#updateCompleted(section, event.target.checked);
 								this.#updateChapterCompletion(chapter, chapterCheckbox);
 							});
@@ -168,7 +170,7 @@ class CourseBook {
 		let completion = [];
 
 		for (const chapter of this.chapters) {
-			if (this.completed.has(chapter.id)) {
+			if (this.#completed.has(chapter.id)) {
 				completion.push(1);
 			} else if (chapter.sections) {
 				let chapterCompletionValue = 0;
@@ -176,7 +178,7 @@ class CourseBook {
 
 				for (let section of chapter.sections) {
 					if (typeof section == "string") {
-						if (this.completed.has(section)) {
+						if (this.#completed.has(section)) {
 							chapterCompletionValue += 1;
 						}
 					} else {
@@ -185,7 +187,7 @@ class CourseBook {
 						let sectionGroupCompletionItems = 0;
 
 						for (let section of sectionGroup) {
-							if (this.completed.has(section)) {
+							if (this.#completed.has(section)) {
 								sectionGroupCompletionValue += 1;
 							}
 							sectionGroupCompletionItems += 1;
@@ -210,6 +212,11 @@ class CourseBook {
 		}
 
 		return completion;
+	}
+	prefetch() {
+		if ((!this.#textbook && !this.#textbookPromise) || (this.#textbook && this.#textbook.destroyed)) {
+			this.#textbookPromise = new Textbook(this.url, this.interactive);
+		}
 	}
 	load({ cssUrl }) {
 		let unloadPromise;
@@ -243,15 +250,14 @@ class CourseBook {
 		this._savePositionTag();
 
 		return {
-			bookFile: {
-				type: this.type,
+			textbook: {
 				url: this.url,
 				interactive: this.interactive,
+				chapters: this.chapters,
 			},
-			chapters: this.chapters,
 			progressData: {
 				positionTag: this.#positionTag,
-				completed: Array.from(this.completed),
+				completed: Array.from(this.#completed),
 			}
 		};
 	}

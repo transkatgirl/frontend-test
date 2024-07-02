@@ -1,8 +1,9 @@
 
 let course1 = new CourseBook(
-	{ url: "./textbook-scraper/test.epub/", interactive: false },
 	{
-		"chapters": [
+		url: "./textbook-scraper/test.epub/",
+		interactive: false,
+		chapters: [
 			{
 				"id": "intro.xhtml#intro"
 			},
@@ -197,11 +198,11 @@ let course1 = new CourseBook(
 	}
 );
 
-let course2 = new CourseBook({ url: "./textbook-scraper/alice.epub", interactive: false }, [], {});
+let course2 = new CourseBook({ url: "./textbook-scraper/alice.epub" }, {});
 
-let course3 = new CourseBook({ url: "./textbook-scraper/test.pdf", interactive: false }, [], {});
+let course3 = new CourseBook({ url: "./textbook-scraper/test.pdf" }, {});
 
-let course4 = new CourseBook({ url: "/textbook-scraper/math.pdf", interactive: false }, [], {});
+let course4 = new CourseBook({ url: "/textbook-scraper/math.pdf" }, {});
 
 course1.load({});
 course2.prefetch();
