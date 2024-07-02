@@ -71,10 +71,14 @@ let course = new CourseBook(
 				"id": "ch04.xhtml#ch4",
 				"sections": [
 					[
+						"ch04.xhtml#ch04lev2",
+						"ch04.xhtml#ch04lev17",
 
 					],
 					[
-
+						"ch04.xhtml#ch04lev22",
+						"ch04.xhtml#ch04lev23",
+						"ch04.xhtml#ch04lev24"
 					]
 				]
 			},
@@ -82,10 +86,19 @@ let course = new CourseBook(
 				"id": "ch05.xhtml#ch5",
 				"sections": [
 					[
-
+						"ch05.xhtml#ch05lev2",
+						"ch05.xhtml#ch05lev3",
+						"ch05.xhtml#ch05lev33",
+						"ch05.xhtml#ch05lev46",
+						"ch05.xhtml#ch05lev60",
+						"ch05.xhtml#ch05lev72",
+						"ch05.xhtml#ch05lev103"
 					],
 					[
-
+						"ch05.xhtml#ch05lev111",
+						"ch05.xhtml#ch05lev112",
+						"ch05.xhtml#ch05lev113",
+						"ch05.xhtml#ch05lev114"
 					]
 				]
 			},
@@ -93,10 +106,23 @@ let course = new CourseBook(
 				"id": "ch06.xhtml#ch6",
 				"sections": [
 					[
-
+						"ch06.xhtml#ch06lev2",
+						"ch06.xhtml#ch06lev12",
+						"ch06.xhtml#ch06lev29",
+						"ch06.xhtml#ch06lev47",
+						"ch06.xhtml#ch06lev62",
+						"ch06.xhtml#ch06lev73",
+						"ch06.xhtml#ch06lev99",
+						"ch06.xhtml#ch06lev117",
+						"ch06.xhtml#ch06lev131",
+						"ch06.xhtml#ch06lev161",
+						"ch06.xhtml#ch06lev177"
 					],
 					[
-
+						"ch06.xhtml#ch06lev210",
+						"ch06.xhtml#ch06lev211",
+						"ch06.xhtml#ch06lev212",
+						"ch06.xhtml#ch06lev213"
 					]
 				]
 			},
@@ -104,10 +130,21 @@ let course = new CourseBook(
 				"id": "ch07.xhtml#ch7",
 				"sections": [
 					[
-
+						"ch07.xhtml#ch07lev2",
+						"ch07.xhtml#ch07lev34",
+						"ch07.xhtml#ch07lev42",
+						"ch07.xhtml#ch07lev58",
+						"ch07.xhtml#ch07lev85",
+						"ch07.xhtml#ch07lev107",
+						"ch07.xhtml#ch07lev127",
+						"ch07.xhtml#ch07lev142",
+						"ch07.xhtml#ch07lev146",
+						"ch07.xhtml#ch07lev166"
 					],
 					[
-
+						"ch07.xhtml#ch07lev182",
+						"ch07.xhtml#ch07lev183",
+						"ch07.xhtml#ch07lev184"
 					]
 				]
 			},
@@ -115,10 +152,17 @@ let course = new CourseBook(
 				"id": "ch08.xhtml#ch8",
 				"sections": [
 					[
-
+						"ch08.xhtml#ch08lev2",
+						"ch08.xhtml#ch08lev20",
+						"ch08.xhtml#ch08lev23",
+						"ch08.xhtml#ch08lev24",
+						"ch08.xhtml#ch08lev25"
 					],
 					[
-
+						"ch08.xhtml#ch08lev37",
+						"ch08.xhtml#ch08lev38",
+						"ch08.xhtml#ch08lev39",
+						"ch08.xhtml#ch08lev40"
 					]
 				]
 			},
@@ -126,23 +170,26 @@ let course = new CourseBook(
 				"id": "ch09.xhtml#ch9",
 				"sections": [
 					[
-
+						"ch09.xhtml#ch09lev2",
+						"ch09.xhtml#ch09lev17",
+						"ch09.xhtml#ch09lev31",
+						"ch09.xhtml#ch09lev42",
+						"ch09.xhtml#ch09lev59",
+						"ch09.xhtml#ch09lev71",
+						"ch09.xhtml#ch09lev83",
+						"ch09.xhtml#ch09lev94",
+						"ch09.xhtml#ch09lev98"
 					],
 					[
-
+						"ch09.xhtml#ch09lev111",
+						"ch09.xhtml#ch09lev112",
+						"ch09.xhtml#ch09lev113",
+						"ch09.xhtml#ch09lev114"
 					]
 				]
 			},
 			{
-				"id": "ch10.xhtml#ch10",
-				"sections": [
-					[
-
-					],
-					[
-
-					]
-				]
+				"id": "ch10.xhtml#ch10"
 			}
 		]
 	},

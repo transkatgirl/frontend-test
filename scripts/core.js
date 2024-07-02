@@ -12,6 +12,14 @@ function unloadActiveCourse() {
 	}
 }
 
+// TODO:
+// - Automatically mark sections as complete when scrolling to the next section?
+// - Keep track of time spent on each chapter
+// - Offer an API for sound effects?
+// - Update CourseBook internal structure to match planned JSON structure
+//   - Add toJson and fromJson functions
+// - Add proper errro handling
+
 class CourseBook {
 	#textbook;
 	#textbookPromise;
@@ -37,10 +45,11 @@ class CourseBook {
 		this.url = String(url);
 		this.interactive = Boolean(interactive);
 
+		this.chapters = chapters;
+
 		if (positionTag) {
 			this.#positionTag = String(positionTag);
 		}
-		this.chapters = chapters;
 		this.completed = new Set(completed);
 	}
 	prefetch() {
@@ -256,4 +265,8 @@ class CourseBook {
 			}
 		};
 	}
+}
+
+class Course {
+
 }

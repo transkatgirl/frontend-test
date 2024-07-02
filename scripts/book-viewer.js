@@ -2,6 +2,10 @@ const dependency_prefix = "/scripts/dependencies";
 
 // TODO: Test code for race conditions
 
+// TODO: Achieve feature parity between ePub and PDF reading modes
+
+// TODO: Add proper error handling
+
 function initalizedPdfViewer(pdfjsPrefix, viewerContainer) {
 	const loadPromise = Promise.all([
 		new Promise((resolve, reject) => {
