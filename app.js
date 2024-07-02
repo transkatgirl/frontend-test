@@ -103,33 +103,40 @@ class CourseBook {
 
 		this.#updateCompleted(chapter.id, true);
 		chapterCheckbox.checked = true;
-		this.#updateChapterSectionListing(chapter, chapterCheckbox);
 		this.#showNextChapter();
 	}
-	#updateChapterSectionListing(chapter, chapterElement) {
-		const chapterItemContainer = chapterElement.parentElement.parentElement;
-		if (this.completed.has(chapter.id) && chapterItemContainer.tagName == "DETAILS") {
-			chapterItemContainer.open = false;
-		}
-	}
-	#showNextChapter() {
+	#showNextChapter(currentChapterId) {
+		let isFirstIncompleteChapter = true;
 		for (const chapter of this.chapters) {
 			const element = document.getElementById(chapter.id);
 
 			const chapterItemContainer = element.parentElement.parentElement;
 			const chapterListContainer = element.parentElement.parentElement.parentElement.parentElement.parentElement;
 
-			if (!this.completed.has(chapter.id)) {
-				if (chapterListContainer.tagName == "DETAILS") {
-					chapterListContainer.open = true;
+			if (isFirstIncompleteChapter) {
+				if (!this.completed.has(chapter.id)) {
+					if (chapterListContainer.tagName == "DETAILS") {
+						chapterListContainer.open = true;
+					}
+					if (chapterItemContainer.tagName == "DETAILS") {
+						chapterItemContainer.open = true;
+					}
+					isFirstIncompleteChapter = false;
+				} else {
+					if (chapterListContainer.tagName == "DETAILS") {
+						chapterListContainer.open = false;
+					}
+					if (chapterItemContainer.tagName == "DETAILS") {
+						chapterItemContainer.open = false;
+					}
 				}
-				if (chapterItemContainer.tagName == "DETAILS") {
-					chapterItemContainer.open = true;
+			} else if (currentChapterId === chapter.id) {
+				if (this.completed.has(chapter.id) && chapterItemContainer.tagName == "DETAILS") {
+					chapterItemContainer.open = false;
 				}
-				break;
 			} else {
-				if (chapterListContainer.tagName == "DETAILS") {
-					chapterListContainer.open = false;
+				if (chapterItemContainer.tagName == "DETAILS") {
+					chapterItemContainer.open = false;
 				}
 			}
 		}
@@ -140,8 +147,7 @@ class CourseBook {
 
 			const chapterCheckbox = this.#addListingLinkCheckbox(element, this.completed.has(chapter.id), (event) => {
 				this.#updateCompleted(chapter.id, event.target.checked);
-				this.#updateChapterSectionListing(chapter, chapterCheckbox);
-				this.#showNextChapter();
+				this.#showNextChapter(chapter.id);
 			});
 
 			if (chapter.sections) {
