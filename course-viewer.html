@@ -6,7 +6,7 @@
 	<script src="/scripts/dependencies/epub.min.js" defer></script>
 	<script src="/scripts/book-viewer.js" defer></script>
 	<script src="/scripts/data-graphing.js" defer></script>
-	<script src="/scripts/coursebook.js" defer></script>
+	<script src="/scripts/coursebook-viewer.js" defer></script>
 	<script src="viewer-demo.js" defer></script>
 </head>
 
@@ -14,18 +14,20 @@
 	<header>
 		<h1>📖 <span id="contentTitle"></span></h1>
 		<nav>
-			<table class="progress-map hourly-progress-map">
-				<tbody>
-					<tr>
-						<th>⏱️</th>
-						<td class="finished"> </td>
-						<td class="finished"> </td>
-						<td class="in-progress"> </td>
-						<td class="expanded-data"></td>
-						<td class="expanded-data"></td>
-					</tr>
-				</tbody>
-			</table>
+			<div id="contentTimer">
+				<table class="progress-map hourly-progress-map">
+					<tbody>
+						<tr>
+							<th>⏱️</th>
+							<td class="finished"> </td>
+							<td class="finished"> </td>
+							<td class="in-progress"> </td>
+							<td class="expanded-data"></td>
+							<td class="expanded-data"></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
 			<a href="homepage.html">Exit 🚪</a>
 		</nav>
 	</header>

@@ -16,6 +16,14 @@ document.addEventListener("visibilitychange", () => {
 	}
 });
 
+const timer_container = document.getElementById("contentTimer");
+
+/*window.setInterval(function () {
+	if (activeCourse && !document.hidden) {
+		console.log(activeCourse.timeSpent);
+	}
+}, 5000);*/
+
 // TODO:
 // - Offer an API for sound effects?
 
