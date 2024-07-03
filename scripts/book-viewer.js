@@ -60,10 +60,12 @@ function initalizedPdfViewer(pdfjsPrefix, viewerContainer) {
 		});
 		this.resizeObserver.observe(viewerContainer);
 
-		this.loadPdf = function (pdf, initCallback) {
-			this.pdfViewer.setDocument(pdf);
-			this.pdfLinkService.setDocument(pdf, null);
-			this.initCallback = initCallback;
+		this.loadPdf = function (pdf) {
+			return new Promise((resolve) => {
+				this.pdfViewer.setDocument(pdf);
+				this.pdfLinkService.setDocument(pdf, null);
+				this.initCallback = resolve;
+			});
 		};
 
 		this.reset = function () {
@@ -415,37 +417,36 @@ class Textbook {
 					});
 				});
 			case "pdf":
-				pdf_viewer.loadPdf(this.#inner.document, () => {
+				return pdf_viewer.loadPdf(this.#inner.document).then(() => {
 					if (position) {
 						pdf_viewer.pdfViewer.scrollPageIntoView({ pageNumber: Number(position) });
 					}
-				});
+					this.rendered = true;
 
-				this.rendered = true;
-
-				const document = this.#inner.document;
-				return metadata_displayer.render(this.language, this.title, {
-					listingData: this.#inner.outline,
-					isClickable: (item) => item.dest,
-					onClick: (item) => {
-						if (typeof item.dest === "string") {
-							return document.getDestination(item.dest).then((destArray) => {
-								return document.getPageIndex(destArray[0]).then((pageNumber) => {
-									pdf_viewer.pdfViewer.scrollPageIntoView({
-										pageNumber: pageNumber + 1,
-										destArray,
+					const document = this.#inner.document;
+					return metadata_displayer.render(this.language, this.title, {
+						listingData: this.#inner.outline,
+						isClickable: (item) => item.dest,
+						onClick: (item) => {
+							if (typeof item.dest === "string") {
+								return document.getDestination(item.dest).then((destArray) => {
+									return document.getPageIndex(destArray[0]).then((pageNumber) => {
+										pdf_viewer.pdfViewer.scrollPageIntoView({
+											pageNumber: pageNumber + 1,
+											destArray,
+										});
 									});
 								});
-							});
-						} else {
-							return document.getPageIndex(item.dest[0]).then((pageNumber) => {
-								pdf_viewer.pdfViewer.scrollPageIntoView({
-									pageNumber: pageNumber + 1,
-									destArray: item.dest,
+							} else {
+								return document.getPageIndex(item.dest[0]).then((pageNumber) => {
+									pdf_viewer.pdfViewer.scrollPageIntoView({
+										pageNumber: pageNumber + 1,
+										destArray: item.dest,
+									});
 								});
-							});
+							}
 						}
-					}
+					});
 				});
 		}
 

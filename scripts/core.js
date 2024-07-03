@@ -244,7 +244,11 @@ class CourseBook {
 	}
 	_savePositionTag() {
 		if (this.#textbook && this.#textbook.rendered) {
-			this.#positionTag = this.#textbook.location;
+			let location = this.#textbook.location;
+
+			if (location) {
+				this.#positionTag = location;
+			}
 		}
 	}
 	export() {
