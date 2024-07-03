@@ -246,10 +246,7 @@ class CourseBook {
 
 				activeCourse = this;
 				return this.#textbook.render(cssUrl, this.#positionTag).then(() => {
-					return new Promise((resolve) => {
-						this.#buildListingProgressTracker();
-						resolve();
-					});
+					return this.#buildListingProgressTracker();
 				});
 			});
 		});
