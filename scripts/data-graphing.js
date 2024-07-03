@@ -124,5 +124,5 @@ class BookChapterGraph {
 }
 
 class DailyProgressGraph {
-
+	// TODO
 }

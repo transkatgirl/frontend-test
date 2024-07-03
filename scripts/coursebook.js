@@ -305,7 +305,3 @@ class CourseBook {
 		};
 	}
 }
-
-class Course {
-
-}
