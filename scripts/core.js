@@ -20,7 +20,8 @@ class CourseBook {
 	#positionTag;
 	#completed;
 	#updatePromise;
-	constructor ({ url, interactive = false, chapters = [] }, { positionTag, completed = [] }) {
+	#timeSpent;
+	constructor ({ url, interactive = false, chapters = [] }, { positionTag, completed = [], timeSpent = [] }) {
 		this.url = String(url);
 		this.interactive = Boolean(interactive);
 		if (chapters && typeof chapters == "object" && Array.isArray(chapters)) {
@@ -36,6 +37,9 @@ class CourseBook {
 			this.#completed = new Set(completed);
 		} else {
 			this.#completed = new Set();
+		}
+		if (timeSpent) {
+			this.#timeSpent = Number(timeSpent);
 		}
 		this.#updatePromise = Promise.resolve();
 	}
@@ -172,7 +176,7 @@ class CourseBook {
 
 		this.#showNextChapter(undefined, true);
 	}
-	get completion() {
+	#getCompletion() {
 		let completion = [];
 
 		for (const chapter of this.chapters) {
@@ -267,26 +271,42 @@ class CourseBook {
 			let location = this.#textbook.location;
 
 			if (location) {
-				this.#positionTag = location;
+				this.#positionTag = String(location);
 			}
 		}
 	}
+	get completion() {
+		if (this.#textbook && this.#textbook.rendered) {
+			return this.#updatePromise.then(() => {
+				return this.#getCompletion();
+			});
+		} else {
+			return this.#getCompletion();
+		}
+	}
+	#export() {
+		return {
+			textbook: {
+				url: this.url,
+				interactive: this.interactive,
+				chapters: this.chapters,
+			},
+			progressData: {
+				positionTag: this.#positionTag,
+				completed: Array.from(this.#completed),
+				timeSpent: Number(this.#timeSpent),
+			}
+		};
+	}
 	export() {
-		return this.#updatePromise.then(() => {
-			this.#savePositionTag();
-
-			return {
-				textbook: {
-					url: this.url,
-					interactive: this.interactive,
-					chapters: this.chapters,
-				},
-				progressData: {
-					positionTag: String(this.#positionTag),
-					completed: Array.from(this.#completed),
-				}
-			};
-		});
+		if (this.#textbook && this.#textbook.rendered) {
+			return this.#updatePromise.then(() => {
+				this.#savePositionTag();
+				return this.#export();
+			});
+		} else {
+			return this.#export();
+		}
 	}
 }
 
