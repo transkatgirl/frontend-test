@@ -38,7 +38,6 @@ class TimeProgressMeter {
 			const upperBound = Math.ceil(normalizedValue);
 
 			this.#dataElements.forEach((element, i) => {
-				element.style = "color: transparent"; // Ugly hack
 				if (lowerBound > i) {
 					element.className = "finished";
 				} else if (upperBound > i) {
@@ -46,6 +45,7 @@ class TimeProgressMeter {
 				} else {
 					element.className = "";
 				}
+				element.style = "color: transparent"; // Ugly hack
 				element.style = ""; // Ugly hack
 			});
 		}
@@ -101,15 +101,14 @@ class BookChapterGraph {
 				const element = this.#dataElements[i];
 
 				if (i >= progress.length) {
-					element.style = "color: transparent"; // Ugly hack
 					element.className = "";
+					element.style = "color: transparent"; // Ugly hack
 					element.style = ""; // Ugly hack
 					continue;
 				}
 
 				const value = Number(progress[i]);
 
-				element.style = "color: transparent"; // Ugly hack
 				if (value >= 1) {
 					element.className = "finished";
 				} else if (value > 0) {
@@ -117,6 +116,7 @@ class BookChapterGraph {
 				} else {
 					element.className = "";
 				}
+				element.style = "color: transparent"; // Ugly hack
 				element.style = ""; // Ugly hack
 			}
 		}
