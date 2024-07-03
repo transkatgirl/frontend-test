@@ -255,9 +255,7 @@ class CourseBook {
 
 			if (this.#textbookPromise) {
 				return this.#textbookPromise.then((textbook) => {
-					textbook.destroy();
-					this.#textbook = null;
-					this.#textbookPromise = null;
+					return textbook.destroy();
 				});
 			}
 		});
