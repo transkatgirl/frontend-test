@@ -30,7 +30,7 @@ class TimeProgressMeter {
 
 		return this.element;
 	}
-	update(value) {
+	update(value = this.min) {
 		if (this.element) {
 			const normalizedValue = (value - this.min) / ((this.max - this.min) / this.size);
 
@@ -95,8 +95,31 @@ class BookChapterGraph {
 
 		return this.element;
 	}
-	update(progress) {
+	update(progress = []) {
+		if (this.element) {
+			for (let i = 0; i < this.#dataElements.length; i++) {
+				const element = this.#dataElements[i];
 
+				if (i >= progress.length) {
+					element.style = "color: transparent"; // Ugly hack
+					element.className = "";
+					element.style = ""; // Ugly hack
+					continue;
+				}
+
+				const value = Number(progress[i]);
+
+				element.style = "color: transparent"; // Ugly hack
+				if (value >= 1) {
+					element.className = "finished";
+				} else if (value > 0) {
+					element.className = "in-progress";
+				} else {
+					element.className = "";
+				}
+				element.style = ""; // Ugly hack
+			}
+		}
 	}
 }
 
