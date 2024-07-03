@@ -79,8 +79,7 @@
 			border-radius: 15%;
 		}
 
-		th,
-		tfoot td {
+		th {
 			font-weight: normal;
 			opacity: 0.5;
 		}
@@ -89,7 +88,7 @@
 			text-align: right;
 		}
 
-		tfoot {
+		tfoot th:not(:first-of-type) {
 			text-align: center;
 		}
 
