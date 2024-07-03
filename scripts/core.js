@@ -1,14 +1,9 @@
-let activeTextbook;
 let activeCourse;
 
 function unloadActiveCourse() {
 	if (activeCourse) {
-		activeCourse._savePositionTag();
-		activeCourse = null;
-	}
-	if (activeTextbook) {
-		return activeTextbook.destroy().then(() => {
-			activeTextbook = null;
+		return activeCourse._unload().then(() => {
+			activeCourse = null;
 		});
 	} else {
 		return Promise.resolve();
@@ -24,6 +19,7 @@ class CourseBook {
 	#textbookPromise;
 	#positionTag;
 	#completed;
+	#updatePromise;
 	constructor ({ url, interactive = false, chapters = [] }, { positionTag, completed = [] }) {
 		this.url = String(url);
 		this.interactive = Boolean(interactive);
@@ -41,6 +37,7 @@ class CourseBook {
 		} else {
 			this.#completed = new Set();
 		}
+		this.#updatePromise = Promise.resolve();
 	}
 	/*getInner() {
 		// ! Temporary
@@ -135,8 +132,11 @@ class CourseBook {
 			const element = document.getElementById(chapter.id);
 
 			const chapterCheckbox = this.#addListingLinkCheckbox(element, this.#completed.has(chapter.id), (event) => {
-				this.#updateCompleted(chapter.id, event.target.checked);
-				this.#showNextChapter(chapter.id);
+				this.#updatePromise = this.#updatePromise.then(() => {
+					this.#updateCompleted(chapter.id, event.target.checked);
+					this.#showNextChapter(chapter.id);
+					this.#savePositionTag();
+				});
 			});
 
 			if (chapter.sections) {
@@ -145,8 +145,11 @@ class CourseBook {
 						const element = document.getElementById(section);
 
 						this.#addListingLinkCheckbox(element, this.#completed.has(section), (event) => {
-							this.#updateCompleted(section, event.target.checked);
-							this.#updateChapterCompletion(chapter, chapterCheckbox);
+							this.#updatePromise = this.#updatePromise.then(() => {
+								this.#updateCompleted(section, event.target.checked);
+								this.#updateChapterCompletion(chapter, chapterCheckbox);
+								this.#savePositionTag();
+							});
 						});
 					} else {
 						let sectionGroup = section;
@@ -155,8 +158,11 @@ class CourseBook {
 							const element = document.getElementById(section);
 
 							this.#addListingLinkCheckbox(element, this.#completed.has(section), (event) => {
-								this.#updateCompleted(section, event.target.checked);
-								this.#updateChapterCompletion(chapter, chapterCheckbox);
+								this.#updatePromise = this.#updatePromise.then(() => {
+									this.#updateCompleted(section, event.target.checked);
+									this.#updateChapterCompletion(chapter, chapterCheckbox);
+									this.#savePositionTag();
+								});
 							});
 						}
 					}
@@ -233,9 +239,8 @@ class CourseBook {
 			return this.#textbookPromise.then((textbook) => {
 				this.#textbook = textbook;
 
-				activeTextbook = this.#textbook;
 				activeCourse = this;
-				return activeTextbook.render(cssUrl, this.#positionTag).then(() => {
+				return this.#textbook.render(cssUrl, this.#positionTag).then(() => {
 					return new Promise((resolve) => {
 						this.#buildListingProgressTracker();
 						resolve();
@@ -244,7 +249,20 @@ class CourseBook {
 			});
 		});
 	}
-	_savePositionTag() {
+	_unload() {
+		return this.#updatePromise.then(() => {
+			this.#savePositionTag();
+
+			if (this.#textbookPromise) {
+				return this.#textbookPromise.then((textbook) => {
+					textbook.destroy();
+					this.#textbook = null;
+					this.#textbookPromise = null;
+				});
+			}
+		});
+	}
+	#savePositionTag() {
 		if (this.#textbook && this.#textbook.rendered) {
 			let location = this.#textbook.location;
 
@@ -254,19 +272,21 @@ class CourseBook {
 		}
 	}
 	export() {
-		this._savePositionTag();
+		return this.#updatePromise.then(() => {
+			this.#savePositionTag();
 
-		return {
-			textbook: {
-				url: this.url,
-				interactive: this.interactive,
-				chapters: this.chapters,
-			},
-			progressData: {
-				positionTag: String(this.#positionTag),
-				completed: Array.from(this.#completed),
-			}
-		};
+			return {
+				textbook: {
+					url: this.url,
+					interactive: this.interactive,
+					chapters: this.chapters,
+				},
+				progressData: {
+					positionTag: String(this.#positionTag),
+					completed: Array.from(this.#completed),
+				}
+			};
+		});
 	}
 }
 
