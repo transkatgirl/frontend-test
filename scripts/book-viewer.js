@@ -234,7 +234,8 @@ function metadataDisplayer({ titleContainer, listingContainer, contentContainer 
 
 		this.styleContainer.innerHTML = "#" + CSS.escape(listingItemId) + " {font-weight: bold}";
 
-		let currentElement = window.document.getElementById(listingItemId).parentElement.parentElement;
+		const itemElement = window.document.getElementById(listingItemId);
+		let currentElement = itemElement.parentElement.parentElement;
 		while (currentElement.parentElement != this.listingContainer) {
 			currentElement = currentElement.parentElement;
 
@@ -242,6 +243,7 @@ function metadataDisplayer({ titleContainer, listingContainer, contentContainer 
 				currentElement.setAttribute("open", "");
 			}
 		}
+		//itemElement.scrollIntoView({ block: "center" });
 	};
 
 	this.reset = function () {

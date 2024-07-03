@@ -18,7 +18,6 @@ function unloadActiveCourse() {
 // TODO:
 // - Keep track of time spent on each chapter
 // - Offer an API for sound effects?
-// - Save/restore ToC scroll position
 
 class CourseBook {
 	#textbook;
@@ -90,9 +89,9 @@ class CourseBook {
 
 		this.#updateCompleted(chapter.id, true);
 		chapterCheckbox.checked = true;
-		this.#showNextChapter();
+		this.#showNextChapter(undefined, true);
 	}
-	#showNextChapter(currentChapterId) {
+	#showNextChapter(currentChapterId, autoScroll = false) {
 		let isFirstIncompleteChapter = true;
 		for (const chapter of this.chapters) {
 			const element = document.getElementById(chapter.id);
@@ -107,6 +106,9 @@ class CourseBook {
 					}
 					if (chapterItemContainer.tagName == "DETAILS") {
 						chapterItemContainer.open = true;
+					}
+					if (autoScroll) {
+						chapterItemContainer.scrollIntoView({ block: "center" });
 					}
 					isFirstIncompleteChapter = false;
 				} else {
@@ -162,7 +164,7 @@ class CourseBook {
 			}
 		}
 
-		this.#showNextChapter();
+		this.#showNextChapter(undefined, true);
 	}
 	get completion() {
 		let completion = [];
