@@ -19,9 +19,9 @@ class CourseBook {
 	#textbookPromise;
 	#positionTag;
 	#completed;
-	#updatePromise;
 	#timeSpent;
-	constructor ({ url, interactive = false, chapters = [] }, { positionTag, completed = [], timeSpent = [] }) {
+	#lastTimestamp;
+	constructor ({ url, interactive = false, chapters = [] }, { positionTag, completed = [], timeSpent = 0 }) {
 		this.url = String(url);
 		this.interactive = Boolean(interactive);
 		if (chapters && typeof chapters == "object" && Array.isArray(chapters)) {
@@ -40,8 +40,9 @@ class CourseBook {
 		}
 		if (timeSpent) {
 			this.#timeSpent = Number(timeSpent);
+		} else {
+			this.#timeSpent = 0;
 		}
-		this.#updatePromise = Promise.resolve();
 	}
 	/*getInner() {
 		// ! Temporary
@@ -136,11 +137,9 @@ class CourseBook {
 			const element = document.getElementById(chapter.id);
 
 			const chapterCheckbox = this.#addListingLinkCheckbox(element, this.#completed.has(chapter.id), (event) => {
-				this.#updatePromise = this.#updatePromise.then(() => {
-					this.#updateCompleted(chapter.id, event.target.checked);
-					this.#showNextChapter(chapter.id);
-					this.#savePositionTag();
-				});
+				this.#updateCompleted(chapter.id, event.target.checked);
+				this.#showNextChapter(chapter.id);
+				this.#savePositionTag();
 			});
 
 			if (chapter.sections) {
@@ -149,11 +148,9 @@ class CourseBook {
 						const element = document.getElementById(section);
 
 						this.#addListingLinkCheckbox(element, this.#completed.has(section), (event) => {
-							this.#updatePromise = this.#updatePromise.then(() => {
-								this.#updateCompleted(section, event.target.checked);
-								this.#updateChapterCompletion(chapter, chapterCheckbox);
-								this.#savePositionTag();
-							});
+							this.#updateCompleted(section, event.target.checked);
+							this.#updateChapterCompletion(chapter, chapterCheckbox);
+							this.#savePositionTag();
 						});
 					} else {
 						let sectionGroup = section;
@@ -162,11 +159,9 @@ class CourseBook {
 							const element = document.getElementById(section);
 
 							this.#addListingLinkCheckbox(element, this.#completed.has(section), (event) => {
-								this.#updatePromise = this.#updatePromise.then(() => {
-									this.#updateCompleted(section, event.target.checked);
-									this.#updateChapterCompletion(chapter, chapterCheckbox);
-									this.#savePositionTag();
-								});
+								this.#updateCompleted(section, event.target.checked);
+								this.#updateChapterCompletion(chapter, chapterCheckbox);
+								this.#savePositionTag();
 							});
 						}
 					}
@@ -176,7 +171,7 @@ class CourseBook {
 
 		this.#showNextChapter(undefined, true);
 	}
-	#getCompletion() {
+	get completion() {
 		let completion = [];
 
 		for (const chapter of this.chapters) {
@@ -242,6 +237,7 @@ class CourseBook {
 		return unloadPromise.then(() => {
 			return this.#textbookPromise.then((textbook) => {
 				this.#textbook = textbook;
+				this.#lastTimestamp = new Date();
 
 				activeCourse = this;
 				return this.#textbook.render(cssUrl, this.#positionTag).then(() => {
@@ -254,17 +250,15 @@ class CourseBook {
 		});
 	}
 	_unload() {
-		return this.#updatePromise.then(() => {
-			this.#savePositionTag();
+		this.#savePositionTag();
 
-			if (this.#textbookPromise) {
-				return this.#textbookPromise.then((textbook) => {
-					if (!textbook.destroyed) {
-						return textbook.destroy();
-					}
-				});
-			}
-		});
+		if (this.#textbookPromise) {
+			return this.#textbookPromise.then((textbook) => {
+				if (!textbook.destroyed) {
+					return textbook.destroy();
+				}
+			});
+		}
 	}
 	#savePositionTag() {
 		if (this.#textbook && this.#textbook.rendered) {
@@ -273,18 +267,20 @@ class CourseBook {
 			if (location) {
 				this.#positionTag = String(location);
 			}
+			if (this.#lastTimestamp) {
+				const currentTimestamp = new Date();
+
+				this.#timeSpent += currentTimestamp - this.#lastTimestamp;
+				this.#lastTimestamp = currentTimestamp;
+			}
 		}
 	}
-	get completion() {
-		if (this.#textbook && this.#textbook.rendered) {
-			return this.#updatePromise.then(() => {
-				return this.#getCompletion();
-			});
-		} else {
-			return this.#getCompletion();
-		}
+	get timeSpent() {
+		this.#savePositionTag();
+		return Number(this.#timeSpent);
 	}
-	#export() {
+	export() {
+		this.#savePositionTag();
 		return {
 			textbook: {
 				url: this.url,
@@ -297,16 +293,6 @@ class CourseBook {
 				timeSpent: Number(this.#timeSpent),
 			}
 		};
-	}
-	export() {
-		if (this.#textbook && this.#textbook.rendered) {
-			return this.#updatePromise.then(() => {
-				this.#savePositionTag();
-				return this.#export();
-			});
-		} else {
-			return this.#export();
-		}
 	}
 }
 
