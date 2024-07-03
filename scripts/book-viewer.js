@@ -2,7 +2,7 @@ const dependency_prefix = "/scripts/dependencies";
 
 function initalizedPdfViewer(pdfjsPrefix, viewerContainer) {
 	const loadPromise = Promise.all([
-		new Promise((resolve, reject) => {
+		new Promise((resolve) => {
 			const scriptElement1 = document.createElement("script");
 			scriptElement1.setAttribute("type", "module");
 			scriptElement1.setAttribute("src", pdfjsPrefix + "/build/pdf.min.mjs");
@@ -10,7 +10,7 @@ function initalizedPdfViewer(pdfjsPrefix, viewerContainer) {
 			scriptElement1.onload = resolve;
 			window.document.head.appendChild(scriptElement1);
 		}),
-		new Promise((resolve, reject) => {
+		new Promise((resolve) => {
 			const scriptElement2 = document.createElement("script");
 			scriptElement2.setAttribute("type", "module");
 			scriptElement2.setAttribute("src", pdfjsPrefix + "/web/pdf_viewer.mjs");

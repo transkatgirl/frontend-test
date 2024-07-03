@@ -16,10 +16,8 @@ function unloadActiveCourse() {
 }
 
 // TODO:
-// - Automatically mark sections as complete when scrolling to the next section?
 // - Keep track of time spent on each chapter
 // - Offer an API for sound effects?
-// - Add proper error handling
 // - Save/restore ToC scroll position
 
 class CourseBook {
@@ -236,7 +234,10 @@ class CourseBook {
 				activeTextbook = this.#textbook;
 				activeCourse = this;
 				return activeTextbook.render(cssUrl, this.#positionTag).then(() => {
-					this.#buildListingProgressTracker();
+					return new Promise((resolve) => {
+						this.#buildListingProgressTracker();
+						resolve();
+					});
 				});
 			});
 		});
@@ -256,7 +257,7 @@ class CourseBook {
 				chapters: this.chapters,
 			},
 			progressData: {
-				positionTag: this.#positionTag,
+				positionTag: String(this.#positionTag),
 				completed: Array.from(this.#completed),
 			}
 		};
