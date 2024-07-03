@@ -10,8 +10,13 @@ function unloadActiveCourse() {
 	}
 }
 
+document.addEventListener("visibilitychange", () => {
+	if (activeCourse) {
+		activeCourse._updateVisibility(!document.hidden);
+	}
+});
+
 // TODO:
-// - Keep track of time spent on each chapter
 // - Offer an API for sound effects?
 
 class CourseBook {
@@ -250,14 +255,20 @@ class CourseBook {
 		});
 	}
 	_unload() {
-		this.#savePositionTag();
-
 		if (this.#textbookPromise) {
 			return this.#textbookPromise.then((textbook) => {
 				if (!textbook.destroyed) {
+					this.#savePositionTag();
+					this.#lastTimestamp = null;
 					return textbook.destroy();
 				}
 			});
+		}
+	}
+	_updateVisibility(visible) {
+		this.#savePositionTag();
+		if (!visible) {
+			this.#lastTimestamp = null;
 		}
 	}
 	#savePositionTag() {
@@ -272,6 +283,8 @@ class CourseBook {
 
 				this.#timeSpent += currentTimestamp - this.#lastTimestamp;
 				this.#lastTimestamp = currentTimestamp;
+			} else {
+				this.#lastTimestamp = new Date();
 			}
 		}
 	}
