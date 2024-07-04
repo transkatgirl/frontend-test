@@ -1,6 +1,6 @@
 class TimeProgressMeter {
 	#dataElements = [];
-	constructor (min = 0, max = 150, size = 5) {
+	constructor ({ min = 0, max = 150, size = 5 }) {
 		this.min = Number(min);
 		this.max = Number(max);
 		this.size = Number(size);
@@ -50,7 +50,7 @@ class TimeProgressMeter {
 
 class BookChapterGraph {
 	#dataElements = [];
-	constructor (title, chapters, width = 10) {
+	constructor ({ title, chapters, width = 10 }) {
 		if (title) {
 			this.title = String(title);
 		}
@@ -117,7 +117,7 @@ class BookChapterGraph {
 class MultiWeekProgressGraph {
 	#dataElements = [];
 	#localization;
-	constructor (type, weeks = 24, min = 0, max, alwaysDisplayedWeeks = 16, dayNames = ["", "Mon", "", "Wed", "", "Fri", ""], weekLabel = "Week", listEveryWeeks = 4, lessLabel = "Less", moreLabel = "More") {
+	constructor ({ type, weeks = 24, min = 0, max, alwaysDisplayedWeeks = 16, dayNames = ["", "Mon", "", "Wed", "", "Fri", ""], weekLabel = "Week", listEveryWeeks = 4, lessLabel = "Less", moreLabel = "More" }) {
 		if (type === "time" || type === "chapter") {
 			this.type = type;
 		} else {

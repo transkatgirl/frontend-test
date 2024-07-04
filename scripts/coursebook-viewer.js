@@ -250,7 +250,7 @@ class CourseBook {
 		return unloadPromise.then(() => {
 			return this.#textbookPromise.then((textbook) => {
 				this.#textbook = textbook;
-				this.#lastTimestamp = new Date();
+				this.#lastTimestamp = performance.now();
 
 				activeCourse = this;
 				return this.#textbook.render(cssUrl, this.#positionTag).then(() => {
@@ -284,12 +284,12 @@ class CourseBook {
 				this.#positionTag = String(location);
 			}
 			if (this.#lastTimestamp) {
-				const currentTimestamp = new Date();
+				const currentTimestamp = performance.now();
 
-				this.#timeSpent += currentTimestamp - this.#lastTimestamp;
+				this.#timeSpent += (currentTimestamp - this.#lastTimestamp) / 1000;
 				this.#lastTimestamp = currentTimestamp;
 			} else {
-				this.#lastTimestamp = new Date();
+				this.#lastTimestamp = performance.now();
 			}
 		}
 	}
