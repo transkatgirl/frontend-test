@@ -262,7 +262,6 @@ class MultiWeekProgressGraph {
 		return this.#dataElements[((day % 7) * this.weeks) + Math.floor(day / 7)];
 	}
 	update(progressMap) {
-
+		// TODO
 	}
-	// TODO
 }

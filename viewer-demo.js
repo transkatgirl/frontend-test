@@ -201,4 +201,4 @@ let course = new CourseBook(
 	}
 );
 
-course.load({});
+course.load({}, {});

@@ -204,7 +204,4 @@ let course3 = new CourseBook({ url: "./textbook-scraper/test.pdf" }, {});
 
 let course4 = new CourseBook({ url: "/textbook-scraper/math.pdf" }, {});
 
-course1.load({});
-course2.prefetch();
-course3.prefetch();
-course4.prefetch();
+course1.load({}, {});

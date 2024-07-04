@@ -1,84 +1,57 @@
 const dependency_prefix = "/scripts/dependencies";
 
 function initalizedPdfViewer(pdfjsPrefix, viewerContainer) {
-	const loadPromise = Promise.all([
-		new Promise((resolve) => {
-			const scriptElement1 = document.createElement("script");
-			scriptElement1.setAttribute("type", "module");
-			scriptElement1.setAttribute("src", pdfjsPrefix + "/build/pdf.min.mjs");
-			scriptElement1.async = true;
-			scriptElement1.onload = resolve;
-			window.document.head.appendChild(scriptElement1);
-		}),
-		new Promise((resolve) => {
-			const scriptElement2 = document.createElement("script");
-			scriptElement2.setAttribute("type", "module");
-			scriptElement2.setAttribute("src", pdfjsPrefix + "/web/pdf_viewer.mjs");
-			scriptElement2.async = true;
-			scriptElement2.onload = resolve;
-			window.document.head.appendChild(scriptElement2);
-		}),
-	]);
-
-	const linkElement = document.createElement("link");
-	linkElement.setAttribute("rel", "stylesheet");
-	linkElement.setAttribute("href", pdfjsPrefix + "/web/pdf_viewer.css");
-	window.document.head.appendChild(linkElement);
-
 	this.pdfjsPrefix = pdfjsPrefix;
 
-	return loadPromise.then(() => {
-		pdfjsLib.GlobalWorkerOptions.workerSrc = this.pdfjsPrefix + "/build/pdf.worker.mjs";
+	pdfjsLib.GlobalWorkerOptions.workerSrc = this.pdfjsPrefix + "/build/pdf.worker.mjs";
 
-		this.eventBus = new pdfjsViewer.EventBus();
-		this.pdfLinkService = new pdfjsViewer.PDFLinkService({
-			eventBus: this.eventBus,
-		});
-		this.pdfScriptingManager = new pdfjsViewer.PDFScriptingManager({
-			eventBus: this.eventBus,
-			sandboxBundleSrc: this.pdfjsPrefix + "/build/pdf.sandbox.min.mjs",
-		});
-		this.pdfViewer = new pdfjsViewer.PDFViewer({
-			container: viewerContainer,
-			eventBus: this.eventBus,
-			linkService: this.pdfLinkService,
-			scriptingManager: this.pdfScriptingManager,
-		});
-		this.pdfLinkService.setViewer(this.pdfViewer);
-		this.pdfScriptingManager.setViewer(this.pdfViewer);
-
-		this.eventBus.on("pagesinit", () => {
-			this.pdfViewer.currentScaleValue = "page-width";
-			this.initCallback();
-		});
-
-		this.resizeObserver = new ResizeObserver((event) => {
-			if (this.pdfViewer.pdfDocument) {
-				this.pdfViewer.currentScaleValue = "page-width";
-				this.pdfViewer.update();
-			}
-		});
-		this.resizeObserver.observe(viewerContainer);
-
-		this.loadPdf = function (pdf) {
-			return new Promise((resolve) => {
-				this.pdfViewer.setDocument(pdf);
-				this.pdfLinkService.setDocument(pdf, null);
-				this.initCallback = resolve;
-			});
-		};
-
-		this.reset = function () {
-			this.pdfViewer.setDocument(null);
-			this.pdfLinkService.setDocument(null);
-			this.initCallback = null;
-		};
-
-		return this;
+	this.eventBus = new pdfjsViewer.EventBus();
+	this.pdfLinkService = new pdfjsViewer.PDFLinkService({
+		eventBus: this.eventBus,
 	});
+	this.pdfScriptingManager = new pdfjsViewer.PDFScriptingManager({
+		eventBus: this.eventBus,
+		sandboxBundleSrc: this.pdfjsPrefix + "/build/pdf.sandbox.min.mjs",
+	});
+	this.pdfViewer = new pdfjsViewer.PDFViewer({
+		container: viewerContainer,
+		eventBus: this.eventBus,
+		linkService: this.pdfLinkService,
+		scriptingManager: this.pdfScriptingManager,
+	});
+	this.pdfLinkService.setViewer(this.pdfViewer);
+	this.pdfScriptingManager.setViewer(this.pdfViewer);
+
+	this.eventBus.on("pagesinit", () => {
+		this.pdfViewer.currentScaleValue = "page-width";
+		this.initCallback();
+	});
+
+	this.resizeObserver = new ResizeObserver((event) => {
+		if (this.pdfViewer.pdfDocument) {
+			this.pdfViewer.currentScaleValue = "page-width";
+			this.pdfViewer.update();
+		}
+	});
+	this.resizeObserver.observe(viewerContainer);
+
+	this.loadPdf = function (pdf) {
+		return new Promise((resolve) => {
+			this.pdfViewer.setDocument(pdf);
+			this.pdfLinkService.setDocument(pdf, null);
+			this.initCallback = resolve;
+		});
+	};
+
+	this.reset = function () {
+		this.pdfViewer.setDocument(null);
+		this.pdfLinkService.setDocument(null);
+		this.initCallback = null;
+	};
+
+	return this;
 }
 let pdf_viewer;
-let pdfPromise;
 
 const EpubCFI = ePub.CFI;
 
@@ -269,6 +242,13 @@ const metadata_displayer = new metadataDisplayer({
 	contentContainer: section_container,
 });
 
+if (window.pdfjsViewer) {
+	pdf_viewer = new initalizedPdfViewer(
+		new URL(dependency_prefix + "/pdfjs", window.location).href,
+		section_container,
+	);
+}
+
 class Textbook {
 	#inner;
 	constructor (url, scripting = false) {
@@ -318,43 +298,36 @@ class Textbook {
 					});
 				});
 			case "pdf":
-				if (!pdfPromise) {
-					pdfPromise = new initalizedPdfViewer(
-						new URL(dependency_prefix + "/pdfjs", window.location).href,
-						section_container,
-					).then((resolved) => {
-						pdf_viewer = resolved;
-					});
+				if (!pdf_viewer) {
+					return null;
 				}
 
-				return pdfPromise.then(() => {
-					return pdfjsLib.getDocument({
-						url: this.url,
-						cMapUrl: pdf_viewer.pdfjsPrefix + "/cmaps/",
-						cMapPacked: true,
-						enableXfa: true,
-					}).promise.then((document) => {
-						this.#inner = {
-							document
-						};
+				return pdfjsLib.getDocument({
+					url: this.url,
+					cMapUrl: pdf_viewer.pdfjsPrefix + "/cmaps/",
+					cMapPacked: true,
+					enableXfa: true,
+				}).promise.then((document) => {
+					this.#inner = {
+						document
+					};
 
-						return Promise.all([
-							this.#inner.document.getMetadata(),
-							this.#inner.document.getOutline()
-						]).then(([metadata, outline]) => {
-							this.#inner.metadata = metadata;
-							this.#inner.outline = outline;
+					return Promise.all([
+						this.#inner.document.getMetadata(),
+						this.#inner.document.getOutline()
+					]).then(([metadata, outline]) => {
+						this.#inner.metadata = metadata;
+						this.#inner.outline = outline;
 
-							if (this.#inner.metadata.info.Title) {
-								this.title = this.#inner.metadata.info.Title;
-							}
+						if (this.#inner.metadata.info.Title) {
+							this.title = this.#inner.metadata.info.Title;
+						}
 
-							if (this.#inner.metadata.info.Language) {
-								this.language = this.#inner.metadata.info.Language;
-							}
+						if (this.#inner.metadata.info.Language) {
+							this.language = this.#inner.metadata.info.Language;
+						}
 
-							return this;
-						});
+						return this;
 					});
 				});
 		}

@@ -34,6 +34,7 @@ class CourseBook {
 	#completed;
 	#timeSpent;
 	#lastTimestamp;
+	#progressMeter;
 	constructor ({ url, interactive = false, chapters = [] }, { positionTag, completed = [], timeSpent = 0 }) {
 		this.url = String(url);
 		this.interactive = Boolean(interactive);
@@ -231,19 +232,20 @@ class CourseBook {
 
 		return completion;
 	}
-	prefetch() {
+	#init({ min, max, size }) {
 		if ((!this.#textbook && !this.#textbookPromise) || (this.#textbook && this.#textbook.destroyed)) {
 			this.#textbookPromise = new Textbook(this.url, this.interactive);
+			this.#progressMeter = new TimeProgressMeter({ min, max, size });
 		}
 	}
-	load({ cssUrl }) {
+	load({ cssUrl }, { min, max, size }) {
 		let unloadPromise;
 		if (!this.#textbook) {
-			this.prefetch();
+			this.#init({ min, max, size });
 			unloadPromise = unloadActiveCourse();
 		} else {
 			unloadPromise = unloadActiveCourse().then(() => {
-				this.prefetch();
+				this.#init({ min, max, size });
 			});
 		}
 
