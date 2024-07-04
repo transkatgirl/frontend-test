@@ -32,7 +32,7 @@ class TimeProgressMeter {
 		const normalizedValue = (value - this.min) / ((this.max - this.min) / this.size);
 
 		const lowerBound = Math.floor(normalizedValue);
-		const upperBound = Math.ceil(normalizedValue);
+		const upperBound = Math.floor(normalizedValue + 0.5);
 
 		this.#dataElements.forEach((element, i) => {
 			if (lowerBound > i) {

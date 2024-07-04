@@ -18,11 +18,11 @@ document.addEventListener("visibilitychange", () => {
 
 const timer_container = document.getElementById("contentTimer");
 
-/*window.setInterval(function () {
+window.setInterval(function () {
 	if (activeCourse && !document.hidden) {
-		console.log(activeCourse.timeSpent);
+		let _ = activeCourse.timeSpent;
 	}
-}, 5000);*/
+}, 5000);
 
 // TODO:
 // - Offer an API for sound effects?
@@ -256,6 +256,9 @@ class CourseBook {
 
 				activeCourse = this;
 				return this.#textbook.render(cssUrl, this.#positionTag).then(() => {
+					if (timer_container && this.#progressMeter) {
+						timer_container.appendChild(this.#progressMeter.element);
+					}
 					return this.#buildListingProgressTracker();
 				});
 			});
@@ -264,6 +267,9 @@ class CourseBook {
 	_unload() {
 		if (this.#textbookPromise) {
 			return this.#textbookPromise.then((textbook) => {
+				if (timer_container) {
+					timer_container.innerHTML = "";
+				}
 				if (!textbook.destroyed) {
 					this.#savePositionTag();
 					this.#lastTimestamp = null;
@@ -292,6 +298,9 @@ class CourseBook {
 				this.#lastTimestamp = currentTimestamp;
 			} else {
 				this.#lastTimestamp = performance.now();
+			}
+			if (timer_container && this.#progressMeter) {
+				this.#progressMeter.update(this.#timeSpent);
 			}
 		}
 	}
