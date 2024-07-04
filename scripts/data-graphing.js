@@ -117,7 +117,7 @@ class BookChapterGraph {
 class MultiWeekProgressGraph {
 	#dataElements = [];
 	#localization;
-	constructor (type, weeks = 24, min = 0, max, dayNames = ["", "Mon", "", "Wed", "", "Fri", ""], weekLabel = "Week", listEveryWeeks = 4, lessLabel = "Less", moreLabel = "More") {
+	constructor (type, weeks = 24, min = 0, max, alwaysDisplayedWeeks = 16, dayNames = ["", "Mon", "", "Wed", "", "Fri", ""], weekLabel = "Week", listEveryWeeks = 4, lessLabel = "Less", moreLabel = "More") {
 		if (type === "time" || type === "chapter") {
 			this.type = type;
 		} else {
@@ -143,7 +143,8 @@ class MultiWeekProgressGraph {
 			weekLabel,
 			listEveryWeeks,
 			lessLabel,
-			moreLabel
+			moreLabel,
+			alwaysDisplayedWeeks
 		};
 
 		const container = document.createElement("div");
@@ -182,6 +183,9 @@ class MultiWeekProgressGraph {
 			for (let i = 0; i < this.weeks; i++) {
 				const dataElement = document.createElement("td");
 				this.#dataElements.push(dataElement);
+				if ((this.weeks - i) > this.#localization.alwaysDisplayedWeeks) {
+					dataElement.classList.add("expanded-data");
+				}
 				row.appendChild(dataElement);
 			}
 			body.appendChild(row);
@@ -196,9 +200,11 @@ class MultiWeekProgressGraph {
 
 		for (let i = this.weeks; i > 0; i--) {
 			const label = document.createElement("th");
-			console.log(i);
 			if (i % this.#localization.listEveryWeeks == 0) {
 				label.innerText = i;
+			}
+			if (i > this.#localization.alwaysDisplayedWeeks) {
+				label.classList.add("expanded-data");
 			}
 			footerRow.appendChild(label);
 		}
@@ -250,15 +256,11 @@ class MultiWeekProgressGraph {
 		root.appendChild(body);
 		return root;
 	}
-	/*render() {
-		if (!this.element) {
-			this.element = document.createElement("div");
-			//this.element.appendChild(this.#renderGraph());
-			this.element.appendChild(this.#renderKey());
-		}
+	#getDay(day) {
+		day = (this.weeks * 7) - day;
 
-		return this.element;
-	}*/
+		return this.#dataElements[((day % 7) * this.weeks) + Math.floor(day / 7)];
+	}
 	update(progressMap) {
 
 	}
