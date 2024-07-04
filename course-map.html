@@ -51,32 +51,31 @@
 			<a href="homepage.html">Exit 🚪</a>
 		</nav>
 	</header>
-	<main>
-		<nav>
-			<h2>Your Course Maps</h2>
-			<ul>
-				<li>Course Map Name</li>
-				<li>Course Map Name</li>
-				<li>Course Map Name</li>
-				<li>Course Map Name</li>
-				<li>Course Map Name</li>
-				<li>Course Map Name</li>
-			</ul>
-			<br>
-			<h2>Your Courses</h2>
-			<ul>
-				<li>Course Name <input type="checkbox" checked /></li>
-				<li>Course Name <button type="button">➖</button></li>
-				<li>Course Name <button type="button">➕</button> <button type="button">✔️</button></li>
-			</ul>
-			<br>
-			<footer>
-				<button type="button">📂 Open Course Folder</button>
-			</footer>
+	<nav id="contentListing">
+		<h2>Your Course Maps</h2>
+		<ul>
+			<li>Course Map Name</li>
+			<li>Course Map Name</li>
+			<li>Course Map Name</li>
+			<li>Course Map Name</li>
+			<li>Course Map Name</li>
+			<li>Course Map Name</li>
+		</ul>
+		<br>
+		<h2>Your Courses</h2>
+		<ul>
+			<li>Course Name <input type="checkbox" checked /></li>
+			<li>Course Name <button type="button">➖</button></li>
+			<li>Course Name <button type="button">➕</button> <button type="button">✔️</button></li>
+		</ul>
+		<br>
+		<footer>
+			<button type="button">📂 Open Course Folder</button>
+		</footer>
 
-		</nav>
-		<div>
-			<pre class="mermaid">
+	</nav>
+	<article id="contentViewer">
+		<pre class="mermaid">
 			---
 			title: Course Map Name
 			---
@@ -87,6 +86,5 @@
 			Algebra-and-Trigonometry ---> Statistics-Fundementals[Introductory Statistics <button type="button">➕</button> <button type="button">✔️</button>]
 			Algebra-and-Trigonometry ---> Calculus[Calculus <button type="button">➖</button>]
 			</pre>
-		</div>
-	</main>
+	</article>
 </body>

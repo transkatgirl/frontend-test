@@ -23,11 +23,12 @@
 		- hash of book file (as JSON filename)
 	- [ ] courses can be automatically or manually marked as complete
 - [x] section-based progress tracking
-- [ ] time-based progress tracking
+- [x] time-based progress tracking
 	- [ ] graphical progress display
 	- [ ] inactivity detection
 
 # v0.5 ("beta")
+- [ ] complete code refactor for performance & reliability improvments
 - improvements to course building
 	- graphical per-book sidecar file builder
 	- graphical course builder
